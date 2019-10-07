@@ -1,8 +1,8 @@
-import logging
-import threading
-import time
-import concurrent.futures
-
+# import logging
+# import threading
+# import time
+# import concurrent.futures
+from CONSTANTS import *
 print(threading.get_ident())
 
 
@@ -22,7 +22,7 @@ class FakeDatabase:
         logging.info("Thread %s: finishing update", name)
 
     def locked_update(self, name):
-        logging.info("Thread %s: starting update", name)
+        logging.info("Thread %s no %s: starting update", threading.get_ident(), name)
         logging.debug("Thread %s about to lock", name)
         with self._lock:
             logging.debug("Thread %s has lock", name)
@@ -65,3 +65,5 @@ if __name__ == "__main__":
 #
 #     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
 #         executor.map(thread_function, range(3))
+
+

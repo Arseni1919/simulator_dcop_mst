@@ -1,7 +1,4 @@
 # Import the pygame module
-import pygame
-import sys
-# bla bla
 from CONSTANTS import *
 # Import random for random numbers
 import random
@@ -28,6 +25,7 @@ class Target(pygame.sprite.Sprite):
                     random.randint(0, SCREEN_HEIGHT),
                 )
             )
+            raise ValueError('surf_center == -1 in Target')
         else:
             self.surf_center = surf_center
             self.rect = self.surf.get_rect(

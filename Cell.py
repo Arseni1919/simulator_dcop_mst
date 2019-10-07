@@ -1,8 +1,4 @@
 # Import the pygame module
-import pygame
-import sys
-import random
-# bla bla
 from CONSTANTS import *
 
 
@@ -22,6 +18,7 @@ class Cell(pygame.sprite.Sprite):
                     random.randint(0, SCREEN_HEIGHT),
                 )
             )
+            raise ValueError('surf_center == -1 in Cell')
         else:
             self.surf_center = surf_center
             self.rect = self.surf.get_rect(

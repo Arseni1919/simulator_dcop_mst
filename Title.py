@@ -27,18 +27,18 @@ class Title(pygame.sprite.Sprite):
 
     # Move the sprite based on speed
     # Remove the sprite when it passes the left edge of the screen
-    def update(self, iter=0):
+    def update(self, iteration=0, conv=0):
         if self.alg_name == "Iteration:":
             self.surf.fill(SKY_COLOR)
             font = pygame.font.SysFont("comicsansms", 30)
             text = font.render("%s" % self.alg_name, True, (0, 0, 0))
             self.surf.blit(text, (0, 0))
-            text = font.render("%s" % iter, True, (0, 0, 0))
+            text = font.render("%s" % iteration, True, (0, 0, 0))
             self.surf.blit(text, (0, 40))
         if self.alg_name == "Convergence:":
             self.surf.fill(SKY_COLOR)
             font = pygame.font.SysFont("comicsansms", 30)
             text = font.render("%s" % self.alg_name, True, (0, 0, 0))
             self.surf.blit(text, (0, 0))
-            text = font.render("%s" % int(iter/2), True, (0, 0, 0))
+            text = font.render("%s" % conv, True, (0, 0, 0))
             self.surf.blit(text, (0, 40))

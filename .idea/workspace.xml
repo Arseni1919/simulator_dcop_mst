@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="61cd4c22-dbe1-4300-a0e2-5fd10fc80455" name="Default Changelist" comment="" />
+    <list default="true" id="61cd4c22-dbe1-4300-a0e2-5fd10fc80455" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Algorithms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bla2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/Agent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CONSTANTS.py" beforeDir="false" afterPath="$PROJECT_DIR$/CONSTANTS.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cell.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cell.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Target.py" beforeDir="false" afterPath="$PROJECT_DIR$/Target.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Title.py" beforeDir="false" afterPath="$PROJECT_DIR$/Title.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bla.py" beforeDir="false" afterPath="$PROJECT_DIR$/bla.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/help_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/help_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/threading tutorial.py" beforeDir="false" afterPath="$PROJECT_DIR$/threading tutorial.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,8 +28,13 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1RIHXEjwPv6TsnfYyhSTO3oDsEw" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
@@ -83,7 +101,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="lines" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="bla2" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="simulator_for_dcop_mst" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -95,7 +113,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/lines.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/bla2.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -147,19 +165,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.lines" />
       <item itemvalue="Python.main" />
       <item itemvalue="Python.DRAFTS" />
       <item itemvalue="Python.threading tutorial" />
       <item itemvalue="Python.bla" />
+      <item itemvalue="Python.bla2" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.main" />
-        <item itemvalue="Python.bla" />
+        <item itemvalue="Python.bla2" />
         <item itemvalue="Python.threading tutorial" />
+        <item itemvalue="Python.bla" />
         <item itemvalue="Python.DRAFTS" />
-        <item itemvalue="Python.lines" />
       </list>
     </recent_temporary>
   </component>
@@ -175,5 +193,16 @@
       <updated>1569347727633</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

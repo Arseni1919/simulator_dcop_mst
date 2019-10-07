@@ -1,7 +1,4 @@
 # Import the pygame module
-import pygame
-import sys
-import random
 from Agent import *
 from Target import *
 from Cell import *
@@ -77,10 +74,42 @@ def create_agents(cell_size, all_sprites, agents, cells,
                     break
 
 
-def get_center(bigger_frame, smaller_frame):
-    bw, bh = bigger_frame
-    sw, sh = smaller_frame
-    bw,
+def all_arrived(agents):
+    for agent in agents.sprites():
+        if not agent.arrived:
+            return False
+    return True
+
+
+def convergence_update(iteration):
+    return math.sqrt(iteration)
+
+
+def plot_results_if(need_to_plot_results, graphs, algorithms):
+    if need_to_plot_results:
+        plt.figure()
+        plt.plot(graphs[algorithms[0]])
+        plt.title('Convergence per iteration')
+        plt.show()
+
+
+def pickle_results_if(need_to_save_results, graphs):
+    if need_to_save_results:
+        file_name = "testfile"
+        # open the file for writing
+        with open(file_name, 'wb') as fileObject:
+            # this writes the object a to the file named 'testfile'
+            pickle.dump(graphs, fileObject)
+
+
+def foo():
+    print('here')
+    logging.info("Thread %s : starting foo", threading.get_ident())
+    time.sleep(0.1)
+    logging.info("Thread %s : finishing foo", threading.get_ident())
+
+
+
 
 
 
