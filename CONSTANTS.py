@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 import math
 import numpy as np
 import pickle
-from Algorithms import *
 
 # Define constants for the screen width and height
 SCREEN_WIDTH = 1000
@@ -44,7 +43,3 @@ logging.basicConfig(format=_format, level=logging.INFO,
                     datefmt="%H:%M:%S")
 # logging.getLogger().setLevel(logging.DEBUG)
 
-dict_alg = {
-    'DSA': DSA,
-    'MGM': MGM,
-}

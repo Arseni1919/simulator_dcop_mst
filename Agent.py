@@ -1,8 +1,6 @@
 # Import the pygame module
 from CONSTANTS import *
 
-# Import random for random numbers
-import random
 
 
 # Define a player object by extending pygame.sprite.Sprite
@@ -77,7 +75,7 @@ class Agent(pygame.sprite.Sprite):
         # logging.info("Thread %s : finishing moving", threading.get_ident())
 
     def update(self, algorithm, targets, cells):
-        self.future_pos = algorithm(
+        self.future_pos = algorithm(self.preprocessing(
             curr_pose=self.rect.center,
             cell_size=self.cell_size,
             MR=self.MR,
@@ -86,7 +84,7 @@ class Agent(pygame.sprite.Sprite):
             number_of_robot=self.number_of_robot,
             targets=targets,
             cells=cells,
-        )
+        ))
         self.arrived = False
 
         # for rendering
@@ -96,6 +94,9 @@ class Agent(pygame.sprite.Sprite):
         self.step_y = int((new_y - curr_y) / SPEED_MOVING)
 
         time.sleep(1)
+
+    def preprocessing(self, **kwargs):
+        return kwargs
 
         # logging.info("Thread %s : finishing update", threading.get_ident())
 

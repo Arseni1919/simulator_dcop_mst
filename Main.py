@@ -2,6 +2,7 @@ from Agent import *
 from Target import *
 from Cell import *
 from CONSTANTS import *
+from Algorithms import *
 from help_functions import *
 
 # ---------------------------
@@ -9,13 +10,13 @@ from help_functions import *
 # ---------------------------
 
 cell_size = CELL_SIZE['BIG']
-# cell_size = CELL_SIZE['MEDIUM']
+cell_size = CELL_SIZE['MEDIUM']
 # cell_size = CELL_SIZE['SMALL']
 show_ranges = True
 need_to_save_results = False
 need_to_plot_results = False
 
-num_of_agents = 1
+num_of_agents = 5
 algorithms = ['DSA',]
 target_rate = 0.05
 MR = 2.5*cell_size
@@ -183,7 +184,7 @@ if __name__ == '__main__':
  - dictionary of algorithms - correct
  - clean code in main
  - make algorithms transparent to robots ans simulator
- - 
+ - save initial positions for specific problem
 '''
 
 
