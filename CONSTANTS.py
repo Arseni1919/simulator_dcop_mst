@@ -22,7 +22,7 @@ CELL_SIZE = {
 }
 
 SKY_COLOR = (135, 206, 250)
-SPEED_MOVING = 10
+# SPEED_MOVING = 10
 
 # Import pygame.locals for easier access to key coordinates
 # Updated to conform to flake8 and black standards

@@ -53,7 +53,8 @@ def create_agents(cell_size, all_sprites, agents, cells,
                   ratio=0.05,
                   MR=round(3.5 * CELL_SIZE['BIG']),
                   SR=int(2.5 * CELL_SIZE['BIG']),
-                  show_ranges=False):
+                  show_ranges=False,
+                  speed=10):
     for agent in range(1, num_of_agents + 1):
         assigned = False
         while not assigned:
@@ -67,7 +68,8 @@ def create_agents(cell_size, all_sprites, agents, cells,
                                       surf_center=cell.surf_center,
                                       MR=MR,
                                       SR=SR,
-                                      show_ranges=show_ranges)
+                                      show_ranges=show_ranges,
+                                      speed=speed)
                     cell.prop = new_agent
                     agents.add(new_agent)
                     all_sprites.add(new_agent)

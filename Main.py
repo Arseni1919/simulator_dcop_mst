@@ -15,13 +15,14 @@ cell_size = CELL_SIZE['MEDIUM']
 show_ranges = True
 need_to_save_results = False
 need_to_plot_results = False
+speed = 10  # bigger -slower, smaller - faster. don't ask why
 
 num_of_agents = 5
 algorithms = ['DSA',]
 target_rate = 0.05
 MR = 2.5*cell_size
 SR = 1.5*cell_size
-MAX_ITERATIONS = 3
+MAX_ITERATIONS = 10
 # ---------------------------
 
 # ---------------------------
@@ -66,7 +67,8 @@ create_agents(cell_size, all_sprites, agents, cells,
               num_of_agents=num_of_agents,
               MR=MR,
               SR=SR,
-              show_ranges=show_ranges)
+              show_ranges=show_ranges,
+              speed=speed)
 
 
 def main():
@@ -185,6 +187,9 @@ if __name__ == '__main__':
  - clean code in main
  - make algorithms transparent to robots ans simulator
  - save initial positions for specific problem
+ - make more beautiful graphs
+ - update temp_req in targets
+ - 
 '''
 
 

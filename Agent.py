@@ -12,7 +12,8 @@ class Agent(pygame.sprite.Sprite):
                  surf_center=-1,
                  MR=round(3.5 * CELL_SIZE['BIG']),
                  SR=int(2.5 * CELL_SIZE['BIG']),
-                 show_ranges=False
+                 show_ranges=False,
+                 speed=10
                  ):
         super(Agent, self).__init__()
         self.cell_size = cell_size
@@ -27,6 +28,7 @@ class Agent(pygame.sprite.Sprite):
         self.arrived = True
         self.step_x = 0
         self.step_y = 0
+        self.speed = speed
 
         self.surf = pygame.Surface((2 * MR, 2 * MR), pygame.SRCALPHA)
 
@@ -90,13 +92,16 @@ class Agent(pygame.sprite.Sprite):
         # for rendering
         curr_x, curr_y = self.rect.center
         new_x, new_y = self.future_pos
-        self.step_x = int((new_x - curr_x) / SPEED_MOVING)
-        self.step_y = int((new_y - curr_y) / SPEED_MOVING)
+        self.step_x = int((new_x - curr_x) / self.speed)
+        self.step_y = int((new_y - curr_y) / self.speed)
 
         time.sleep(1)
 
     def preprocessing(self, **kwargs):
         return kwargs
+
+    def get_curr_pos(self):
+        return self.rect.center
 
         # logging.info("Thread %s : finishing update", threading.get_ident())
 
