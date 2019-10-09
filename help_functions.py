@@ -106,6 +106,8 @@ def pickle_results_if(need_to_save_results, graphs):
 
 
 
+
+
 def foo():
     print('here')
     logging.info("Thread %s : starting foo", threading.get_ident())

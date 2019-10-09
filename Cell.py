@@ -35,3 +35,6 @@ class Cell(pygame.sprite.Sprite):
 
     def add_property(self, prop):
         self.prop = prop
+
+    def get_pos(self):
+        return self.surf_center

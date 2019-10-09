@@ -10,7 +10,7 @@ from help_functions import *
 # ---------------------------
 
 cell_size = CELL_SIZE['BIG']
-cell_size = CELL_SIZE['MEDIUM']
+# cell_size = CELL_SIZE['MEDIUM']
 # cell_size = CELL_SIZE['SMALL']
 show_ranges = True
 need_to_save_results = False
@@ -136,7 +136,8 @@ def main():
             # makes a join to everybody
             with concurrent.futures.ThreadPoolExecutor(max_workers=len(agents.sprites())) as executor:
                 for agent in agents.sprites():
-                    executor.submit(agent.update, dict_alg[algorithms[0]], targets, cells)
+                    alg, for_alg = dict_alg[algorithms[0]]
+                    executor.submit(agent.update, alg, agents, targets, cells, for_alg)
             # logging.info("Thread %s : finishing updating!", threading.get_ident())
             time1 = pygame.time.get_ticks()
 

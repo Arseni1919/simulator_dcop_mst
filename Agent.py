@@ -22,13 +22,13 @@ class Agent(pygame.sprite.Sprite):
         self.SR = int(SR)
         self.show_ranges = show_ranges
         self.curr = (3, -3)
-        self.curr_nei = []
-        # self.curr_pos = self.rect.center
         self.future_pos = None
         self.arrived = True
         self.step_x = 0
         self.step_y = 0
         self.speed = speed
+        self.curr_nei = []
+        self.inbox = []
 
         self.surf = pygame.Surface((2 * MR, 2 * MR), pygame.SRCALPHA)
 
@@ -76,8 +76,10 @@ class Agent(pygame.sprite.Sprite):
         # time.sleep(0.1)
         # logging.info("Thread %s : finishing moving", threading.get_ident())
 
-    def update(self, algorithm, targets, cells):
+    def update(self, algorithm, agents, targets, cells, for_alg):
+        self.nei_update(agents)
         self.future_pos = algorithm(self.preprocessing(
+            agent=self,
             curr_pose=self.rect.center,
             cell_size=self.cell_size,
             MR=self.MR,
@@ -86,6 +88,7 @@ class Agent(pygame.sprite.Sprite):
             number_of_robot=self.number_of_robot,
             targets=targets,
             cells=cells,
+            for_alg=for_alg,
         ))
         self.arrived = False
 
@@ -100,8 +103,24 @@ class Agent(pygame.sprite.Sprite):
     def preprocessing(self, **kwargs):
         return kwargs
 
-    def get_curr_pos(self):
+    def get_pos(self):
         return self.rect.center
+
+    def send_curr_pose_to_curr_nei(self):
+        pass
+
+    def get_possible_pos_with_MR(self):
+        possible_pos = []
+        return possible_pos
+
+    def recieved_all_messages(self):
+        return True
+
+    def get_SR(self):
+        return self.SR
+
+    def nei_update(self, agents):
+        pass
 
         # logging.info("Thread %s : finishing update", threading.get_ident())
 
@@ -123,3 +142,5 @@ class Agent(pygame.sprite.Sprite):
         #     self.rect.top = 0
         # if self.rect.bottom >= SCREEN_HEIGHT:
         #     self.rect.bottom = SCREEN_HEIGHT
+
+
