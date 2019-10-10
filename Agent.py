@@ -13,13 +13,15 @@ class Agent(pygame.sprite.Sprite):
                  MR=round(3.5 * CELL_SIZE['BIG']),
                  SR=int(2.5 * CELL_SIZE['BIG']),
                  show_ranges=False,
-                 speed=10
+                 speed=10,
+                 cred=5,
                  ):
         super(Agent, self).__init__()
         self.cell_size = cell_size
         self.number_of_robot = number_of_robot
         self.MR = int(MR)
         self.SR = int(SR)
+        self.cred = cred
         self.show_ranges = show_ranges
         self.curr = (3, -3)
         self.future_pos = None
@@ -28,7 +30,8 @@ class Agent(pygame.sprite.Sprite):
         self.step_y = 0
         self.speed = speed
         self.curr_nei = []
-        self.inbox = []
+        self.inbox = {}
+        # self._lock = threading.Lock()
 
         self.surf = pygame.Surface((2 * MR, 2 * MR), pygame.SRCALPHA)
 
@@ -55,6 +58,7 @@ class Agent(pygame.sprite.Sprite):
             self.rect = self.surf.get_rect(
                 center=surf_center
             )
+            self.radius = MR
 
     # Move the sprite based on user keypresses
     def move(self, pressed_keys=None):
@@ -107,20 +111,96 @@ class Agent(pygame.sprite.Sprite):
         return self.rect.center
 
     def send_curr_pose_to_curr_nei(self):
-        pass
+        time.sleep(self.number_of_robot * 0.001)  # for stability: preventing deadlock
+        for agent in self.curr_nei:
+            # with threading.Lock():
+            agent.inbox[self.number_of_robot].append(self.get_pos())
 
-    def get_possible_pos_with_MR(self):
+    def get_possible_pos_with_MR(self, cells, targets):
+
         possible_pos = []
+        cell_set1 = []
+        cell_set2 = []
+        cell_set3 = []
+
+        for cell in cells:
+            if pygame.sprite.collide_circle(self, cell):
+                cell_set1.append(cell)
+
+        for cell in cell_set1:
+            captured = False
+            for target in targets:
+                if target.get_pos() == cell.get_pos():
+                    captured = True
+                    break
+            if not captured:
+                cell_set2.append(cell)
+
+        for cell in cell_set2:
+            captured = False
+            for agent in self.curr_nei:
+                if agent.get_pos() == cell.get_pos():
+                    captured = True
+                    break
+            if not captured:
+                cell_set3.append(cell)
+
+        for cell in cell_set3:
+            possible_pos.append(cell.get_pos())
+
         return possible_pos
 
-    def recieved_all_messages(self):
+    def calculate_temp_req(self, targets):
+
+        def in_area(pos_1, pos_2, SR):
+            px, py = pos_1
+            tx, ty = pos_2
+            return math.sqrt(math.pow(px - tx, 2) + math.pow(py - ty, 2)) < SR
+
+        temp_req_set = []
+        for target in targets:
+            curr_tuple = (target, target.get_req())
+            for agent in self.curr_nei:
+                if in_area(agent.get_pos(), target.get_pos(), agent.get_SR()):
+                    curr_tuple = (target, max(0, curr_tuple[1] - agent.get_cred()))
+            temp_req_set.append(curr_tuple)
+
+        return temp_req_set
+
+    def received_all_messages(self):
+        for _, messages in self.inbox.items():
+            if len(messages) == 0:
+                return False
         return True
 
     def get_SR(self):
         return self.SR
 
+    def get_MR(self):
+        return self.MR
+
+    def get_cred(self):
+        return self.cred
+
     def nei_update(self, agents):
-        pass
+
+        def distance(pos1, pos2):
+            return math.sqrt(math.pow(pos1[0] - pos2[0], 2) + math.pow(pos1[1] - pos2[1], 2))
+
+        # Update self.curr_nei
+        self.curr_nei = []
+        for agent in agents:
+            if self.number_of_robot != agent.number_of_robot:
+                if distance(self.get_pos(), agent.get_pos()) < self.SR + self.MR + agent.get_SR() + agent.get_MR():
+                    self.curr_nei.append(agent)
+
+        # Update self.inbox
+        self.inbox = {}
+        for agent in self.curr_nei:
+            self.inbox[agent.number_of_robot] = []
+
+        # print(self.number_of_robot, ': ', self.inbox)
+
 
         # logging.info("Thread %s : finishing update", threading.get_ident())
 

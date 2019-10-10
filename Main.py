@@ -10,18 +10,19 @@ from help_functions import *
 # ---------------------------
 
 cell_size = CELL_SIZE['BIG']
-# cell_size = CELL_SIZE['MEDIUM']
+cell_size = CELL_SIZE['MEDIUM']
 # cell_size = CELL_SIZE['SMALL']
 show_ranges = True
 need_to_save_results = False
-need_to_plot_results = False
+need_to_plot_results = True
 speed = 10  # bigger -slower, smaller - faster. don't ask why
 
-num_of_agents = 5
+num_of_agents = 6
 algorithms = ['DSA',]
-target_rate = 0.05
-MR = 2.5*cell_size
-SR = 1.5*cell_size
+target_rate = 0.08
+MR = 5.5*cell_size
+SR = 2.5*cell_size
+cred = 5
 MAX_ITERATIONS = 10
 # ---------------------------
 
@@ -67,18 +68,21 @@ create_agents(cell_size, all_sprites, agents, cells,
               num_of_agents=num_of_agents,
               MR=MR,
               SR=SR,
+              cred=cred,
               show_ranges=show_ranges,
               speed=speed)
 
 
+counter = 0
+
+
 def main():
     # Variable to keep the main loop running
-    time1 = pygame.time.get_ticks()
-    time3 = pygame.time.get_ticks()
-    counter = 0
+    running = True
     iteration = 0
     convergence = 0
-    running = True
+    time1 = pygame.time.get_ticks()
+    time3 = pygame.time.get_ticks()
 
     # Main loop
     while iteration < MAX_ITERATIONS and running:
@@ -126,8 +130,11 @@ def main():
             # UPDATING
             # -----------------------------------------
             iteration += 1
-            convergence = convergence_update(iteration)
+            convergence = convergence_update(targets.sprites(), agents.sprites())
             graphs[algorithms[0]].append(convergence)
+            nei_update(agents.sprites())
+            # print('---')
+            # logging.info("iteration: %s  Thread %s : ", iteration, threading.get_ident())
             # -----------------------------------------
             # print(time2 - time3)
             # print(counter)
@@ -137,8 +144,8 @@ def main():
             with concurrent.futures.ThreadPoolExecutor(max_workers=len(agents.sprites())) as executor:
                 for agent in agents.sprites():
                     alg, for_alg = dict_alg[algorithms[0]]
-                    executor.submit(agent.update, alg, agents, targets, cells, for_alg)
-            # logging.info("Thread %s : finishing updating!", threading.get_ident())
+                    executor.submit(agent.update, alg, agents.sprites(), targets.sprites(), cells.sprites(), for_alg)
+            logging.info("Thread %s : finishing updating! ----------------------------------", threading.get_ident())
             time1 = pygame.time.get_ticks()
 
         # Get the set of keys pressed and check for user input
@@ -170,6 +177,7 @@ def main():
     pygame.mixer.music.stop()
     pygame.mixer.quit()
 
+    time.sleep(3)
     # Done! Time to quit.
     pygame.quit()
 

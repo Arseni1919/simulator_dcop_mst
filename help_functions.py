@@ -40,7 +40,7 @@ def create_field(cell_size, all_sprites, cells):
 def create_targets(cell_size, all_sprites, targets, titles, cells, ratio=0.3):
     for cell in cells.sprites():
         if random.random() < ratio:
-            new_target = Target(cell_size, req=random.randint(1, 2), surf_center=cell.surf_center)
+            new_target = Target(cell_size, req=random.randint(1, 4), surf_center=cell.surf_center)
             cell.prop = new_target
             targets.add(new_target)
             all_sprites.add(new_target)
@@ -53,6 +53,7 @@ def create_agents(cell_size, all_sprites, agents, cells,
                   ratio=0.05,
                   MR=round(3.5 * CELL_SIZE['BIG']),
                   SR=int(2.5 * CELL_SIZE['BIG']),
+                  cred=5,
                   show_ranges=False,
                   speed=10):
     for agent in range(1, num_of_agents + 1):
@@ -68,6 +69,7 @@ def create_agents(cell_size, all_sprites, agents, cells,
                                       surf_center=cell.surf_center,
                                       MR=MR,
                                       SR=SR,
+                                      cred=cred,
                                       show_ranges=show_ranges,
                                       speed=speed)
                     cell.prop = new_agent
@@ -84,8 +86,19 @@ def all_arrived(agents):
     return True
 
 
-def convergence_update(iteration):
-    return math.sqrt(iteration)
+def distance(pos1, pos2):
+    return math.sqrt(math.pow(pos1[0] - pos2[0], 2) + math.pow(pos1[1] - pos2[1], 2))
+
+
+def convergence_update(targets, agents):
+    convergence = 0
+    for target in targets:
+        curr_conv = target.get_req()
+        for agent in agents:
+            if distance(target.get_pos(), agent.get_pos()) < agent.get_SR():
+                curr_conv = max(0, curr_conv - agent.get_cred())
+        convergence += curr_conv
+    return convergence
 
 
 def plot_results_if(need_to_plot_results, graphs, algorithms):
@@ -105,7 +118,9 @@ def pickle_results_if(need_to_save_results, graphs):
             pickle.dump(graphs, fileObject)
 
 
-
+def nei_update(agents):
+    for agent in agents:
+        agent.nei_update(agents)
 
 
 def foo():

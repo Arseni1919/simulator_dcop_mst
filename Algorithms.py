@@ -5,7 +5,7 @@ OUTER WORLD - ALL FUNCTIONS HERE SUPPOSE TO BE TRANSPARENT TO SIMULATION
 '''
 
 def DSA(kwargs):
-    logging.info("Thread %s : in DSA", threading.get_ident())
+    # logging.info("Thread %s : in DSA", threading.get_ident())
     # for key, value in kwargs.items():
     #     print(key, value)
     agent = kwargs['agent']
@@ -20,11 +20,13 @@ def DSA(kwargs):
     for_alg = kwargs['for_alg']
 
     agent.send_curr_pose_to_curr_nei()
-    while not agent.recieved_all_messages():
-        time.sleep(0.001)
-    possible_pos = agent.get_possible_pos_with_MR()
-    temp_req = agent.calculate_temp_req()  # form: [(target, temp_req), (target, temp_req), (target, temp_req), ..]
-    new_pos = select_pos(possible_pos, temp_req, agent.get_SR())
+    while not agent.received_all_messages():
+        # logging.info("agent: %s  Thread %s : in DSA, inbox: %s", agent.number_of_robot, threading.get_ident(), agent.inbox)
+        time.sleep(1)
+    logging.info("agent: %s  Inbox: %s ", agent.number_of_robot, agent.inbox)
+    possible_pos = agent.get_possible_pos_with_MR(cells, targets)
+    temp_req_set = agent.calculate_temp_req(targets)  # form: [(target, temp_req), (target, temp_req), ..]
+    new_pos = select_pos(possible_pos, temp_req_set, agent.get_SR())
     if random.random() < for_alg[0]:
         return new_pos
     return curr_pose
