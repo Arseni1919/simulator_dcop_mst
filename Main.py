@@ -10,20 +10,20 @@ from help_functions import *
 # ---------------------------
 
 cell_size = CELL_SIZE['BIG']
-cell_size = CELL_SIZE['MEDIUM']
+# cell_size = CELL_SIZE['MEDIUM']
 # cell_size = CELL_SIZE['SMALL']
 show_ranges = True
 need_to_save_results = False
 need_to_plot_results = True
 speed = 10  # bigger -slower, smaller - faster. don't ask why
 
-num_of_agents = 6
+num_of_agents = 8
 algorithms = ['DSA',]
 target_rate = 0.08
 MR = 5.5*cell_size
 SR = 2.5*cell_size
 cred = 5
-MAX_ITERATIONS = 10
+MAX_ITERATIONS = 15
 # ---------------------------
 
 # ---------------------------
@@ -196,8 +196,7 @@ if __name__ == '__main__':
  - clean code in main
  - make algorithms transparent to robots ans simulator
  - save initial positions for specific problem
- - make more beautiful graphs
- - update temp_req in targets
+ - make more beautiful graphs!
  - 
 '''
 

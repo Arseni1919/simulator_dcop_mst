@@ -6,8 +6,6 @@
       <change beforePath="$PROJECT_DIR$/Agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/Agent.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Algorithms.py" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bla2.py" beforeDir="false" afterPath="$PROJECT_DIR$/bla2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/help_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/help_functions.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -224,7 +222,14 @@
       <option name="project" value="LOCAL" />
       <updated>1570638168044</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="updated">
+      <created>1570699379764</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1570699379764</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

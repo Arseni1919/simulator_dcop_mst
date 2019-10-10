@@ -20,10 +20,10 @@ def DSA(kwargs):
     for_alg = kwargs['for_alg']
 
     agent.send_curr_pose_to_curr_nei()
-    while not agent.received_all_messages():
-        # logging.info("agent: %s  Thread %s : in DSA, inbox: %s", agent.number_of_robot, threading.get_ident(), agent.inbox)
-        time.sleep(1)
-    logging.info("agent: %s  Inbox: %s ", agent.number_of_robot, agent.inbox)
+    # while not agent.received_all_messages():
+    #     # logging.info("agent: %s  Thread %s : in DSA, inbox: %s", agent.number_of_robot, threading.get_ident(), agent.inbox)
+    #     time.sleep(1)
+    # logging.info("agent: %s  Inbox: %s ", agent.number_of_robot, agent.inbox)
     possible_pos = agent.get_possible_pos_with_MR(cells, targets)
     temp_req_set = agent.calculate_temp_req(targets)  # form: [(target, temp_req), (target, temp_req), ..]
     new_pos = select_pos(possible_pos, temp_req_set, agent.get_SR())

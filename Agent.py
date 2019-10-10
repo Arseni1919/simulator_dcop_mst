@@ -31,7 +31,7 @@ class Agent(pygame.sprite.Sprite):
         self.speed = speed
         self.curr_nei = []
         self.inbox = {}
-        # self._lock = threading.Lock()
+        self._lock = threading.Lock()
 
         self.surf = pygame.Surface((2 * MR, 2 * MR), pygame.SRCALPHA)
 
@@ -110,11 +110,24 @@ class Agent(pygame.sprite.Sprite):
     def get_pos(self):
         return self.rect.center
 
+    def get_message_from(self, num_of_agent, message):
+        logging.info("Thread %s: starting update", num_of_agent)
+        logging.info("Thread %s about to lock", num_of_agent)
+        with self._lock:
+            logging.info("Thread %s has lock", num_of_agent)
+            self.inbox[num_of_agent].append(message)
+            logging.info("Thread %s about to release lock", num_of_agent)
+        logging.info("Thread %s after release", num_of_agent)
+        logging.info("Thread %s: finishing update", num_of_agent)
+
+
     def send_curr_pose_to_curr_nei(self):
-        time.sleep(self.number_of_robot * 0.001)  # for stability: preventing deadlock
+        # time.sleep(self.number_of_robot * 0.001)  # for stability: preventing deadlock
         for agent in self.curr_nei:
+            if agent is self: raise ValueError('Ups')
             # with threading.Lock():
-            agent.inbox[self.number_of_robot].append(self.get_pos())
+            # agent.inbox[self.number_of_robot].append(self.get_pos())
+            agent.get_message_from(self.number_of_robot, self.get_pos())
 
     def get_possible_pos_with_MR(self, cells, targets):
 
