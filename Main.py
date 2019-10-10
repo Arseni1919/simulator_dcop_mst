@@ -17,7 +17,7 @@ need_to_save_results = False
 need_to_plot_results = True
 speed = 10  # bigger -slower, smaller - faster. don't ask why
 
-num_of_agents = 8
+num_of_agents = 30
 algorithms = ['DSA',]
 target_rate = 0.08
 MR = 5.5*cell_size

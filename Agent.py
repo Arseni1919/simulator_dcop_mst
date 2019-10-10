@@ -111,14 +111,14 @@ class Agent(pygame.sprite.Sprite):
         return self.rect.center
 
     def get_message_from(self, num_of_agent, message):
-        logging.info("Thread %s: starting update", num_of_agent)
-        logging.info("Thread %s about to lock", num_of_agent)
+        # logging.info("Thread %s: starting update", num_of_agent)
+        # logging.info("Thread %s about to lock", num_of_agent)
         with self._lock:
-            logging.info("Thread %s has lock", num_of_agent)
+            # logging.info("Thread %s has lock", num_of_agent)
             self.inbox[num_of_agent].append(message)
-            logging.info("Thread %s about to release lock", num_of_agent)
-        logging.info("Thread %s after release", num_of_agent)
-        logging.info("Thread %s: finishing update", num_of_agent)
+        #     logging.info("Thread %s about to release lock", num_of_agent)
+        # logging.info("Thread %s after release", num_of_agent)
+        # logging.info("Thread %s: finishing update", num_of_agent)
 
 
     def send_curr_pose_to_curr_nei(self):
