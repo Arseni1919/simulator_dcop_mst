@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import math
 import numpy as np
 import pickle
+import copy
 
 # Define constants for the screen width and height
 SCREEN_WIDTH = 1000

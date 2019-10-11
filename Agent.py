@@ -1,5 +1,6 @@
 # Import the pygame module
 from CONSTANTS import *
+from pure_functions import *
 
 
 
@@ -31,7 +32,7 @@ class Agent(pygame.sprite.Sprite):
         self.speed = speed
         self.curr_nei = []
         self.inbox = {}
-        self._lock = threading.Lock()
+        self._lock = threading.RLock()
 
         self.surf = pygame.Surface((2 * MR, 2 * MR), pygame.SRCALPHA)
 
@@ -81,7 +82,6 @@ class Agent(pygame.sprite.Sprite):
         # logging.info("Thread %s : finishing moving", threading.get_ident())
 
     def update(self, algorithm, agents, targets, cells, for_alg):
-        self.nei_update(agents)
         self.future_pos = algorithm(self.preprocessing(
             agent=self,
             curr_pose=self.rect.center,
@@ -110,31 +110,39 @@ class Agent(pygame.sprite.Sprite):
     def get_pos(self):
         return self.rect.center
 
-    def get_message_from(self, num_of_agent, message):
-        # logging.info("Thread %s: starting update", num_of_agent)
-        # logging.info("Thread %s about to lock", num_of_agent)
+    def get_access_to_inbox(self, type_of_requirement, num_of_agent=None, message=None):
         with self._lock:
-            # logging.info("Thread %s has lock", num_of_agent)
-            self.inbox[num_of_agent].append(message)
-        #     logging.info("Thread %s about to release lock", num_of_agent)
-        # logging.info("Thread %s after release", num_of_agent)
-        # logging.info("Thread %s: finishing update", num_of_agent)
+            # logging.info("Thread %s has the lock inside %s", num_of_agent, self.number_of_robot)
+            if type_of_requirement == 'message':
+                # logging.info("Thread %s has the message: %s", num_of_agent, message)
+                self.inbox[num_of_agent].append(message)
+                # logging.info("Agent %s after update has the inbox: %s", self.number_of_robot, self.inbox)
+            if type_of_requirement == 'copy':
+                # logging.info("Thread %s about to release the lock!!!! inbox: %s", num_of_agent, self.inbox)
+                return copy.deepcopy(self.inbox)
+            # logging.info("Thread %s about to release lock inside %s", num_of_agent, self.number_of_robot)
 
+    def received_all_messages(self):
+        curr_inbox = self.get_access_to_inbox('copy', self.number_of_robot)
+        for _, messages in curr_inbox.items():
+            if len(messages) == 0:
+                return False, curr_inbox
+        return True, curr_inbox
 
     def send_curr_pose_to_curr_nei(self):
         # time.sleep(self.number_of_robot * 0.001)  # for stability: preventing deadlock
         for agent in self.curr_nei:
-            if agent is self: raise ValueError('Ups')
-            # with threading.Lock():
-            # agent.inbox[self.number_of_robot].append(self.get_pos())
-            agent.get_message_from(self.number_of_robot, self.get_pos())
+            if agent is self:
+                raise ValueError('Ups')
+            agent.get_access_to_inbox('message', self.number_of_robot, self.get_pos())
 
-    def get_possible_pos_with_MR(self, cells, targets):
+    def get_possible_pos_with_MR(self, cells, targets, neighbours):
 
         possible_pos = []
         cell_set1 = []
         cell_set2 = []
         cell_set3 = []
+        curr_inbox = self.get_access_to_inbox('copy')
 
         for cell in cells:
             if pygame.sprite.collide_circle(self, cell):
@@ -151,8 +159,8 @@ class Agent(pygame.sprite.Sprite):
 
         for cell in cell_set2:
             captured = False
-            for agent in self.curr_nei:
-                if agent.get_pos() == cell.get_pos():
+            for agent in neighbours:
+                if curr_inbox[agent.number_of_robot][0] == cell.get_pos():
                     captured = True
                     break
             if not captured:
@@ -163,28 +171,21 @@ class Agent(pygame.sprite.Sprite):
 
         return possible_pos
 
-    def calculate_temp_req(self, targets):
+    def calculate_temp_req(self, targets, neighbours):
 
-        def in_area(pos_1, pos_2, SR):
-            px, py = pos_1
-            tx, ty = pos_2
-            return math.sqrt(math.pow(px - tx, 2) + math.pow(py - ty, 2)) < SR
+        curr_inbox = self.get_access_to_inbox('copy')
 
         temp_req_set = []
         for target in targets:
             curr_tuple = (target, target.get_req())
-            for agent in self.curr_nei:
-                if in_area(agent.get_pos(), target.get_pos(), agent.get_SR()):
+            for agent in neighbours:
+                if in_area(curr_inbox[agent.number_of_robot][0], target.get_pos(), agent.get_SR()):
                     curr_tuple = (target, max(0, curr_tuple[1] - agent.get_cred()))
             temp_req_set.append(curr_tuple)
 
         return temp_req_set
 
-    def received_all_messages(self):
-        for _, messages in self.inbox.items():
-            if len(messages) == 0:
-                return False
-        return True
+
 
     def get_SR(self):
         return self.SR
@@ -196,23 +197,17 @@ class Agent(pygame.sprite.Sprite):
         return self.cred
 
     def nei_update(self, agents):
-
-        def distance(pos1, pos2):
-            return math.sqrt(math.pow(pos1[0] - pos2[0], 2) + math.pow(pos1[1] - pos2[1], 2))
-
         # Update self.curr_nei
         self.curr_nei = []
         for agent in agents:
             if self.number_of_robot != agent.number_of_robot:
-                if distance(self.get_pos(), agent.get_pos()) < self.SR + self.MR + agent.get_SR() + agent.get_MR():
+                if distance(self.get_pos(), agent.get_pos()) < (self.SR + self.MR + agent.get_SR() + agent.get_MR()):
                     self.curr_nei.append(agent)
 
         # Update self.inbox
         self.inbox = {}
         for agent in self.curr_nei:
             self.inbox[agent.number_of_robot] = []
-
-        # print(self.number_of_robot, ': ', self.inbox)
 
 
         # logging.info("Thread %s : finishing update", threading.get_ident())

@@ -37,10 +37,14 @@ def create_field(cell_size, all_sprites, cells):
 
 
 # Create targets
-def create_targets(cell_size, all_sprites, targets, titles, cells, ratio=0.3):
+def create_targets(cell_size, all_sprites, targets, titles, cells, ratio=0.3, target_range=(1, 4)):
     for cell in cells.sprites():
         if random.random() < ratio:
-            new_target = Target(cell_size, req=random.randint(1, 4), surf_center=cell.surf_center)
+            new_target = Target(
+                cell_size,
+                req=random.randint(target_range[0], target_range[1]),
+                surf_center=cell.surf_center
+            )
             cell.prop = new_target
             targets.add(new_target)
             all_sprites.add(new_target)
@@ -86,10 +90,6 @@ def all_arrived(agents):
     return True
 
 
-def distance(pos1, pos2):
-    return math.sqrt(math.pow(pos1[0] - pos2[0], 2) + math.pow(pos1[1] - pos2[1], 2))
-
-
 def convergence_update(targets, agents):
     convergence = 0
     for target in targets:
@@ -123,11 +123,7 @@ def nei_update(agents):
         agent.nei_update(agents)
 
 
-def foo():
-    print('here')
-    logging.info("Thread %s : starting foo", threading.get_ident())
-    time.sleep(0.1)
-    logging.info("Thread %s : finishing foo", threading.get_ident())
+
 
 
 

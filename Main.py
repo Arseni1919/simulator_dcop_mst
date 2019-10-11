@@ -3,27 +3,29 @@ from Target import *
 from Cell import *
 from CONSTANTS import *
 from Algorithms import *
-from help_functions import *
+from main_help_functions import *
+from pure_functions import *
 
 # ---------------------------
 # ------INPUT SETTINGS-------
 # ---------------------------
 
 cell_size = CELL_SIZE['BIG']
-# cell_size = CELL_SIZE['MEDIUM']
+cell_size = CELL_SIZE['MEDIUM']
 # cell_size = CELL_SIZE['SMALL']
 show_ranges = True
 need_to_save_results = False
 need_to_plot_results = True
 speed = 10  # bigger -slower, smaller - faster. don't ask why
 
-num_of_agents = 30
+num_of_agents = 5
 algorithms = ['DSA',]
 target_rate = 0.08
+target_range = (1, 5)  # max and min value of target
 MR = 5.5*cell_size
 SR = 2.5*cell_size
-cred = 5
-MAX_ITERATIONS = 15
+cred = 3
+MAX_ITERATIONS = 20
 # ---------------------------
 
 # ---------------------------
@@ -61,7 +63,7 @@ create_field(cell_size, all_sprites, cells)
 print(len(cells.sprites()))
 
 # Create targets on field
-create_targets(cell_size, all_sprites, targets, titles, cells, target_rate)
+create_targets(cell_size, all_sprites, targets, titles, cells, target_rate, target_range)
 
 # Create agents on field
 create_agents(cell_size, all_sprites, agents, cells,
@@ -76,7 +78,7 @@ create_agents(cell_size, all_sprites, agents, cells,
 counter = 0
 
 
-def main():
+if __name__ == '__main__':
     # Variable to keep the main loop running
     running = True
     iteration = 0
@@ -187,9 +189,6 @@ def main():
     # Plot results
     plot_results_if(need_to_plot_results, graphs, algorithms)
 
-
-if __name__ == '__main__':
-    main()
 
 '''
  - dictionary of algorithms - correct

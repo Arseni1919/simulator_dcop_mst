@@ -20,25 +20,28 @@ def DSA(kwargs):
     for_alg = kwargs['for_alg']
 
     agent.send_curr_pose_to_curr_nei()
-    # while not agent.received_all_messages():
+    # ---------------------------------------------------
+    while not agent.received_all_messages()[0]:
+    #     # pass
     #     # logging.info("agent: %s  Thread %s : in DSA, inbox: %s", agent.number_of_robot, threading.get_ident(), agent.inbox)
-    #     time.sleep(1)
-    # logging.info("agent: %s  Inbox: %s ", agent.number_of_robot, agent.inbox)
-    possible_pos = agent.get_possible_pos_with_MR(cells, targets)
-    temp_req_set = agent.calculate_temp_req(targets)  # form: [(target, temp_req), (target, temp_req), ..]
+        time.sleep(1)
+    # ---------------------------------------------------
+    logging.info("agent: %s  Inbox: %s  Thread: %s",
+                 agent.number_of_robot,
+                 agent.received_all_messages()[1],
+                 threading.get_ident()
+                 )
+    possible_pos = agent.get_possible_pos_with_MR(cells, targets, agent.curr_nei)
+    temp_req_set = agent.calculate_temp_req(targets, agent.curr_nei)  # form: [(target,temp_req),(target,temp_req),..]
     new_pos = select_pos(possible_pos, temp_req_set, agent.get_SR())
     if random.random() < for_alg[0]:
         return new_pos
     return curr_pose
 
-    # curr_x, curr_y = curr_pose
-    # future_pos = (curr_x + 1 * (cell_size + 2), curr_y - 1 * (cell_size + 2))
-    #
-    # return future_pos
-
 
 def MGM(curr_pose):
-    logging.info("Thread %s : in DSA", threading.get_ident())
+    logging.info("Thread %s : in MGM", threading.get_ident())
+
     return curr_pose
 
 
@@ -113,7 +116,16 @@ def get_target_set_with_SR_range(pos_set, targets, SR):
 
 
 # return tuple (x, y)
+
 def select_pos(pos_set, targets, SR):
+    """
+    input:
+    pos_set = [(x1, y1),(x2, y2),..]
+    targets = [(target, temp_req), (target, temp_req), ..]
+    SR = int()
+    output:
+    pos = (x, y)
+    """
     if len(pos_set) == 1:
         return pos_set[0]
     target_set = get_target_set_with_SR_range(pos_set, targets, SR)
@@ -147,7 +159,14 @@ dict_alg = {
 '''
 REQUIREMENTS:
 Target() -> get_req(), get_pos(), get_temp_req(), set_temp_req()
-Agent() -> get_curr_pos()
+Agent() ->  get_pos() 
+            send_curr_pose_to_curr_nei() 
+            get_possible_pos_with_MR(cells, targets)
+            calculate_temp_req(targets)
+            get_SR()
+            get_MR()
+            nei_update(agents)
+Cell() -> get_pos()
 '''
 
 
