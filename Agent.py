@@ -86,10 +86,6 @@ class Agent(pygame.sprite.Sprite):
             agent=self,
             curr_pose=self.rect.center,
             cell_size=self.cell_size,
-            MR=self.MR,
-            SR=self.SR,
-            curr_nei=self.curr_nei,
-            number_of_robot=self.number_of_robot,
             targets=targets,
             cells=cells,
             for_alg=for_alg,
@@ -122,71 +118,6 @@ class Agent(pygame.sprite.Sprite):
                 return copy.deepcopy(self.inbox)
             # logging.info("Thread %s about to release lock inside %s", num_of_agent, self.number_of_robot)
 
-    def received_all_messages(self):
-        curr_inbox = self.get_access_to_inbox('copy', self.number_of_robot)
-        for _, messages in curr_inbox.items():
-            if len(messages) == 0:
-                return False, curr_inbox
-        return True, curr_inbox
-
-    def send_curr_pose_to_curr_nei(self):
-        # time.sleep(self.number_of_robot * 0.001)  # for stability: preventing deadlock
-        for agent in self.curr_nei:
-            if agent is self:
-                raise ValueError('Ups')
-            agent.get_access_to_inbox('message', self.number_of_robot, self.get_pos())
-
-    def get_possible_pos_with_MR(self, cells, targets, neighbours):
-
-        possible_pos = []
-        cell_set1 = []
-        cell_set2 = []
-        cell_set3 = []
-        curr_inbox = self.get_access_to_inbox('copy')
-
-        for cell in cells:
-            if pygame.sprite.collide_circle(self, cell):
-                cell_set1.append(cell)
-
-        for cell in cell_set1:
-            captured = False
-            for target in targets:
-                if target.get_pos() == cell.get_pos():
-                    captured = True
-                    break
-            if not captured:
-                cell_set2.append(cell)
-
-        for cell in cell_set2:
-            captured = False
-            for agent in neighbours:
-                if curr_inbox[agent.number_of_robot][0] == cell.get_pos():
-                    captured = True
-                    break
-            if not captured:
-                cell_set3.append(cell)
-
-        for cell in cell_set3:
-            possible_pos.append(cell.get_pos())
-
-        return possible_pos
-
-    def calculate_temp_req(self, targets, neighbours):
-
-        curr_inbox = self.get_access_to_inbox('copy')
-
-        temp_req_set = []
-        for target in targets:
-            curr_tuple = (target, target.get_req())
-            for agent in neighbours:
-                if in_area(curr_inbox[agent.number_of_robot][0], target.get_pos(), agent.get_SR()):
-                    curr_tuple = (target, max(0, curr_tuple[1] - agent.get_cred()))
-            temp_req_set.append(curr_tuple)
-
-        return temp_req_set
-
-
-
     def get_SR(self):
         return self.SR
 
@@ -195,6 +126,12 @@ class Agent(pygame.sprite.Sprite):
 
     def get_cred(self):
         return self.cred
+
+    def get_curr_nei(self):
+        return self.curr_nei
+
+    def get_num_of_agent(self):
+        return self.number_of_robot
 
     def nei_update(self, agents):
         # Update self.curr_nei

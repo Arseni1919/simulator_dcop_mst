@@ -1,8 +1,22 @@
 
 from CONSTANTS import *
+from pure_functions import *
 '''
 OUTER WORLD - ALL FUNCTIONS HERE SUPPOSE TO BE TRANSPARENT TO SIMULATION
 '''
+
+
+def FOO(kwargs):
+    agent = kwargs['agent']
+    curr_pose = kwargs['curr_pose']
+    cell_size = kwargs['cell_size']
+    targets = kwargs['targets']
+    cells = kwargs['cells']
+    for_alg = kwargs['for_alg']
+    logging.info("Thread %s : in FOO", threading.get_ident())
+
+    return curr_pose
+
 
 def DSA(kwargs):
     # logging.info("Thread %s : in DSA", threading.get_ident())
@@ -10,36 +24,37 @@ def DSA(kwargs):
     #     print(key, value)
     agent = kwargs['agent']
     curr_pose = kwargs['curr_pose']
-    cell_size = kwargs['cell_size']
-    MR = kwargs['MR']
-    SR = kwargs['SR']
-    curr_nei = kwargs['curr_nei']
-    number_of_robot = kwargs['number_of_robot']
     targets = kwargs['targets']
     cells = kwargs['cells']
     for_alg = kwargs['for_alg']
 
-    agent.send_curr_pose_to_curr_nei()
+    send_curr_pose_to_curr_nei(agent)
     # ---------------------------------------------------
-    while not agent.received_all_messages()[0]:
+    while not received_all_messages(agent)[0]:
     #     # pass
     #     # logging.info("agent: %s  Thread %s : in DSA, inbox: %s", agent.number_of_robot, threading.get_ident(), agent.inbox)
         time.sleep(1)
     # ---------------------------------------------------
     logging.info("agent: %s  Inbox: %s  Thread: %s",
                  agent.number_of_robot,
-                 agent.received_all_messages()[1],
+                 received_all_messages(agent)[1],
                  threading.get_ident()
                  )
-    possible_pos = agent.get_possible_pos_with_MR(cells, targets, agent.curr_nei)
-    temp_req_set = agent.calculate_temp_req(targets, agent.curr_nei)  # form: [(target,temp_req),(target,temp_req),..]
+    possible_pos = get_possible_pos_with_MR(agent, cells, targets, agent.curr_nei)
+    temp_req_set = calculate_temp_req(agent, targets, agent.curr_nei)  # form: [(target,temp_req),(target,temp_req),..]
     new_pos = select_pos(possible_pos, temp_req_set, agent.get_SR())
     if random.random() < for_alg[0]:
         return new_pos
     return curr_pose
 
 
-def MGM(curr_pose):
+def MGM(kwargs):
+    agent = kwargs['agent']
+    curr_pose = kwargs['curr_pose']
+    cell_size = kwargs['cell_size']
+    targets = kwargs['targets']
+    cells = kwargs['cells']
+    for_alg = kwargs['for_alg']
     logging.info("Thread %s : in MGM", threading.get_ident())
 
     return curr_pose
@@ -47,9 +62,71 @@ def MGM(curr_pose):
 
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
-# help outer functions
+# help Algorithms functions
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
+def received_all_messages(self_agent):
+    curr_inbox = self_agent.get_access_to_inbox('copy', self_agent.get_num_of_agent())
+    for _, messages in curr_inbox.items():
+        if len(messages) == 0:
+            return False, curr_inbox
+    return True, curr_inbox
+
+
+def calculate_temp_req(self_agent, targets, neighbours):
+    curr_inbox = self_agent.get_access_to_inbox('copy')
+    temp_req_set = []
+    for target in targets:
+        curr_tuple = (target, target.get_req())
+        for agent in neighbours:
+            if in_area(curr_inbox[agent.number_of_robot][0], target.get_pos(), agent.get_SR()):
+                curr_tuple = (target, max(0, curr_tuple[1] - agent.get_cred()))
+        temp_req_set.append(curr_tuple)
+    return temp_req_set
+
+
+def get_possible_pos_with_MR(self_agent, cells, targets, neighbours):
+    possible_pos = []
+    cell_set1 = []
+    cell_set2 = []
+    cell_set3 = []
+    curr_inbox = self_agent.get_access_to_inbox('copy')
+
+    for cell in cells:
+        if distance(self_agent.get_pos(), cell.get_pos()) < self_agent.get_MR():
+            cell_set1.append(cell)
+
+    for cell in cell_set1:
+        captured = False
+        for target in targets:
+            if target.get_pos() == cell.get_pos():
+                captured = True
+                break
+        if not captured:
+            cell_set2.append(cell)
+
+    for cell in cell_set2:
+        captured = False
+        for agent in neighbours:
+            if curr_inbox[agent.get_num_of_agent()][0] == cell.get_pos():
+                captured = True
+                break
+        if not captured:
+            cell_set3.append(cell)
+
+    for cell in cell_set3:
+        possible_pos.append(cell.get_pos())
+
+    return possible_pos
+
+
+def send_curr_pose_to_curr_nei(self_agent):
+    curr_nei = self_agent.get_curr_nei()
+    for agent in curr_nei:
+        if agent is self_agent:
+            raise ValueError('Ups')
+        agent.get_access_to_inbox('message', self_agent.get_num_of_agent(), self_agent.get_pos())
+
 
 def in_area(pos_1, pos_2, SR):
     px, py = pos_1
@@ -158,15 +235,19 @@ dict_alg = {
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 '''
 REQUIREMENTS:
-Target() -> get_req(), get_pos(), get_temp_req(), set_temp_req()
-Agent() ->  get_pos() 
-            send_curr_pose_to_curr_nei() 
-            get_possible_pos_with_MR(cells, targets)
-            calculate_temp_req(targets)
+Target() -> get_req(), 
+            get_pos(), 
+            get_temp_req(), 
+            set_temp_req()
+            
+Agent()  -> get_pos() 
+            get_num_of_agent() 
+            get_access_to_inbox()
             get_SR()
             get_MR()
             nei_update(agents)
-Cell() -> get_pos()
+            
+Cell()   -> get_pos()
 '''
 
 

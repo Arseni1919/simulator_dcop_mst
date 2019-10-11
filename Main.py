@@ -12,13 +12,13 @@ from pure_functions import *
 
 cell_size = CELL_SIZE['BIG']
 cell_size = CELL_SIZE['MEDIUM']
-# cell_size = CELL_SIZE['SMALL']
+cell_size = CELL_SIZE['SMALL']
 show_ranges = True
 need_to_save_results = False
 need_to_plot_results = True
 speed = 10  # bigger -slower, smaller - faster. don't ask why
 
-num_of_agents = 5
+num_of_agents = 40
 algorithms = ['DSA',]
 target_rate = 0.08
 target_range = (1, 5)  # max and min value of target
@@ -196,7 +196,8 @@ if __name__ == '__main__':
  - make algorithms transparent to robots ans simulator
  - save initial positions for specific problem
  - make more beautiful graphs!
- - 
+ - make less heavy methods in agent and more functional code in Algorithms.py
+ -  
 '''
 
 
