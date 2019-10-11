@@ -7,6 +7,10 @@ OUTER WORLD - ALL FUNCTIONS HERE SUPPOSE TO BE TRANSPARENT TO SIMULATION
 
 
 def FOO(kwargs):
+    """
+    :param kwargs:
+    :return:
+    """
     agent = kwargs['agent']
     curr_pose = kwargs['curr_pose']
     cell_size = kwargs['cell_size']
@@ -19,9 +23,10 @@ def FOO(kwargs):
 
 
 def DSA(kwargs):
-    # logging.info("Thread %s : in DSA", threading.get_ident())
-    # for key, value in kwargs.items():
-    #     print(key, value)
+    """
+    :param kwargs:
+    :return:
+    """
     agent = kwargs['agent']
     curr_pose = kwargs['curr_pose']
     targets = kwargs['targets']
@@ -31,8 +36,6 @@ def DSA(kwargs):
     send_curr_pose_to_curr_nei(agent)
     # ---------------------------------------------------
     while not received_all_messages(agent)[0]:
-    #     # pass
-    #     # logging.info("agent: %s  Thread %s : in DSA, inbox: %s", agent.number_of_robot, threading.get_ident(), agent.inbox)
         time.sleep(1)
     # ---------------------------------------------------
     logging.info("agent: %s  Inbox: %s  Thread: %s",
@@ -49,6 +52,10 @@ def DSA(kwargs):
 
 
 def MGM(kwargs):
+    """
+    :param kwargs:
+    :return:
+    """
     agent = kwargs['agent']
     curr_pose = kwargs['curr_pose']
     cell_size = kwargs['cell_size']
@@ -56,6 +63,8 @@ def MGM(kwargs):
     cells = kwargs['cells']
     for_alg = kwargs['for_alg']
     logging.info("Thread %s : in MGM", threading.get_ident())
+
+    pass
 
     return curr_pose
 
@@ -66,6 +75,10 @@ def MGM(kwargs):
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 def received_all_messages(self_agent):
+    """
+    input:
+    output:
+    """
     curr_inbox = self_agent.get_access_to_inbox('copy', self_agent.get_num_of_agent())
     for _, messages in curr_inbox.items():
         if len(messages) == 0:
@@ -74,6 +87,10 @@ def received_all_messages(self_agent):
 
 
 def calculate_temp_req(self_agent, targets, neighbours):
+    """
+    input:
+    output:
+    """
     curr_inbox = self_agent.get_access_to_inbox('copy')
     temp_req_set = []
     for target in targets:
@@ -86,6 +103,10 @@ def calculate_temp_req(self_agent, targets, neighbours):
 
 
 def get_possible_pos_with_MR(self_agent, cells, targets, neighbours):
+    """
+    input:
+    output:
+    """
     possible_pos = []
     cell_set1 = []
     cell_set2 = []
@@ -121,6 +142,10 @@ def get_possible_pos_with_MR(self_agent, cells, targets, neighbours):
 
 
 def send_curr_pose_to_curr_nei(self_agent):
+    """
+    input:
+    output:
+    """
     curr_nei = self_agent.get_curr_nei()
     for agent in curr_nei:
         if agent is self_agent:
@@ -128,13 +153,14 @@ def send_curr_pose_to_curr_nei(self_agent):
         agent.get_access_to_inbox('message', self_agent.get_num_of_agent(), self_agent.get_pos())
 
 
-def in_area(pos_1, pos_2, SR):
-    px, py = pos_1
-    tx, ty = pos_2
-    return math.sqrt(math.pow(px - tx, 2) + math.pow(py - ty, 2)) < SR
+
 
 
 def get_req_list_max_to_min(targets):
+    """
+    input:
+    output:
+    """
     req_list_max_to_min = []
     for target_tuple in targets:
         target, temp_req = target_tuple
@@ -143,6 +169,10 @@ def get_req_list_max_to_min(targets):
 
 
 def get_new_targets(target_set, targets):
+    """
+    input:
+    output:
+    """
     new_targets = []
     for target in targets:
         if target not in target_set:
@@ -151,6 +181,10 @@ def get_new_targets(target_set, targets):
 
 
 def get_possible_pos(pos_set, target_set, SR):
+    """
+    input:
+    output:
+    """
     best_value = 0
     new_target_set = []
     possible_pos = []
@@ -178,6 +212,10 @@ def get_possible_pos(pos_set, target_set, SR):
 
 
 def get_target_set_with_SR_range(pos_set, targets, SR):
+    """
+    input:
+    output:
+    """
     target_set = []
     req_list_max_to_min = get_req_list_max_to_min(targets)
     for max_req in req_list_max_to_min:
