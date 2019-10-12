@@ -106,6 +106,10 @@ class Agent(pygame.sprite.Sprite):
     def get_pos(self):
         return self.rect.center
 
+    def set_pos(self, pos):
+        self.rect.center = pos
+        self.future_pos = pos
+
     def get_access_to_inbox(self, type_of_requirement, num_of_agent=None, message=None):
         with self._lock:
             # logging.info("Thread %s has the lock inside %s", num_of_agent, self.number_of_robot)

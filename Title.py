@@ -19,7 +19,7 @@ class Title(pygame.sprite.Sprite):
         text = font.render("%s" % alg_name, True, (0, 0, 0))
         wt, ht = self.surf.get_size()
         self.surf.blit(text, (0, 0))
-
+        self.dont_kill = False
         # self.surf.fill((255, 255, 255))
         self.rect = self.surf.get_rect(
             center=(int((SCREEN_WIDTH - 200)), int(ht/2) + ht*order)
@@ -27,14 +27,37 @@ class Title(pygame.sprite.Sprite):
 
     # Move the sprite based on speed
     # Remove the sprite when it passes the left edge of the screen
-    def update(self, iteration=0, conv=0):
+    def update(self, iteration=0, MAX_ITERATIONS=0,
+               conv=0,
+               problem=0, NUMBER_OF_PROBLEMS=0,
+               algorithm=None, algorithms=[]):
+
+        if self.alg_name == "Algorithm:":
+            index_of = algorithms.index(algorithm) + 1
+            length = len(algorithms)
+            self.surf.fill(SKY_COLOR)
+            font = pygame.font.SysFont("comicsansms", 30)
+            text = font.render("%s" % self.alg_name, True, (0, 0, 0))
+            self.surf.blit(text, (0, 0))
+            text = font.render("%s out of %s" % (index_of, length), True, (0, 0, 0))
+            self.surf.blit(text, (0, 40))
+
+        if self.alg_name == "Problem:":
+            self.surf.fill(SKY_COLOR)
+            font = pygame.font.SysFont("comicsansms", 30)
+            text = font.render("%s" % self.alg_name, True, (0, 0, 0))
+            self.surf.blit(text, (0, 0))
+            text = font.render("%s out of %s" % (problem, NUMBER_OF_PROBLEMS), True, (0, 0, 0))
+            self.surf.blit(text, (0, 40))
+
         if self.alg_name == "Iteration:":
             self.surf.fill(SKY_COLOR)
             font = pygame.font.SysFont("comicsansms", 30)
             text = font.render("%s" % self.alg_name, True, (0, 0, 0))
             self.surf.blit(text, (0, 0))
-            text = font.render("%s" % iteration, True, (0, 0, 0))
+            text = font.render("%s out of %s" % (iteration, MAX_ITERATIONS), True, (0, 0, 0))
             self.surf.blit(text, (0, 40))
+
         if self.alg_name == "Convergence:":
             self.surf.fill(SKY_COLOR)
             font = pygame.font.SysFont("comicsansms", 30)

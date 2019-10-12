@@ -2,8 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="61cd4c22-dbe1-4300-a0e2-5fd10fc80455" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/matplotlib_graph.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/Agent.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Algorithms.py" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pure_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/pure_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cell.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cell.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Target.py" beforeDir="false" afterPath="$PROJECT_DIR$/Target.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Title.py" beforeDir="false" afterPath="$PROJECT_DIR$/Title.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bla2.py" beforeDir="false" afterPath="$PROJECT_DIR$/bla2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_help_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_help_functions.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -52,27 +60,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Python.main">
-    <configuration name="DRAFTS" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="simulator_for_dcop_mst" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/DRAFTS.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="bla" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="simulator_for_dcop_mst" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -136,6 +123,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="matplotlib_graph" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="simulator_for_dcop_mst" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/matplotlib_graph.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="threading tutorial" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="simulator_for_dcop_mst" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -159,18 +167,18 @@
     </configuration>
     <list>
       <item itemvalue="Python.main" />
-      <item itemvalue="Python.DRAFTS" />
       <item itemvalue="Python.threading tutorial" />
       <item itemvalue="Python.bla" />
       <item itemvalue="Python.bla2" />
+      <item itemvalue="Python.matplotlib_graph" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.main" />
         <item itemvalue="Python.bla2" />
+        <item itemvalue="Python.matplotlib_graph" />
         <item itemvalue="Python.threading tutorial" />
         <item itemvalue="Python.bla" />
-        <item itemvalue="Python.DRAFTS" />
       </list>
     </recent_temporary>
   </component>
@@ -255,7 +263,14 @@
       <option name="project" value="LOCAL" />
       <updated>1570791903584</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="updated">
+      <created>1570792651299</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1570792651299</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

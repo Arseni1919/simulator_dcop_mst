@@ -1,8 +1,7 @@
 # Import the pygame module
-
+from CONSTANTS import *
 from Target import *
 from Cell import *
-from CONSTANTS import *
 from Title import *
 from Agent import *
 
@@ -10,17 +9,35 @@ from Agent import *
 # Create Side-Titles
 def create_side_titles(alg_name, all_sprites, titles):
 
-    alg_title = Title(alg_name=alg_name, order=0)
+    for title in titles.sprites():
+        title.kill()
+
+    order = 0
+    alg_title = Title(alg_name=alg_name, order=order)
     titles.add(alg_title)
     all_sprites.add(alg_title)
 
-    other_title = Title(alg_name="Iteration:", order=1)
+    order += 1
+    other_title = Title(alg_name="Problem:", order=order)
     titles.add(other_title)
     all_sprites.add(other_title)
 
-    other_title = Title(alg_name="Convergence:", order=2)
+    order += 1
+    other_title = Title(alg_name="Algorithm:", order=order)
     titles.add(other_title)
     all_sprites.add(other_title)
+
+    order += 1
+    other_title = Title(alg_name="Iteration:", order=order)
+    titles.add(other_title)
+    all_sprites.add(other_title)
+
+    order += 1
+    other_title = Title(alg_name="Convergence:", order=order)
+    titles.add(other_title)
+    all_sprites.add(other_title)
+
+
 
 
 # Create Field
@@ -48,7 +65,7 @@ def create_targets(cell_size, all_sprites, targets, titles, cells, ratio=0.3, ta
             cell.prop = new_target
             targets.add(new_target)
             all_sprites.add(new_target)
-    titles.update(len(targets.sprites()))
+    # titles.update(len(targets.sprites()))
 
 
 # Create agents
@@ -104,7 +121,9 @@ def convergence_update(targets, agents):
 def plot_results_if(need_to_plot_results, graphs, algorithms):
     if need_to_plot_results:
         plt.figure()
-        plt.plot(graphs[algorithms[0]])
+        for algorithm in algorithms:
+            plt.plot(graphs[algorithm], label=algorithm)
+        plt.legend()
         plt.title('Convergence per iteration')
         plt.show()
 
@@ -121,6 +140,12 @@ def pickle_results_if(need_to_save_results, graphs):
 def nei_update(agents):
     for agent in agents:
         agent.nei_update(agents)
+
+
+def go_back_to_initial_positions(cells):
+    for cell in cells:
+        if cell.prop:
+            cell.prop.set_pos(cell.get_pos())
 
 
 

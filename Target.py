@@ -43,6 +43,9 @@ class Target(pygame.sprite.Sprite):
     def get_pos(self):
         return self.surf_center
 
+    def set_pos(self, pos):
+        self.rect.center = pos
+
     def get_req(self):
         return self.req
 

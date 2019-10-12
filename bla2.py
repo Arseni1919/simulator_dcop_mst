@@ -1,5 +1,4 @@
-import pickle
-
+# from CONSTANTS import *
 
 # graphs = {'DSA': [1,2,3,4]}
 # # Save the results
@@ -13,7 +12,7 @@ import numpy as np
 import math
 from Algorithms import *
 from Target import *
-# import pygame
+
 # pygame.init()
 # b= [1,2,3]
 # targets = []
@@ -31,4 +30,11 @@ from Target import *
 # print(time2 - time1)
 
 a = []
-print(len(a) == 0)
+# print(get_cov([(Target(req=1, surf_center=(1,4)), 4),(Target(req=1, surf_center=(10,6)), 3)],(1,2),3))
+print(range(0))
+for i in range(2):
+    print('rfjskbvk')
+
+
+
+
