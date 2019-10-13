@@ -38,11 +38,11 @@ def DSA(kwargs):
     while not received_all_messages(agent)[0]:
         time.sleep(1)
     # ---------------------------------------------------
-    logging.info("agent: %s  Inbox: %s  Thread: %s",
-                 agent.number_of_robot,
-                 received_all_messages(agent)[1],
-                 threading.get_ident()
-                 )
+    # logging.info("agent: %s  Inbox: %s  Thread: %s",
+    #              agent.number_of_robot,
+    #              received_all_messages(agent)[1],
+    #              threading.get_ident()
+    #              )
     possible_pos = get_possible_pos_with_MR(agent, cells, targets, agent.curr_nei)
     temp_req_set = calculate_temp_req(agent, targets, agent.curr_nei)  # form: [(target,temp_req),(target,temp_req),..]
     new_pos = select_pos(possible_pos, temp_req_set, agent.get_SR())
@@ -67,11 +67,11 @@ def DSA_PILR(kwargs):
     while not received_all_messages(agent)[0]:
         time.sleep(1)
     # ---------------------------------------------------
-    logging.info("agent: %s  Inbox: %s  Thread: %s",
-                 agent.number_of_robot,
-                 received_all_messages(agent)[1],
-                 threading.get_ident()
-                 )
+    # logging.info("agent: %s  Inbox: %s  Thread: %s",
+    #              agent.number_of_robot,
+    #              received_all_messages(agent)[1],
+    #              threading.get_ident()
+    #              )
     possible_pos = get_possible_pos_with_MR(agent, cells, targets, agent.curr_nei)
     temp_req_set = calculate_temp_req(agent, targets, agent.curr_nei)  # form: [(target,temp_req),(target,temp_req),..]
     new_pos = select_pos(possible_pos, temp_req_set, agent.get_SR())
@@ -111,11 +111,11 @@ def MGM(kwargs):
     while not received_all_messages(agent, 2)[0]:
         time.sleep(1)
     # ---------------------------------------------------
-    logging.info("agent: %s  Inbox: %s  Thread: %s",
-                 agent.number_of_robot,
-                 received_all_messages(agent)[1],
-                 threading.get_ident()
-                 )
+    # logging.info("agent: %s  Inbox: %s  Thread: %s",
+    #              agent.number_of_robot,
+    #              received_all_messages(agent)[1],
+    #              threading.get_ident()
+    #              )
     if LR > 0:
         if mgm_condition(agent, LR):
             return new_pos
@@ -434,6 +434,9 @@ dict_alg = {
     'DSA': (DSA, [0.8]),
     'MGM': (MGM, []),
     'DSA_PILR': (DSA_PILR, [0.8, 3, 0.4]),
+    'DSA_PILR1': (DSA_PILR, [0.8, 1, 0.5]),
+    'DSA_PILR2': (DSA_PILR, [0.8, 5, 0.5]),
+    'DSA_PILR3': (DSA_PILR, [0.8, 3, 0.5]),
 }
 
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------

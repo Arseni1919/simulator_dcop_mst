@@ -8,23 +8,26 @@ from pure_functions import *
 
 cell_size = CELL_SIZE['BIG']
 cell_size = CELL_SIZE['MEDIUM']
-cell_size = CELL_SIZE['SMALL']
+# cell_size = CELL_SIZE['SMALL']
 show_ranges = True
 need_to_save_results = False
+adding_to_file_name = 'for_graph'
 need_to_plot_results = True
-speed = 10  # bigger -slower, smaller - faster. don't ask why
+alpha = 0.025  # for confidence intervals in graphs
+speed = 2  # bigger -slower, smaller - faster. don't ask why
 
-num_of_agents = 20
-algorithms = ['DSA_PILR',]
-algorithms = ['DSA_PILR', 'DSA',]
-algorithms = ['DSA_PILR', 'DSA', 'MGM',]
+num_of_agents = 4
+algorithms = ['DSA_PILR1','DSA_PILR2','DSA_PILR3',]
+# algorithms = ['DSA_PILR', 'DSA',]
+# algorithms = ['DSA_PILR', 'DSA', 'MGM',]
 target_rate = 0.08
 target_range = (1, 5)  # max and min value of target
 MR = 5.5*cell_size
 SR = 2.5*cell_size
 cred = 3
-MAX_ITERATIONS = 20
-NUMBER_OF_PROBLEMS = 3
+MAX_ITERATIONS = 30
+NUMBER_OF_PROBLEMS = 10
+
 # ---------------------------
 
 # ---------------------------
@@ -74,14 +77,12 @@ pygame.time.set_timer(MOVEAGENTS, 2000)
 #               speed=speed)
 
 
-counter = 0
-
-
 if __name__ == '__main__':
     # Variable to keep the main loop running
     running = True
     time1 = pygame.time.get_ticks()
     time3 = pygame.time.get_ticks()
+    interval = 2
 
     # Main loop
     for problem in range(NUMBER_OF_PROBLEMS):
@@ -149,15 +150,14 @@ if __name__ == '__main__':
                         # time1 = pygame.time.get_ticks()
                         pass
 
-                time2 = pygame.time.get_ticks()
                 if not all_arrived(agents):
-                    counter += 1
                     # makes a join to everybody
                     with concurrent.futures.ThreadPoolExecutor(max_workers=len(agents.sprites())) as executor:
                         for agent in agents.sprites():
                             executor.submit(agent.move)
                     # logging.info("Thread %s : finishing moving!", threading.get_ident())
 
+                time2 = pygame.time.get_ticks()
                 if all_arrived(agents) and time2 - time1 > 1000:
                     # -----------------------------------------
                     # UPDATING
@@ -169,10 +169,7 @@ if __name__ == '__main__':
                     # print('---')
                     # logging.info("iteration: %s  Thread %s : ", iteration, threading.get_ident())
                     # -----------------------------------------
-                    # print(time2 - time3)
-                    # print(counter)
-                    counter = 0
-                    time3 = pygame.time.get_ticks()
+
                     # makes a join to everybody
                     with concurrent.futures.ThreadPoolExecutor(max_workers=len(agents.sprites())) as executor:
                         for agent in agents.sprites():
@@ -180,7 +177,8 @@ if __name__ == '__main__':
                             executor.submit(agent.update, alg, agents.sprites(), targets.sprites(), cells.sprites(),
                                             for_alg)
                     logging.info("Thread %s : finishing updating! -----------------------------", threading.get_ident())
-                    time1 = pygame.time.get_ticks()
+                    time3 = pygame.time.get_ticks()
+                    interval = (time3 - time2)/1000 + 1  # for Title of time
 
                 # Get the set of keys pressed and check for user input
                 pressed_keys = pygame.key.get_pressed()
@@ -190,8 +188,8 @@ if __name__ == '__main__':
                 targets.update()
                 titles.update(iteration, MAX_ITERATIONS,
                               convergence,
-                              problem + 1, NUMBER_OF_PROBLEMS,
-                              algorithm, algorithms)
+                              problem, NUMBER_OF_PROBLEMS,
+                              algorithm, algorithms, interval)
 
                 # Fill the screen with black
                 screen.fill(SKY_COLOR)
@@ -219,10 +217,10 @@ if __name__ == '__main__':
     pygame.quit()
 
     # Save the results
-    pickle_results_if(need_to_save_results, graphs)
+    pickle_results_if(need_to_save_results, graphs, adding_to_file_name)
 
     # Plot results
-    plot_results_if(need_to_plot_results, graphs, algorithms)
+    plot_results_if(need_to_plot_results, graphs, algorithms, alpha)
 
 
 '''

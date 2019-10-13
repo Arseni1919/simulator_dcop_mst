@@ -37,6 +37,11 @@ def create_side_titles(alg_name, all_sprites, titles):
     titles.add(other_title)
     all_sprites.add(other_title)
 
+    order += 1
+    other_title = Title(alg_name="Remained:", order=order)
+    titles.add(other_title)
+    all_sprites.add(other_title)
+
 
 
 
@@ -118,22 +123,59 @@ def convergence_update(targets, agents):
     return convergence
 
 
-def plot_results_if(need_to_plot_results, graphs, algorithms):
+def plot_results_if(need_to_plot_results, graphs, algorithms, alpha=0.025):
     if need_to_plot_results:
-        plt.figure()
+        # plt.style.use('fivethirtyeight')
+        # plt.style.use('bmh')
+        lines = ['-', '--', '-.', ':', ]
+        lines.reverse()
+        markers = [',', '+', '_', '.', 'o', '*']
+        markers.reverse()
+        marker_index, line_index = 0, 0
+        num_of_iterations, num_of_problems = graphs[algorithms[0]].shape
+        t_value = t.ppf(1 - alpha, df=(num_of_problems - 1))
+        iterations = [i for i in range(num_of_iterations)]
+        # avr = np.average(a, 1)
+        # std = np.std(a, 1)
+
+        fig, ax = plt.subplots()
+
         for algorithm in algorithms:
-            plt.plot(graphs[algorithm], label=algorithm)
-        plt.legend()
-        plt.title('Convergence per iteration')
+
+            line_index = 0 if line_index == len(lines) else line_index
+            marker_index = 0 if marker_index == len(markers) else marker_index
+
+            matrix = graphs[algorithm]
+            avr = np.average(matrix, 1)
+            std = np.std(matrix, 1)
+
+            line = lines[line_index]
+            marker = markers[marker_index]
+
+            ax.plot(iterations, avr, '%s%s' % (marker, line), label=algorithm)
+
+            line_index += 1
+            marker_index += 1
+
+            # confidence interval
+            ax.fill_between(iterations, avr - t_value * std, avr + t_value * std,
+                             alpha=0.2, antialiased=True)
+
+        ax.legend(loc='upper right')
+        ax.set_title('Results')
+        ax.set_ylabel('Convergence')
+        ax.set_xlabel('Iterations')
+        fig.tight_layout()
         plt.show()
 
 
-def pickle_results_if(need_to_save_results, graphs):
+def pickle_results_if(need_to_save_results, graphs, adding_to_file_name=''):
     if need_to_save_results:
-        file_name = "testfile"
+        timestr = time.strftime("%d.%m.%Y-%H:%M:%S")
+        file_name = "data/%s_%s_file.data" % (timestr, adding_to_file_name)
         # open the file for writing
         with open(file_name, 'wb') as fileObject:
-            # this writes the object a to the file named 'testfile'
+            # this writes the object a to the file named 'testfile.data'
             pickle.dump(graphs, fileObject)
 
 

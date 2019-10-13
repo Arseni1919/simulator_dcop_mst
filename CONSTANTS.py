@@ -10,6 +10,8 @@ import math
 import numpy as np
 import pickle
 import copy
+from scipy.stats import t
+
 
 # Define constants for the screen width and height
 SCREEN_WIDTH = 1000
