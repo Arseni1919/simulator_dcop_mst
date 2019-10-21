@@ -15,7 +15,7 @@ class Title(pygame.sprite.Sprite):
         self.surf = pygame.Surface((200, 100), pygame.SRCALPHA)
         self.alg_name = alg_name
         # Number of Requirement
-        font = pygame.font.SysFont("comicsansms", 30)
+        font = pygame.font.SysFont("comicsansms", 25)
         text = font.render("%s" % alg_name, True, (0, 0, 0))
         wt, ht = self.surf.get_size()
         self.surf.blit(text, (0, 0))

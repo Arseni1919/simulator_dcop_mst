@@ -40,7 +40,7 @@ class Agent(pygame.sprite.Sprite):
             pygame.draw.circle(self.surf, (0, 0, 255, 20), self.surf.get_rect().center, self.MR)
             pygame.draw.circle(self.surf, (255, 0, 0, 40), self.surf.get_rect().center, self.SR)
 
-        self.car_surf = pygame.transform.scale(pygame.image.load("hamster2.png"), (cell_size, int(0.73 * cell_size)))
+        self.car_surf = pygame.transform.scale(pygame.image.load("pics/hamster2.png"), (cell_size, int(0.73 * cell_size)))
         self.car_surf.set_colorkey((255, 255, 255), RLEACCEL)
 
         # Number of Robot

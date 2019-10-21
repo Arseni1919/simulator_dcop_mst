@@ -8,25 +8,26 @@ from pure_functions import *
 
 cell_size = CELL_SIZE['BIG']
 cell_size = CELL_SIZE['MEDIUM']
-# cell_size = CELL_SIZE['SMALL']
+cell_size = CELL_SIZE['SMALL']
 show_ranges = True
 need_to_save_results = False
 adding_to_file_name = 'for_graph'
 need_to_plot_results = True
 alpha = 0.025  # for confidence intervals in graphs
-speed = 2  # bigger -slower, smaller - faster. don't ask why
+speed = 10  # bigger -slower, smaller - faster. don't ask why
 
-num_of_agents = 4
-algorithms = ['DSA_PILR1','DSA_PILR2','DSA_PILR3',]
-# algorithms = ['DSA_PILR', 'DSA',]
+num_of_agents = 20
+algorithms = ['DSA_PILR_0.2','DSA_PILR_0.5','DSA_PILR_0.8',]
+algorithms = ['DSA_PILR',]
+algorithms = ['DSA_PILR', 'DSA',]
 # algorithms = ['DSA_PILR', 'DSA', 'MGM',]
-target_rate = 0.08
+target_rate = 0.1
 target_range = (1, 5)  # max and min value of target
 MR = 5.5*cell_size
 SR = 2.5*cell_size
 cred = 3
-MAX_ITERATIONS = 30
-NUMBER_OF_PROBLEMS = 10
+MAX_ITERATIONS = 5
+NUMBER_OF_PROBLEMS = 1
 
 # ---------------------------
 
@@ -42,39 +43,13 @@ clock = pygame.time.Clock()
 pygame.mixer.init()
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_HEIGHT + 202, SCREEN_HEIGHT), pygame.SRCALPHA)
+finish_sound = pygame.mixer.Sound("sounds/Bell_2.ogg")
 
 # Create a custom event for adding a new enemy
 ADDENEMY = pygame.USEREVENT + 1
 pygame.time.set_timer(ADDENEMY, 250)
 MOVEAGENTS = pygame.USEREVENT + 2
 pygame.time.set_timer(MOVEAGENTS, 2000)
-
-# # Create groups to hold all kinds of sprites
-# # - all_sprites is used for rendering
-# agents = pygame.sprite.Group()
-# targets = pygame.sprite.Group()
-# cells = pygame.sprite.Group()
-# titles = pygame.sprite.Group()
-# all_sprites = pygame.sprite.Group()
-#
-# # Renders the titles aside of a field
-# create_side_titles(algorithms[0], all_sprites, titles)
-#
-# # Create Field
-# create_field(cell_size, all_sprites, cells)
-# print(len(cells.sprites()))
-#
-# # Create targets on field
-# create_targets(cell_size, all_sprites, targets, titles, cells, target_rate, target_range)
-#
-# # Create agents on field
-# create_agents(cell_size, all_sprites, agents, cells,
-#               num_of_agents=num_of_agents,
-#               MR=MR,
-#               SR=SR,
-#               cred=cred,
-#               show_ranges=show_ranges,
-#               speed=speed)
 
 
 if __name__ == '__main__':
@@ -208,11 +183,13 @@ if __name__ == '__main__':
                 # Update the display
                 pygame.display.flip()
 
+    finish_sound.play()
+    time.sleep(2)
     # All done! Stop and quit the mixer.
     pygame.mixer.music.stop()
     pygame.mixer.quit()
 
-    time.sleep(2)
+    # time.sleep(2)
     # Done! Time to quit.
     pygame.quit()
 

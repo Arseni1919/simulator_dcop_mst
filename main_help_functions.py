@@ -126,7 +126,7 @@ def convergence_update(targets, agents):
 def plot_results_if(need_to_plot_results, graphs, algorithms, alpha=0.025):
     if need_to_plot_results:
         # plt.style.use('fivethirtyeight')
-        # plt.style.use('bmh')
+        plt.style.use('bmh')
         lines = ['-', '--', '-.', ':', ]
         lines.reverse()
         markers = [',', '+', '_', '.', 'o', '*']
@@ -165,6 +165,7 @@ def plot_results_if(need_to_plot_results, graphs, algorithms, alpha=0.025):
         ax.set_title('Results')
         ax.set_ylabel('Convergence')
         ax.set_xlabel('Iterations')
+        # ax.set_xlim(xmin=iterations[0], xmax=iterations[-1])
         fig.tight_layout()
         plt.show()
 
