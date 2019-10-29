@@ -1,6 +1,7 @@
 from Algorithms import *
 from main_help_functions import *
 from pure_functions import *
+from CONSTANTS import *
 
 # ---------------------------
 # ------INPUT SETTINGS-------
@@ -8,26 +9,42 @@ from pure_functions import *
 
 cell_size = CELL_SIZE['BIG']
 cell_size = CELL_SIZE['MEDIUM']
-cell_size = CELL_SIZE['SMALL']
+# cell_size = CELL_SIZE['SMALL']
+# cell_size = 10  # 'CUSTOM'
 show_ranges = True
 need_to_save_results = False
-adding_to_file_name = 'for_graph'
+adding_to_file_name = 'DSA_PILR_vs_DSA'
 need_to_plot_results = True
+need_to_plot_variance = False
 alpha = 0.025  # for confidence intervals in graphs
 speed = 10  # bigger -slower, smaller - faster. don't ask why
 
-num_of_agents = 20
-algorithms = ['DSA_PILR_0.2','DSA_PILR_0.5','DSA_PILR_0.8',]
+num_of_agents = 30
+# algorithms = ['DSA_PILR_0.2','DSA_PILR_0.5','DSA_PILR_0.8',]
 algorithms = ['DSA_PILR',]
 algorithms = ['DSA_PILR', 'DSA',]
+# algorithms = [
+#     # 'DSA_PILR_1',
+#     # 'DSA_PILR_2',
+#     # 'DSA_PILR_3',
+#     # 'DSA_PILR_4',
+#     # 'DSA_PILR_5',
+#     'DSA_PILR_6',
+#     'DSA_PILR_7',  # best
+#     'DSA_PILR_8',
+#     'DSA_PILR_9',
+#     # 'MGM',
+#     # 'DSA_4',
+#     'DSA_5',
+# ]
 # algorithms = ['DSA_PILR', 'DSA', 'MGM',]
-target_rate = 0.1
-target_range = (1, 5)  # max and min value of target
+target_rate = 0.05
+target_range = (1, 4)  # max and min value of target
 MR = 5.5*cell_size
 SR = 2.5*cell_size
 cred = 3
-MAX_ITERATIONS = 5
-NUMBER_OF_PROBLEMS = 1
+MAX_ITERATIONS = 20
+NUMBER_OF_PROBLEMS = 10
 
 # ---------------------------
 
@@ -37,6 +54,8 @@ NUMBER_OF_PROBLEMS = 1
 graphs = {}
 for algorithm in algorithms:
     graphs[algorithm] = np.zeros((MAX_ITERATIONS, NUMBER_OF_PROBLEMS))
+    if algorithm not in dict_alg.keys():
+        raise ValueError('algorithm not in dict')
 # ---------------------------
 # INITIALIZATIONS:
 clock = pygame.time.Clock()
@@ -72,7 +91,7 @@ if __name__ == '__main__':
 
         # Create Field
         create_field(cell_size, all_sprites, cells)
-        # print(len(cells.sprites()))
+        print('height/weight: ', math.sqrt(len(cells.sprites())))
 
         # Create targets on field
         create_targets(cell_size, all_sprites, targets, titles, cells, target_rate, target_range)
@@ -197,7 +216,7 @@ if __name__ == '__main__':
     pickle_results_if(need_to_save_results, graphs, adding_to_file_name)
 
     # Plot results
-    plot_results_if(need_to_plot_results, graphs, algorithms, alpha)
+    plot_results_if(need_to_plot_results, need_to_plot_variance, graphs, algorithms, alpha)
 
 
 '''
@@ -207,7 +226,13 @@ if __name__ == '__main__':
  - save initial positions for specific problem
  - make more beautiful graphs!
  - make less heavy methods in agent and more functional code in Algorithms.py
- -  
+ - output as PDF - beautifully organized report
+ - the sending message logic has to go inside the agent
+ - delete send_curr_pose_to_curr_nei(agent) and put instead send_message_to_curr_nei(agent, agent.get_pos())
+ - prevent collisions in DSA, DSA_PIRL and others
+ - make the change of the size screen depend on amount of cells in one side
+ - make variable of amount of targets
+ - 
 '''
 
 

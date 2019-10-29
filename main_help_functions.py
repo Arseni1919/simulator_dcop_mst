@@ -123,7 +123,7 @@ def convergence_update(targets, agents):
     return convergence
 
 
-def plot_results_if(need_to_plot_results, graphs, algorithms, alpha=0.025):
+def plot_results_if(need_to_plot_results, need_to_plot_variance, graphs, algorithms, alpha=0.025):
     if need_to_plot_results:
         # plt.style.use('fivethirtyeight')
         plt.style.use('bmh')
@@ -157,9 +157,10 @@ def plot_results_if(need_to_plot_results, graphs, algorithms, alpha=0.025):
             line_index += 1
             marker_index += 1
 
-            # confidence interval
-            ax.fill_between(iterations, avr - t_value * std, avr + t_value * std,
-                             alpha=0.2, antialiased=True)
+            if need_to_plot_variance:
+                # confidence interval
+                ax.fill_between(iterations, avr - t_value * std, avr + t_value * std,
+                                 alpha=0.2, antialiased=True)
 
         ax.legend(loc='upper right')
         ax.set_title('Results')

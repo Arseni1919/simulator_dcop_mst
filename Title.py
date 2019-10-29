@@ -22,7 +22,8 @@ class Title(pygame.sprite.Sprite):
         self.dont_kill = False
         # self.surf.fill((255, 255, 255))
         self.rect = self.surf.get_rect(
-            center=(int((SCREEN_WIDTH - 200)), int(ht/2) + ht*order)
+            # center=(int((SCREEN_WIDTH - 200)), int(ht/2) + ht*order)
+            center=(int((SCREEN_HEIGHT + 100)), int(ht / 2) + ht * order)
         )
 
     # Move the sprite based on speed

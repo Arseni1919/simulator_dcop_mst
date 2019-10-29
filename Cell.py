@@ -2,7 +2,7 @@
 from CONSTANTS import *
 
 
-# Define the cloud object by extending pygame.sprite.Sprite
+# Define the cell object by extending pygame.sprite.Sprite
 # Use an image for a better-looking sprite
 class Cell(pygame.sprite.Sprite):
     def __init__(self, cell_size=CELL_SIZE['BIG'], surf_center=-1):
@@ -12,12 +12,12 @@ class Cell(pygame.sprite.Sprite):
         self.surf.fill((255, 255, 255))
         # The starting position is randomly generated
         if surf_center == -1:
-            self.rect = self.surf.get_rect(
-                center=(
-                    random.randint(SCREEN_WIDTH + 20, SCREEN_WIDTH + 100),
-                    random.randint(0, SCREEN_HEIGHT),
-                )
-            )
+            # self.rect = self.surf.get_rect(
+            #     center=(
+            #         random.randint(SCREEN_WIDTH + 20, SCREEN_WIDTH + 100),
+            #         random.randint(0, SCREEN_HEIGHT),
+            #     )
+            # )
             raise ValueError('surf_center == -1 in Cell')
         else:
             self.surf_center = surf_center

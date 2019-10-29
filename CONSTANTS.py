@@ -5,6 +5,8 @@ import logging
 import threading
 import time
 import concurrent.futures
+import matplotlib
+# matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import math
 import numpy as np
@@ -16,6 +18,7 @@ from scipy.stats import t
 # Define constants for the screen width and height
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 690
+# SCREEN_HEIGHT = 750
 
 # have to be odd number for move method of Agent
 CELL_SIZE = {
