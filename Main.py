@@ -21,8 +21,8 @@ speed = 10  # bigger -slower, smaller - faster. don't ask why
 
 num_of_agents = 30
 # algorithms = ['DSA_PILR_0.2','DSA_PILR_0.5','DSA_PILR_0.8',]
-algorithms = ['DSA_PILR',]
-algorithms = ['DSA_PILR', 'DSA',]
+algorithms = ['DSA_PILR', ]
+algorithms = ['DSA_PILR', 'DSA', ]
 # algorithms = [
 #     # 'DSA_PILR_1',
 #     # 'DSA_PILR_2',
@@ -40,8 +40,8 @@ algorithms = ['DSA_PILR', 'DSA',]
 # algorithms = ['DSA_PILR', 'DSA', 'MGM',]
 target_rate = 0.05
 target_range = (1, 4)  # max and min value of target
-MR = 5.5*cell_size
-SR = 2.5*cell_size
+MR = 5.5 * cell_size
+SR = 2.5 * cell_size
 cred = 3
 MAX_ITERATIONS = 20
 NUMBER_OF_PROBLEMS = 10
@@ -69,7 +69,6 @@ ADDENEMY = pygame.USEREVENT + 1
 pygame.time.set_timer(ADDENEMY, 250)
 MOVEAGENTS = pygame.USEREVENT + 2
 pygame.time.set_timer(MOVEAGENTS, 2000)
-
 
 if __name__ == '__main__':
     # Variable to keep the main loop running
@@ -170,9 +169,10 @@ if __name__ == '__main__':
                             alg, for_alg = dict_alg[algorithm]
                             executor.submit(agent.update, alg, agents.sprites(), targets.sprites(), cells.sprites(),
                                             for_alg)
-                    logging.info("Thread %s : finishing updating! -----------------------------", threading.get_ident())
+                    logging.info("finishing iteration: %s! -----------------------------" % iteration)
+                    # , threading.get_ident())
                     time3 = pygame.time.get_ticks()
-                    interval = (time3 - time2)/1000 + 1  # for Title of time
+                    interval = (time3 - time2) / 1000 + 1  # for Title of time
 
                 # Get the set of keys pressed and check for user input
                 pressed_keys = pygame.key.get_pressed()
@@ -218,7 +218,6 @@ if __name__ == '__main__':
     # Plot results
     plot_results_if(need_to_plot_results, need_to_plot_variance, graphs, algorithms, alpha)
 
-
 '''
  - dictionary of algorithms - correct
  - clean code in main
@@ -234,6 +233,3 @@ if __name__ == '__main__':
  - make variable of amount of targets
  - 
 '''
-
-
-
