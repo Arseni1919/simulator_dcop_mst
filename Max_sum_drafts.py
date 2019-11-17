@@ -1,4 +1,7 @@
-from pure_functions import *
+from Algorithms_help_functions import *
+'''
+OUTER WORLD - ALL FUNCTIONS HERE SUPPOSE TO BE TRANSPARENT TO SIMULATION
+'''
 
 
 def select_new_pos():

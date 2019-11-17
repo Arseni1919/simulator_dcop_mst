@@ -1,4 +1,5 @@
 from Algorithms import *
+from Max_sum_drafts import *
 from main_help_functions import *
 from pure_functions import *
 from CONSTANTS import *
@@ -19,10 +20,11 @@ need_to_plot_variance = False
 alpha = 0.025  # for confidence intervals in graphs
 speed = 10  # bigger -slower, smaller - faster. don't ask why
 
-num_of_agents = 30
+num_of_agents = 10
+algorithms = ['Max_sum', ]
 # algorithms = ['DSA_PILR_0.2','DSA_PILR_0.5','DSA_PILR_0.8',]
-algorithms = ['DSA_PILR', ]
-algorithms = ['DSA_PILR', 'DSA', ]
+# algorithms = ['DSA_PILR', ]
+algorithms = ['DSA_PILR', 'DSA', 'MGM']
 # algorithms = [
 #     # 'DSA_PILR_1',
 #     # 'DSA_PILR_2',
@@ -38,15 +40,42 @@ algorithms = ['DSA_PILR', 'DSA', ]
 #     'DSA_5',
 # ]
 # algorithms = ['DSA_PILR', 'DSA', 'MGM',]
-target_rate = 0.05
+target_rate = 0.15
 target_range = (1, 4)  # max and min value of target
 MR = 5.5 * cell_size
 SR = 2.5 * cell_size
 cred = 3
-MAX_ITERATIONS = 20
-NUMBER_OF_PROBLEMS = 10
+MAX_ITERATIONS = 2
+NUMBER_OF_PROBLEMS = 3
 
 # ---------------------------
+
+# ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
+# ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
+# dictionary
+# ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
+# ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
+dict_alg = {
+    'Max_sum': (Max_sum, []),
+    'DSA': (DSA, [0.7]),
+    'DSA_2': (DSA, [0.5]),
+    'DSA_3': (DSA, [0.3]),
+    'DSA_4': (DSA, [0.6]),
+    'DSA_5': (DSA, [0.7]),
+    'MGM': (MGM, []),
+    'DSA_PILR': (DSA_PILR, [0.7, 3, 0.5]),
+    'DSA_PILR_1': (DSA_PILR, [0.8, 10, 0.8]),
+    'DSA_PILR_2': (DSA_PILR, [0.8, 3, 0.8]),
+    'DSA_PILR_3': (DSA_PILR, [0.8, 1, 0.8]),
+    'DSA_PILR_4': (DSA_PILR, [0.8, 3, 0.8]),
+    'DSA_PILR_5': (DSA_PILR, [0.8, 3, 0.5]),
+    'DSA_PILR_6': (DSA_PILR, [0.5, 3, 0.5]),
+    'DSA_PILR_7': (DSA_PILR, [0.8, 3, 0.5]),
+    'DSA_PILR_8': (DSA_PILR, [0.7, 3, 0.5]),
+    'DSA_PILR_9': (DSA_PILR, [0.6, 3, 0.5]),
+}
+
+# ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 
 # ---------------------------
 # ----------GRAPHS-----------
@@ -231,5 +260,7 @@ if __name__ == '__main__':
  - prevent collisions in DSA, DSA_PIRL and others
  - make the change of the size screen depend on amount of cells in one side
  - make variable of amount of targets
+ - use tqdm
+ - insert t-test
  - 
 '''
