@@ -60,17 +60,19 @@ def create_field(cell_size, all_sprites, cells):
 
 # Create targets
 def create_targets(cell_size, all_sprites, targets, titles, cells, ratio=0.3, target_range=(1, 4)):
+    order = 1
     for cell in cells.sprites():
         if random.random() < ratio:
             new_target = Target(
                 cell_size,
+                order=order,
                 req=random.randint(target_range[0], target_range[1]),
                 surf_center=cell.surf_center
             )
             cell.prop = new_target
             targets.add(new_target)
             all_sprites.add(new_target)
-    # titles.update(len(targets.sprites()))
+            order += 1
 
 
 # Create agents
@@ -181,9 +183,12 @@ def pickle_results_if(need_to_save_results, graphs, adding_to_file_name=''):
             pickle.dump(graphs, fileObject)
 
 
-def nei_update(agents):
+def nei_update(agents, targets, factor_graph):
     for agent in agents:
-        agent.nei_update(agents)
+        agent.nei_update(agents, targets, factor_graph)
+
+    for target in targets:
+        target.nei_update(agents, factor_graph)
 
 
 def go_back_to_initial_positions(cells):

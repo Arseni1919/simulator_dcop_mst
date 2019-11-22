@@ -81,11 +81,14 @@ class Agent(pygame.sprite.Sprite):
         # time.sleep(0.1)
         # logging.info("Thread %s : finishing moving", threading.get_ident())
 
-    def update(self, algorithm, agents, targets, cells, for_alg):
+    def alg_update(self, algorithm, agents, targets, cells, for_alg):
+        # print(algorithm)
+        # print(self)
         self.future_pos = algorithm(self.preprocessing(
             agent=self,
             curr_pose=self.rect.center,
             cell_size=self.cell_size,
+            agents=agents,
             targets=targets,
             cells=cells,
             for_alg=for_alg,
@@ -101,6 +104,7 @@ class Agent(pygame.sprite.Sprite):
         time.sleep(1)
 
     def preprocessing(self, **kwargs):
+        # print('in preprocessing')
         return kwargs
 
     def get_pos(self):
@@ -137,18 +141,25 @@ class Agent(pygame.sprite.Sprite):
     def get_num_of_agent(self):
         return self.number_of_robot
 
-    def nei_update(self, agents):
-        # Update self.curr_nei
-        self.curr_nei = []
-        for agent in agents:
-            if self.number_of_robot != agent.number_of_robot:
-                if distance(self.get_pos(), agent.get_pos()) < (self.SR + self.MR + agent.get_SR() + agent.get_MR()):
-                    self.curr_nei.append(agent)
+    def nei_update(self, agents, targets, factor_graph):
+        if not factor_graph:
+            # Update self.curr_nei
+            self.curr_nei = []
+            for agent in agents:
+                if self.number_of_robot != agent.number_of_robot:
+                    if distance(self.get_pos(), agent.get_pos()) < (self.SR + self.MR + agent.get_SR() + agent.get_MR()):
+                        self.curr_nei.append(agent)
+        else:
+            # Update self.curr_nei
+            self.curr_nei = []
+            for target in targets:
+                if distance(self.get_pos(), target.get_pos()) < (self.SR + self.MR):
+                    self.curr_nei.append(target)
 
         # Update self.inbox
         self.inbox = {}
         for agent in self.curr_nei:
-            self.inbox[agent.number_of_robot] = []
+            self.inbox[agent.get_num_of_agent()] = []
 
 
         # logging.info("Thread %s : finishing update", threading.get_ident())

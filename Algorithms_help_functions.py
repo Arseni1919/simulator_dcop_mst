@@ -102,8 +102,8 @@ def received_all_messages(self_agent, ord_of_message=1):
     curr_inbox = self_agent.get_access_to_inbox('copy')
     for _, messages in curr_inbox.items():
         if len(messages) == (ord_of_message - 1):
-            return False, curr_inbox
-    return True, curr_inbox
+            return False
+    return True
 
 
 def calculate_temp_req(self_agent, targets, neighbours):
@@ -132,6 +132,7 @@ def get_possible_pos_with_MR(self_agent, cells, targets, neighbours):
     help_set = []
     curr_inbox = self_agent.get_access_to_inbox('copy')
 
+    # all cells that are in MR range
     for cell in cells:
         if distance(self_agent.get_pos(), cell.get_pos()) < self_agent.get_MR():
             # cell_set1.append(cell)
@@ -140,7 +141,7 @@ def get_possible_pos_with_MR(self_agent, cells, targets, neighbours):
     cell_set = help_set
     help_set = []
 
-    # for cell in cell_set1:
+    # minus targets' cells
     for cell in cell_set:
         captured = False
         for target in targets:
@@ -154,7 +155,7 @@ def get_possible_pos_with_MR(self_agent, cells, targets, neighbours):
     cell_set = help_set
     help_set = []
 
-    # for cell in cell_set2:
+    # minus neighbours' cells
     for cell in cell_set:
         captured = False
         for agent in neighbours:
@@ -168,7 +169,60 @@ def get_possible_pos_with_MR(self_agent, cells, targets, neighbours):
     cell_set = help_set
     help_set = []
 
-    # for cell in cell_set3:
+    # copy only the positions
+    for cell in cell_set:
+        possible_pos.append(cell.get_pos())
+
+    return possible_pos
+
+
+def get_possible_pos_with_MR_general(self_agent, cells, targets, agents):
+    """
+    input:
+    output:
+    """
+    possible_pos = []
+    cell_set = []
+    help_set = []
+    curr_inbox = self_agent.get_access_to_inbox('copy')
+
+    # all cells that are in MR range
+    for cell in cells:
+        if distance(self_agent.get_pos(), cell.get_pos()) < self_agent.get_MR():
+            help_set.append(cell)
+
+    cell_set = help_set
+    help_set = []
+
+    # minus agents' cells
+    for cell in cell_set:
+        captured = False
+        for agent in agents:
+            if agent.get_pos() == cell.get_pos() and agent.get_num_of_agent() != self_agent.get_num_of_agent():
+                captured = True
+                break
+        if not captured:
+            # cell_set3.append(cell)
+            help_set.append(cell)
+
+    cell_set = help_set
+    help_set = []
+
+    # minus targets' cells
+    for cell in cell_set:
+        captured = False
+        for target in targets:
+            if target.get_pos() == cell.get_pos():
+                captured = True
+                break
+        if not captured:
+            # cell_set2.append(cell)
+            help_set.append(cell)
+
+    cell_set = help_set
+    help_set = []
+
+    # copy only the positions
     for cell in cell_set:
         possible_pos.append(cell.get_pos())
 
@@ -183,15 +237,33 @@ def send_and_receive_messages_to_curr_nei(self_agent, message, ord_of_message=1)
     curr_nei = self_agent.get_curr_nei()
     for agent in curr_nei:
         if agent is self_agent:
-            raise ValueError('Ups')
+            raise ValueError('agent is self_agent inside self_agent.get_curr_nei()!')
         agent.get_access_to_inbox('message', self_agent.get_num_of_agent(), message)
     # ---------------------------------------------------
-    while not received_all_messages(self_agent, ord_of_message)[0]:
+    while not received_all_messages(self_agent, ord_of_message):
         time.sleep(1)
     # ---------------------------------------------------
 
 
+def send_message_to(receiver, self_agent, message):
+    """
+    input:
+    output:
+    """
+    if receiver is self_agent:
+        raise ValueError('receiver is self_agent inside send_message_to()!')
+    receiver.get_access_to_inbox('message', self_agent.get_num_of_agent(), message)
 
+
+def receive_all_messages(self_agent, ord_of_message=1):
+    """
+    input:
+    output:
+    """
+    # ---------------------------------------------------
+    while not received_all_messages(self_agent, ord_of_message):
+        time.sleep(1)
+    # ---------------------------------------------------
 
 
 def get_req_list_max_to_min(targets):
@@ -290,6 +362,68 @@ def select_pos(pos_set, targets, SR):
     possible_pos, target_set = get_possible_pos(pos_set, target_set, SR)
     new_targets = get_new_targets(target_set, targets)
     return select_pos(possible_pos, new_targets, SR)
+
+# ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
+# For Max_sum:
+# ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
+
+
+def max_sum_create_null_variable_message(possible_pos):
+    message = {}
+    for pos in possible_pos:
+        message[pos] = 0
+    return message
+
+
+def max_sum_variable_message_to(nei, inbox, order_of_message, possible_pos):
+
+    # sum of the messages together
+    new_message = max_sum_create_null_variable_message(possible_pos)
+    for target_num, set_of_messages in inbox.items():
+        if target_num != nei.get_num_of_agent():
+            last_received_message = set_of_messages[order_of_message - 1]
+            for pos, value in last_received_message.items():
+                new_message[pos] += value
+
+    # subtract discount factor alpha
+    alpha = min(new_message.values())
+    for pos in possible_pos:
+        new_message[pos] -= alpha
+
+    if min(new_message.values()) < 0:
+        raise ValueError('new_message[pos] < 0 in max_sum_variable_message_to()')
+
+    return new_message
+
+
+def max_sum_choose_position_for(agent, possible_pos):
+    inbox = agent.get_access_to_inbox('copy')
+    # sum of all messages
+    sum_of_all_messages = max_sum_create_null_variable_message(possible_pos)
+    for target_num, set_of_messages in inbox.items():
+        last_received_message = set_of_messages[-1]
+        for pos, value in last_received_message.items():
+            sum_of_all_messages[pos] += value
+
+    # the max value
+    max_value = max(sum_of_all_messages.values())
+
+    # array of positions with maximal value
+    set_of_max_pos = []
+    for pos, value in sum_of_all_messages.items():
+        if value == max_value:
+            set_of_max_pos.append(pos)
+
+    return random.choice(set_of_max_pos)
+
+
+def max_sum_nei_check(curr_nei, instance):
+    for nei in curr_nei:
+        if not isinstance(nei, instance):
+            raise ValueError('nei is not correct instance inside this Node')
+
+
+
 
 
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------

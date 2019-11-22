@@ -1,7 +1,6 @@
 from Algorithms import *
 from Max_sum_drafts import *
 from main_help_functions import *
-from pure_functions import *
 from CONSTANTS import *
 
 # ---------------------------
@@ -15,16 +14,24 @@ cell_size = CELL_SIZE['MEDIUM']
 show_ranges = True
 need_to_save_results = False
 adding_to_file_name = 'DSA_PILR_vs_DSA'
-need_to_plot_results = True
+need_to_plot_results = False
 need_to_plot_variance = False
 alpha = 0.025  # for confidence intervals in graphs
 speed = 10  # bigger -slower, smaller - faster. don't ask why
-
 num_of_agents = 10
+target_rate = 0.055
+target_range = (1, 4)  # max and min value of target
+MR = 5.5 * cell_size
+SR = 1.5 * cell_size
+cred = 3
+MAX_ITERATIONS = 7
+NUMBER_OF_PROBLEMS = 1
+
 algorithms = ['Max_sum', ]
 # algorithms = ['DSA_PILR_0.2','DSA_PILR_0.5','DSA_PILR_0.8',]
 # algorithms = ['DSA_PILR', ]
-algorithms = ['DSA_PILR', 'DSA', 'MGM']
+algorithms = ['Max_sum', 'DSA_PILR', 'DSA', 'MGM', ]
+algorithms = ['DSA_PILR', 'DSA', 'MGM', ]
 # algorithms = [
 #     # 'DSA_PILR_1',
 #     # 'DSA_PILR_2',
@@ -40,13 +47,6 @@ algorithms = ['DSA_PILR', 'DSA', 'MGM']
 #     'DSA_5',
 # ]
 # algorithms = ['DSA_PILR', 'DSA', 'MGM',]
-target_rate = 0.15
-target_range = (1, 4)  # max and min value of target
-MR = 5.5 * cell_size
-SR = 2.5 * cell_size
-cred = 3
-MAX_ITERATIONS = 2
-NUMBER_OF_PROBLEMS = 3
 
 # ---------------------------
 
@@ -56,7 +56,7 @@ NUMBER_OF_PROBLEMS = 3
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 dict_alg = {
-    'Max_sum': (Max_sum, []),
+    'Max_sum': (Max_sum, [5]),
     'DSA': (DSA, [0.7]),
     'DSA_2': (DSA, [0.5]),
     'DSA_3': (DSA, [0.3]),
@@ -75,6 +75,15 @@ dict_alg = {
     'DSA_PILR_9': (DSA_PILR, [0.6, 3, 0.5]),
 }
 
+factor_graph = {
+    Max_sum: True,
+    DSA: False,
+    MGM: False,
+    DSA_PILR: False,
+}
+for algorithm in algorithms:
+    if dict_alg[algorithm][0] not in factor_graph.keys():
+        raise ValueError('dict_alg[algorithms][0] not in factor_graph.keys()')
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 
 # ---------------------------
@@ -135,6 +144,7 @@ if __name__ == '__main__':
 
         for algorithm in algorithms:
             print('algorithm: ', algorithm)
+            fg = factor_graph[dict_alg[algorithm][0]]
             # Renders the titles aside of a field
             create_side_titles(algorithm, all_sprites, titles)
             go_back_to_initial_positions(cells)
@@ -187,17 +197,22 @@ if __name__ == '__main__':
                     convergence = convergence_update(targets.sprites(), agents.sprites())
                     graphs[algorithm][iteration][problem] = convergence
                     iteration += 1
-                    nei_update(agents.sprites())
+                    nei_update(agents.sprites(), targets.sprites(), fg)
                     # print('---')
                     # logging.info("iteration: %s  Thread %s : ", iteration, threading.get_ident())
                     # -----------------------------------------
 
                     # makes a join to everybody
-                    with concurrent.futures.ThreadPoolExecutor(max_workers=len(agents.sprites())) as executor:
+                    max_workers = (len(agents.sprites()) + len(targets.sprites())) if fg else len(agents.sprites())
+                    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+                        alg, for_alg = dict_alg[algorithm]
                         for agent in agents.sprites():
-                            alg, for_alg = dict_alg[algorithm]
-                            executor.submit(agent.update, alg, agents.sprites(), targets.sprites(), cells.sprites(),
-                                            for_alg)
+                            executor.submit(agent.alg_update,
+                                            alg, agents.sprites(), targets.sprites(), cells.sprites(), for_alg)
+                        if fg:
+                            for target in targets.sprites():
+                                executor.submit(target.alg_update,
+                                                alg, agents.sprites(), targets.sprites(), cells.sprites(), for_alg)
                     logging.info("finishing iteration: %s! -----------------------------" % iteration)
                     # , threading.get_ident())
                     time3 = pygame.time.get_ticks()
