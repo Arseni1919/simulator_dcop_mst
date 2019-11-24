@@ -59,20 +59,30 @@ def create_field(cell_size, all_sprites, cells):
 
 
 # Create targets
-def create_targets(cell_size, all_sprites, targets, titles, cells, ratio=0.3, target_range=(1, 4)):
+def create_targets(cell_size, all_sprites, targets, cells,
+                   ratio=0.3,
+                   target_range=(1, 4),
+                   use_rate=True,
+                   num_of_targets=-1):
     order = 1
-    for cell in cells.sprites():
-        if random.random() < ratio:
-            new_target = Target(
-                cell_size,
-                order=order,
-                req=random.randint(target_range[0], target_range[1]),
-                surf_center=cell.surf_center
-            )
-            cell.prop = new_target
-            targets.add(new_target)
-            all_sprites.add(new_target)
-            order += 1
+    while True:
+        for cell in cells.sprites():
+            if random.random() < ratio:
+                new_target = Target(
+                    cell_size,
+                    order=order,
+                    req=random.randint(target_range[0], target_range[1]),
+                    surf_center=cell.surf_center
+                )
+                cell.prop = new_target
+                targets.add(new_target)
+                all_sprites.add(new_target)
+                order += 1
+
+                if not use_rate and num_of_targets == len(targets.sprites()):
+                    break
+        if not use_rate and num_of_targets == len(targets.sprites()) or use_rate:
+            break
 
 
 # Create agents

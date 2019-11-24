@@ -252,6 +252,7 @@ def send_message_to(receiver, self_agent, message):
     """
     if receiver is self_agent:
         raise ValueError('receiver is self_agent inside send_message_to()!')
+    # print('HERE')
     receiver.get_access_to_inbox('message', self_agent.get_num_of_agent(), message)
 
 
@@ -393,6 +394,34 @@ def max_sum_variable_message_to(nei, inbox, order_of_message, possible_pos):
     if min(new_message.values()) < 0:
         raise ValueError('new_message[pos] < 0 in max_sum_variable_message_to()')
 
+    return new_message
+
+
+def max_sum_function_message_to(nei, inbox, order_of_message, possible_pos, max_contribution, target):
+
+    new_message = max_sum_create_null_variable_message(possible_pos)
+    self_num = nei.get_num_of_agent()
+
+    # create two sets
+    in_SR = []
+    out_of_SR = []
+    for pos in possible_pos:
+        if distance(pos, target.get_pos()) < nei.get_SR():
+            in_SR.append(pos)
+        else:
+            out_of_SR.append(pos)
+
+    for pos in in_SR:
+        new_message[pos] += max_contribution
+
+    # for pos in out_of_SR:
+    #     min_value = 10**10
+    #     curr_value = 0
+    #     for agent_num, set_of_messages in inbox.items():
+    #         if agent_num != self_num:
+    #             last_received_message = set_of_messages[order_of_message - 1]
+    #             for pos, value in last_received_message.items():
+    #                 pass
     return new_message
 
 

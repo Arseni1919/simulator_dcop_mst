@@ -6,11 +6,16 @@ from CONSTANTS import *
 # ---------------------------
 # ------INPUT SETTINGS-------
 # ---------------------------
-
-cell_size = CELL_SIZE['BIG']
-cell_size = CELL_SIZE['MEDIUM']
+# SET CELL SIZE THIS WAY:
+# cell_size = CELL_SIZE['BIG']
+# cell_size = CELL_SIZE['MEDIUM']
 # cell_size = CELL_SIZE['SMALL']
+# ---
+# OR THIS WAY:
+grid_size = 100
+cell_size = int(SCREEN_HEIGHT/grid_size - 2)
 # cell_size = 10  # 'CUSTOM'
+# ---
 show_ranges = True
 need_to_save_results = False
 adding_to_file_name = 'DSA_PILR_vs_DSA'
@@ -18,20 +23,23 @@ need_to_plot_results = False
 need_to_plot_variance = False
 alpha = 0.025  # for confidence intervals in graphs
 speed = 10  # bigger -slower, smaller - faster. don't ask why
-num_of_agents = 10
+num_of_agents = 50
+num_of_targets = 20
+use_rate = False
 target_rate = 0.055
-target_range = (1, 4)  # max and min value of target
+
+target_range = (100, 100)  # max and min value of target
 MR = 5.5 * cell_size
-SR = 1.5 * cell_size
-cred = 3
-MAX_ITERATIONS = 7
-NUMBER_OF_PROBLEMS = 1
+SR = 5.5 * cell_size
+cred = 30
+MAX_ITERATIONS = 25
+NUMBER_OF_PROBLEMS = 10
 
 algorithms = ['Max_sum', ]
 # algorithms = ['DSA_PILR_0.2','DSA_PILR_0.5','DSA_PILR_0.8',]
 # algorithms = ['DSA_PILR', ]
 algorithms = ['Max_sum', 'DSA_PILR', 'DSA', 'MGM', ]
-algorithms = ['DSA_PILR', 'DSA', 'MGM', ]
+# algorithms = ['DSA_PILR', 'DSA', 'MGM', ]
 # algorithms = [
 #     # 'DSA_PILR_1',
 #     # 'DSA_PILR_2',
@@ -56,14 +64,14 @@ algorithms = ['DSA_PILR', 'DSA', 'MGM', ]
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 dict_alg = {
-    'Max_sum': (Max_sum, [5]),
+    'Max_sum': (Max_sum, [5, cred, SR]),
     'DSA': (DSA, [0.7]),
     'DSA_2': (DSA, [0.5]),
     'DSA_3': (DSA, [0.3]),
     'DSA_4': (DSA, [0.6]),
     'DSA_5': (DSA, [0.7]),
     'MGM': (MGM, []),
-    'DSA_PILR': (DSA_PILR, [0.7, 3, 0.5]),
+    'DSA_PILR': (DSA_PILR, [0.7, 20, 0.5]),
     'DSA_PILR_1': (DSA_PILR, [0.8, 10, 0.8]),
     'DSA_PILR_2': (DSA_PILR, [0.8, 3, 0.8]),
     'DSA_PILR_3': (DSA_PILR, [0.8, 1, 0.8]),
@@ -131,7 +139,7 @@ if __name__ == '__main__':
         print('height/weight: ', math.sqrt(len(cells.sprites())))
 
         # Create targets on field
-        create_targets(cell_size, all_sprites, targets, titles, cells, target_rate, target_range)
+        create_targets(cell_size, all_sprites, targets, cells, target_rate, target_range, use_rate, num_of_targets)
 
         # Create agents on field
         create_agents(cell_size, all_sprites, agents, cells,

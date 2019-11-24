@@ -22,7 +22,7 @@ class Target(pygame.sprite.Sprite):
         self.surf = pygame.Surface((cell_size, cell_size), pygame.SRCALPHA)
         pygame.draw.circle(self.surf, (0, 0, 255), [int(cell_size/2), int(cell_size/2)], int(cell_size/2 - 2))
         # Number of Requirement
-        font = pygame.font.SysFont("comicsansms", int(cell_size * 0.8))
+        font = pygame.font.SysFont("comicsansms", int(cell_size * 0.4))
         text = font.render("%s" % self.req, True, (255,255,0))
         wt, ht = text.get_size()
         self.surf.blit(text, (int((cell_size - wt)/2), int((cell_size - ht)/2)))

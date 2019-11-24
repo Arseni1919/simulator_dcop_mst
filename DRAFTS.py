@@ -87,14 +87,16 @@ pygame.init()
 #         pygame.display.flip()
 
 dic = {'a':1, 'b':-1, 'c':-12, 'd':10, }
-for key, value in dic.items():
-    print(key, value)
 
-print(min(dic.values()))
 
-a = ['a', 'aa', 'aaa']
+class Bla:
+    pass
 
-print(random.choice(a))
-print(random.choice(a))
-print(random.choice(a))
+
+a1 = Bla()
+a2 = Bla()
+a3 = Bla()
+
+
+print(10**10)
 
