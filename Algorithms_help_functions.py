@@ -182,9 +182,7 @@ def get_possible_pos_with_MR_general(self_agent, cells, targets, agents):
     output:
     """
     possible_pos = []
-    cell_set = []
     help_set = []
-    curr_inbox = self_agent.get_access_to_inbox('copy')
 
     # all cells that are in MR range
     for cell in cells:
@@ -225,7 +223,6 @@ def get_possible_pos_with_MR_general(self_agent, cells, targets, agents):
     # copy only the positions
     for cell in cell_set:
         possible_pos.append(cell.get_pos())
-
     return possible_pos
 
 
@@ -433,7 +430,6 @@ def max_sum_choose_position_for(agent, possible_pos):
         last_received_message = set_of_messages[-1]
         for pos, value in last_received_message.items():
             sum_of_all_messages[pos] += value
-
     # the max value
     max_value = max(sum_of_all_messages.values())
 
@@ -442,7 +438,6 @@ def max_sum_choose_position_for(agent, possible_pos):
     for pos, value in sum_of_all_messages.items():
         if value == max_value:
             set_of_max_pos.append(pos)
-
     return random.choice(set_of_max_pos)
 
 
@@ -452,7 +447,12 @@ def max_sum_nei_check(curr_nei, instance):
             raise ValueError('nei is not correct instance inside this Node')
 
 
-
+def print_inbox_len(required_num, agent, inbox):
+    if required_num == agent.get_num_of_agent():
+        if len(inbox.keys()) == 0:
+            # print(agent.get_name(), agent.get_num_of_agent(), 'empty')
+            return
+        # print(agent.get_name(), agent.get_num_of_agent(), '\'s inbox: ', len(inbox[random.choice(list(inbox.keys()))]))
 
 
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------

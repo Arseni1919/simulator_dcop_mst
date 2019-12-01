@@ -40,4 +40,4 @@ class Cell(pygame.sprite.Sprite):
         return self.prop
 
     def get_pos(self):
-        return self.surf_center
+        return self.rect.center

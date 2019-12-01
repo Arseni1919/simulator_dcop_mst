@@ -25,6 +25,7 @@ CELL_SIZE = {
     'SMALL': 18,
     'MEDIUM': 34,
     'BIG': 74,
+    'CUSTOM': 10,
 }
 
 SKY_COLOR = (135, 206, 250)

@@ -18,6 +18,7 @@ class Target(pygame.sprite.Sprite):
         if order == -1:
             raise ValueError('order of Target == -1')
         self.num_of_agent = order
+        self.name = 'target_%s' % order
 
         self.surf = pygame.Surface((cell_size, cell_size), pygame.SRCALPHA)
         pygame.draw.circle(self.surf, (0, 0, 255), [int(cell_size/2), int(cell_size/2)], int(cell_size/2 - 2))
@@ -95,7 +96,7 @@ class Target(pygame.sprite.Sprite):
 
 
     def get_pos(self):
-        return self.surf_center
+        return self.rect.center
 
     def set_pos(self, pos):
         self.rect.center = pos
@@ -108,6 +109,9 @@ class Target(pygame.sprite.Sprite):
 
     def set_temp_req(self, temp_req):
         self.temp_req = temp_req
+
+    def get_name(self):
+        return self.name
 
 
 

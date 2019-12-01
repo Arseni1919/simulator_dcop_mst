@@ -98,5 +98,5 @@ a2 = Bla()
 a3 = Bla()
 
 
-print(10**10)
+print(int(-0.9))
 

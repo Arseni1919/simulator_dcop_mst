@@ -20,6 +20,7 @@ class Agent(pygame.sprite.Sprite):
         super(Agent, self).__init__()
         self.cell_size = cell_size
         self.number_of_robot = number_of_robot
+        self.name = 'agent_%s' % number_of_robot
         self.MR = int(MR)
         self.SR = int(SR)
         self.cred = cred
@@ -62,28 +63,30 @@ class Agent(pygame.sprite.Sprite):
             self.radius = MR
 
     # Move the sprite based on user keypresses
-    def move(self, pressed_keys=None):
+    def move(self):
         # logging.info("Thread %s : starting moving", threading.get_ident())
-        # self.rect.move_ip(self.curr)
-        if self.rect.center == self.future_pos:
-            self.arrived = True
-        else:
+
+        self.arrived = self.rect.center == self.future_pos
+
+        if not self.arrived:
+
             curr_x, curr_y = self.rect.center
             future_x, future_y = self.future_pos
+
+        # if self.rect.center == self.future_pos:
+        #     self.arrived = True
+        # else:
 
             x = self.step_x if abs(curr_x - future_x) > abs(self.step_x) else (future_x - curr_x)
             y = self.step_y if abs(curr_y - future_y) > abs(self.step_y) else (future_y - curr_y)
 
-            # print('before', self.rect.center)
-            self.rect.move_ip(x, y)
-            # print('after', self.rect.center)
+            # self.rect.move_ip(x, y)
+            self.rect.center = (curr_x + x, curr_y + y)
 
-        # time.sleep(0.1)
-        # logging.info("Thread %s : finishing moving", threading.get_ident())
+            # print(self.get_name(), ' in move function', ' ', self.rect.center, ' ', self.future_pos,
+            #       ' steps:', self.step_x, self.step_y, ' x and y:', x, y)
 
     def alg_update(self, algorithm, agents, targets, cells, for_alg):
-        # print(algorithm)
-        # print(self)
         self.future_pos = algorithm(self.preprocessing(
             agent=self,
             curr_pose=self.rect.center,
@@ -107,6 +110,10 @@ class Agent(pygame.sprite.Sprite):
         # print('in preprocessing')
         return kwargs
 
+    # def get_pos(self):
+    #     return self.rect.center
+
+    # different from other because the agent is moving -> NOT self.surf_center
     def get_pos(self):
         return self.rect.center
 
@@ -131,6 +138,9 @@ class Agent(pygame.sprite.Sprite):
 
     def get_MR(self):
         return self.MR
+
+    def get_name(self):
+        return self.name
 
     def get_cred(self):
         return self.cred
@@ -160,6 +170,8 @@ class Agent(pygame.sprite.Sprite):
         self.inbox = {}
         for agent in self.curr_nei:
             self.inbox[agent.get_num_of_agent()] = []
+
+        self.future_pos = self.rect.center
 
 
         # logging.info("Thread %s : finishing update", threading.get_ident())

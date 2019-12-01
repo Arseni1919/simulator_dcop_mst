@@ -13,7 +13,9 @@ from CONSTANTS import *
 # ---
 # OR THIS WAY:
 grid_size = 100
-cell_size = int(SCREEN_HEIGHT/grid_size - 2)
+CELL_SIZE['CUSTOM'] = int(SCREEN_HEIGHT/grid_size - 2)
+cell_size = CELL_SIZE['CUSTOM']
+print('cell_size: ', cell_size)
 # cell_size = 10  # 'CUSTOM'
 # ---
 show_ranges = True
@@ -22,10 +24,10 @@ adding_to_file_name = 'DSA_PILR_vs_DSA'
 need_to_plot_results = False
 need_to_plot_variance = False
 alpha = 0.025  # for confidence intervals in graphs
-speed = 10  # bigger -slower, smaller - faster. don't ask why
+speed = 5  # bigger -slower, smaller - faster. don't ask why
 num_of_agents = 50
 num_of_targets = 20
-use_rate = False
+use_rate = False  # if False - it uses the num_of_targets variable, but still also uses target_rate
 target_rate = 0.055
 
 target_range = (100, 100)  # max and min value of target
@@ -125,7 +127,7 @@ if __name__ == '__main__':
 
     # Main loop
     for problem in range(NUMBER_OF_PROBLEMS):
-        print('Problem: ', problem + 1)
+        logging.info("---------- ---------- Problem: %s ---------- ----------" % (problem + 1))
         # Create groups to hold all kinds of sprites
         # - all_sprites is used for rendering
         agents = pygame.sprite.Group()
@@ -151,7 +153,7 @@ if __name__ == '__main__':
                       speed=speed)
 
         for algorithm in algorithms:
-            print('algorithm: ', algorithm)
+            logging.info("---------- Algorithm: %s ----------" % algorithm)
             fg = factor_graph[dict_alg[algorithm][0]]
             # Renders the titles aside of a field
             create_side_titles(algorithm, all_sprites, titles)
@@ -196,7 +198,7 @@ if __name__ == '__main__':
                         for agent in agents.sprites():
                             executor.submit(agent.move)
                     # logging.info("Thread %s : finishing moving!", threading.get_ident())
-
+                    # print('-----%s iteration -------' % iteration)
                 time2 = pygame.time.get_ticks()
                 if all_arrived(agents) and time2 - time1 > 1000:
                     # -----------------------------------------
@@ -205,13 +207,15 @@ if __name__ == '__main__':
                     convergence = convergence_update(targets.sprites(), agents.sprites())
                     graphs[algorithm][iteration][problem] = convergence
                     iteration += 1
+
                     nei_update(agents.sprites(), targets.sprites(), fg)
+
                     # print('---')
                     # logging.info("iteration: %s  Thread %s : ", iteration, threading.get_ident())
                     # -----------------------------------------
 
                     # makes a join to everybody
-                    max_workers = (len(agents.sprites()) + len(targets.sprites())) if fg else len(agents.sprites())
+                    max_workers = (len(agents.sprites()) + len(targets.sprites()) + 1) if fg else len(agents.sprites())
                     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
                         alg, for_alg = dict_alg[algorithm]
                         for agent in agents.sprites():
@@ -221,7 +225,7 @@ if __name__ == '__main__':
                             for target in targets.sprites():
                                 executor.submit(target.alg_update,
                                                 alg, agents.sprites(), targets.sprites(), cells.sprites(), for_alg)
-                    logging.info("finishing iteration: %s! -----------------------------" % iteration)
+                    logging.info("finishing iteration: %s ----------" % iteration)
                     # , threading.get_ident())
                     time3 = pygame.time.get_ticks()
                     interval = (time3 - time2) / 1000 + 1  # for Title of time
@@ -245,11 +249,12 @@ if __name__ == '__main__':
                 for entity in all_sprites:
                     screen.blit(entity.surf, entity.rect)
 
-                # Check if any enemies have collided with the player
-                if pygame.sprite.spritecollideany(agents.sprites()[0], targets):
-                    # If so, then remove the player and stop the loop
-                    # player.kill()
-                    pass
+                # # Check if any enemies have collided with the player
+                # if pygame.sprite.spritecollideany(agents.sprites()[0], targets):
+                #     # If so, then remove the player and stop the loop
+                #     # player.kill()
+                #     pass
+
 
                 # Update the display
                 pygame.display.flip()

@@ -61,9 +61,6 @@ def get_max_contribution(fmr_nei, nei, target):
     return 0
 
 
-
-
-
 def max_sum_function_node(target, for_alg):
     curr_nei = target.get_curr_nei()
     max_sum_nei_check(curr_nei, Agent)
@@ -75,7 +72,7 @@ def max_sum_function_node(target, for_alg):
         receive_all_messages(target, order_of_message)
 
         inbox = target.get_access_to_inbox('copy')
-
+        print_inbox_len(1, target, inbox)
         fmr_nei = select_FMR_nei(target, curr_nei, for_alg)
 
         for nei in curr_nei:
@@ -106,6 +103,7 @@ def max_sum_variable_node(agent, cells, targets, agents, for_alg):
     for i in range(mini_iterations - 1):
         order_of_message = i + 1
         inbox = agent.get_access_to_inbox('copy')
+        print_inbox_len(1, agent, inbox)
         for nei in curr_nei:
             message = max_sum_variable_message_to(nei, inbox, order_of_message, possible_pos)
             send_message_to(nei, agent, message)
@@ -128,12 +126,10 @@ def Max_sum(kwargs):
     cells = kwargs['cells']
 
     if isinstance(agent, Target):
-        # print("Target in Max_sum")
         max_sum_function_node(agent, for_alg)
 
     if isinstance(agent, Agent):
 
         # logging.info("Thread %s : in FOO", threading.get_ident())
-        # print("Agent in Max_sum")
         return max_sum_variable_node(agent, cells, targets, agents, for_alg)
 
