@@ -183,7 +183,7 @@ def print_t_test_table(graphs):
     tab = 2
     eq_str = '*' * (max_length + tab)
     print('{eq_str}'.format(eq_str=eq_str) * (num_of_algs + 1))
-    eq_str = '*' * max_length
+    eq_str = ' ' * max_length
     print('{eq_str}\t'.format(eq_str=eq_str) * int(num_of_algs/3 + 1), end='')
     print('P-VALUE TABLE\t', end='')
     print('{eq_str}\t'.format(eq_str=eq_str) * int(num_of_algs/3 + 1))
