@@ -9,24 +9,24 @@ from CONSTANTS import *
 # SET CELL SIZE THIS WAY:
 # cell_size = CELL_SIZE['BIG']
 # cell_size = CELL_SIZE['MEDIUM']
-# cell_size = CELL_SIZE['SMALL']
+cell_size = CELL_SIZE['SMALL']
 # ---
 # OR THIS WAY:
-grid_size = 100
-CELL_SIZE['CUSTOM'] = int(SCREEN_HEIGHT/grid_size - 2)
-cell_size = CELL_SIZE['CUSTOM']
-print('cell_size: ', cell_size)
+# grid_size = 40
+# CELL_SIZE['CUSTOM'] = int(SCREEN_HEIGHT/grid_size - 2)
+# cell_size = CELL_SIZE['CUSTOM']
+# print('cell_size: ', cell_size)
 # cell_size = 10  # 'CUSTOM'
 # ---
 show_ranges = True
-need_to_save_results = False
-adding_to_file_name = 'DSA_PILR_vs_DSA'
-need_to_plot_results = False
+need_to_save_results = True
+adding_to_file_name = 'Max_sum__DSA_PILR__DSA__MGM'
+need_to_plot_results = True
 need_to_plot_variance = False
 alpha = 0.025  # for confidence intervals in graphs
 speed = 5  # bigger -slower, smaller - faster. don't ask why
-num_of_agents = 50
-num_of_targets = 20
+num_of_agents = 10
+num_of_targets = 10
 use_rate = False  # if False - it uses the num_of_targets variable, but still also uses target_rate
 target_rate = 0.055
 
@@ -34,7 +34,7 @@ target_range = (100, 100)  # max and min value of target
 MR = 5.5 * cell_size
 SR = 5.5 * cell_size
 cred = 30
-MAX_ITERATIONS = 25
+MAX_ITERATIONS = 5
 NUMBER_OF_PROBLEMS = 10
 
 algorithms = ['Max_sum', ]

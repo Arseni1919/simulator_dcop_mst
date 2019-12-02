@@ -450,7 +450,6 @@ def max_sum_nei_check(curr_nei, instance):
 def print_inbox_len(required_num, agent, inbox):
     if required_num == agent.get_num_of_agent():
         if len(inbox.keys()) == 0:
-            # print(agent.get_name(), agent.get_num_of_agent(), 'empty')
             return
         # print(agent.get_name(), agent.get_num_of_agent(), '\'s inbox: ', len(inbox[random.choice(list(inbox.keys()))]))
 

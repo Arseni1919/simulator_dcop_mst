@@ -96,7 +96,11 @@ class Bla:
 a1 = Bla()
 a2 = Bla()
 a3 = Bla()
+from main_help_functions import *
+file_name = 'data/02.12.2019-14:55:52_Max_sum__DSA_PILR__DSA__MGM_file.data'
+with open(file_name, 'rb') as fileObject:
+    graphs = pickle.load(fileObject)
+    print_t_test_table(graphs)
 
-
-print(int(-0.9))
+print(len('bla'))
 

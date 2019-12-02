@@ -153,8 +153,57 @@ def convergence_update(targets, agents):
     return convergence
 
 
+def print_t_test_table(graphs):
+    keys = graphs.keys()
+    num_of_algs = len(keys)
+    print_array = [[] for _ in range(num_of_algs + 1)]
+    for i in range(num_of_algs + 1):
+        for _ in range(num_of_algs + 1):
+            print_array[i].append('')
+    max_length = 0
+    for k in keys:
+        if len(k) > max_length:
+            max_length = len(k)
+
+    print_array[0][0] = '\t%s' % (' ' * len('1.000'))
+    i = 0
+    for k1 in keys:
+        adding_string = ' ' * (max_length - len(k1))
+        j = 0
+        print_array[0][i + 1] = '\t%s%s' % (k1, adding_string)
+        print_array[i + 1][0] = '%s%s\t' % (k1, adding_string)
+        for k2 in keys:
+            adding_string2 = ' ' * (max_length - len('1.000'))
+            stat, p_value = stats.ttest_ind(graphs[k1][-1], graphs[k2][-1])
+            print_array[i + 1][j + 1] = '{:.3f}{adding_string2}\t'.format(p_value, adding_string2=adding_string2)
+            j += 1
+        i += 1
+
+    # printing
+    tab = 2
+    eq_str = '*' * (max_length + tab)
+    print('{eq_str}'.format(eq_str=eq_str) * (num_of_algs + 1))
+    eq_str = '*' * max_length
+    print('{eq_str}\t'.format(eq_str=eq_str) * int(num_of_algs/3 + 1), end='')
+    print('P-VALUE TABLE\t', end='')
+    print('{eq_str}\t'.format(eq_str=eq_str) * int(num_of_algs/3 + 1))
+    eq_str = '*' * (max_length + tab)
+    print('{eq_str}'.format(eq_str=eq_str) * (num_of_algs + 1))
+    for i in range(num_of_algs + 1):
+        for j in range(num_of_algs + 1):
+            print(print_array[i][j], end='')
+        print()
+        eq_str = '=' * max_length
+        print('{eq_str}\t'.format(eq_str=eq_str), end='')
+        eq_str = '=' * max_length if i == 0 else '-' * max_length
+        print('{eq_str}\t'.format(eq_str=eq_str) * num_of_algs)
+    eq_str = '*' * (max_length + tab)
+    print('{eq_str}'.format(eq_str=eq_str) * (num_of_algs + 1))
+
+
 def plot_results_if(need_to_plot_results, need_to_plot_variance, graphs, algorithms, alpha=0.025):
     if need_to_plot_results:
+        print_t_test_table(graphs)
         # plt.style.use('fivethirtyeight')
         plt.style.use('bmh')
         lines = ['-', '--', '-.', ':', ]
