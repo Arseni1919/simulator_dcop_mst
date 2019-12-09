@@ -9,14 +9,12 @@ from CONSTANTS import *
 # SET CELL SIZE THIS WAY:
 # cell_size = CELL_SIZE['BIG']
 # cell_size = CELL_SIZE['MEDIUM']
-cell_size = CELL_SIZE['SMALL']
+# cell_size = CELL_SIZE['SMALL']
 # ---
 # OR THIS WAY:
-# grid_size = 40
-# CELL_SIZE['CUSTOM'] = int(SCREEN_HEIGHT/grid_size - 2)
-# cell_size = CELL_SIZE['CUSTOM']
-# print('cell_size: ', cell_size)
-# cell_size = 10  # 'CUSTOM'
+grid_size = 15
+CELL_SIZE['CUSTOM'] = int(SCREEN_HEIGHT/grid_size - 2)
+cell_size = CELL_SIZE['CUSTOM']
 # ---
 show_ranges = True
 need_to_save_results = True
@@ -25,8 +23,8 @@ need_to_plot_results = True
 need_to_plot_variance = False
 alpha = 0.025  # for confidence intervals in graphs
 speed = 5  # bigger -slower, smaller - faster. don't ask why
-num_of_agents = 10
-num_of_targets = 10
+num_of_agents = 4
+num_of_targets = 3
 use_rate = False  # if False - it uses the num_of_targets variable, but still also uses target_rate
 target_rate = 0.055
 
@@ -34,13 +32,14 @@ target_range = (100, 100)  # max and min value of target
 MR = 5.5 * cell_size
 SR = 5.5 * cell_size
 cred = 30
-MAX_ITERATIONS = 5
-NUMBER_OF_PROBLEMS = 10
+MAX_ITERATIONS = 10
+NUMBER_OF_PROBLEMS = 3
 
-algorithms = ['Max_sum', ]
+algorithms = ['Max_sum_2', ]
+# algorithms = ['Max_sum_2', 'Max_sum_1', ]
 # algorithms = ['DSA_PILR_0.2','DSA_PILR_0.5','DSA_PILR_0.8',]
 # algorithms = ['DSA_PILR', ]
-algorithms = ['Max_sum', 'DSA_PILR', 'DSA', 'MGM', ]
+# algorithms = ['Max_sum', 'DSA_PILR_1', 'DSA_PILR_2', 'DSA_PILR_3', 'DSA_PILR_4', 'DSA', 'MGM', ]
 # algorithms = ['DSA_PILR', 'DSA', 'MGM', ]
 # algorithms = [
 #     # 'DSA_PILR_1',
@@ -66,7 +65,8 @@ algorithms = ['Max_sum', 'DSA_PILR', 'DSA', 'MGM', ]
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 dict_alg = {
-    'Max_sum': (Max_sum, [5, cred, SR]),
+    'Max_sum_1': (Max_sum, [5, cred, SR, max_sum_1_function_message_to]),
+    'Max_sum_2': (Max_sum, [5, cred, SR, max_sum_2_function_message_to]),
     'DSA': (DSA, [0.7]),
     'DSA_2': (DSA, [0.5]),
     'DSA_3': (DSA, [0.3]),
@@ -74,10 +74,10 @@ dict_alg = {
     'DSA_5': (DSA, [0.7]),
     'MGM': (MGM, []),
     'DSA_PILR': (DSA_PILR, [0.7, 20, 0.5]),
-    'DSA_PILR_1': (DSA_PILR, [0.8, 10, 0.8]),
-    'DSA_PILR_2': (DSA_PILR, [0.8, 3, 0.8]),
-    'DSA_PILR_3': (DSA_PILR, [0.8, 1, 0.8]),
-    'DSA_PILR_4': (DSA_PILR, [0.8, 3, 0.8]),
+    'DSA_PILR_1': (DSA_PILR, [0.7, 20, 0.2]),
+    'DSA_PILR_2': (DSA_PILR, [0.7, 20, 0.4]),
+    'DSA_PILR_3': (DSA_PILR, [0.7, 20, 0.6]),
+    'DSA_PILR_4': (DSA_PILR, [0.7, 20, 0.8]),
     'DSA_PILR_5': (DSA_PILR, [0.8, 3, 0.5]),
     'DSA_PILR_6': (DSA_PILR, [0.5, 3, 0.5]),
     'DSA_PILR_7': (DSA_PILR, [0.8, 3, 0.5]),
@@ -290,5 +290,5 @@ if __name__ == '__main__':
  - make variable of amount of targets
  - use tqdm
  - insert t-test
- - 
+ - save information about experiment
 '''

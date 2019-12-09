@@ -3,7 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="61cd4c22-dbe1-4300-a0e2-5fd10fc80455" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_help_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_help_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Algorithms_help_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms_help_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CONSTANTS.py" beforeDir="false" afterPath="$PROJECT_DIR$/CONSTANTS.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DRAFTS.py" beforeDir="false" afterPath="$PROJECT_DIR$/DRAFTS.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Max_sum_drafts.py" beforeDir="false" afterPath="$PROJECT_DIR$/Max_sum_drafts.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -53,7 +57,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.DRAFTS">
+  <component name="RunManager" selected="Python.main">
     <configuration name="Agent" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="simulator_for_dcop_mst" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -168,8 +172,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.DRAFTS" />
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.DRAFTS" />
         <item itemvalue="Python.Agent" />
         <item itemvalue="Python.CONSTANTS" />
         <item itemvalue="Python.matplotlib_graph" />
@@ -341,7 +345,14 @@
       <option name="project" value="LOCAL" />
       <updated>1575292338723</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="updated">
+      <created>1575302274609</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1575302274610</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

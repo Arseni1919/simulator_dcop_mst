@@ -14,6 +14,7 @@ import pickle
 import copy
 from scipy.stats import t
 from scipy import stats
+import itertools
 
 
 # Define constants for the screen width and height

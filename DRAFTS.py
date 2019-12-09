@@ -86,21 +86,26 @@ pygame.init()
 #
 #         pygame.display.flip()
 
+
+# from main_help_functions import *
+# file_name = 'data/02.12.2019-14:55:52_Max_sum__DSA_PILR__DSA__MGM_file.data'
+# with open(file_name, 'rb') as fileObject:
+#     graphs = pickle.load(fileObject)
+#     print_t_test_table(graphs)
+
+
 dic = {'a':1, 'b':-1, 'c':-12, 'd':10, }
 
 
-class Bla:
-    pass
 
 
-a1 = Bla()
-a2 = Bla()
-a3 = Bla()
-from main_help_functions import *
-file_name = 'data/02.12.2019-14:55:52_Max_sum__DSA_PILR__DSA__MGM_file.data'
-with open(file_name, 'rb') as fileObject:
-    graphs = pickle.load(fileObject)
-    print_t_test_table(graphs)
+for i in itertools.product(range(2), repeat=1):
+    # for j in range(len(i)):
+    #     print(i[j])
+    print(i)
+    arr = range(1, len(i) + 1)
+    for j,k in zip(arr, i):
+        print(j, k)
+    print(list(zip(arr, i)))
 
-print(len('bla'))
 

@@ -1,7 +1,9 @@
 from pure_functions import *
+
 '''
 OUTER WORLD - ALL FUNCTIONS HERE SUPPOSE TO BE TRANSPARENT TO SIMULATION
 '''
+
 
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
@@ -352,14 +354,13 @@ def select_pos(pos_set, targets, SR):
     if len(pos_set) == 1:
         return pos_set[0]
     target_set = get_target_set_with_SR_range(pos_set, targets, SR)
-    # print(target_set)
     if len(target_set) == 0:
-        # print(pos_set)
         return random.choice(pos_set)
     # target_set changes if not all targets can fit
     possible_pos, target_set = get_possible_pos(pos_set, target_set, SR)
     new_targets = get_new_targets(target_set, targets)
     return select_pos(possible_pos, new_targets, SR)
+
 
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 # For Max_sum:
@@ -374,7 +375,6 @@ def max_sum_create_null_variable_message(possible_pos):
 
 
 def max_sum_variable_message_to(nei, inbox, order_of_message, possible_pos):
-
     # sum of the messages together
     new_message = max_sum_create_null_variable_message(possible_pos)
     for target_num, set_of_messages in inbox.items():
@@ -394,32 +394,146 @@ def max_sum_variable_message_to(nei, inbox, order_of_message, possible_pos):
     return new_message
 
 
-def max_sum_function_message_to(nei, inbox, order_of_message, possible_pos, max_contribution, target):
-
+def max_sum_1_function_message_to(nei, inbox, possible_pos, max_contribution_bool, target, cred, SR):
+    '''
+    :param nei:
+    :param inbox: {num_of_agent: [{(x, y): value}, (x, y): value, ...}, {}, ...], num_of_agent: [], ...}
+    :param order_of_message:
+    :param possible_pos:
+    :param max_contribution:
+    :param target:
+    :return:
+    '''
     new_message = max_sum_create_null_variable_message(possible_pos)
-    self_num = nei.get_num_of_agent()
+    max_contribution = min(target.get_req(), cred) if max_contribution_bool else 0
 
-    # create two sets
     in_SR = []
-    out_of_SR = []
     for pos in possible_pos:
-        if distance(pos, target.get_pos()) < nei.get_SR():
+        if distance(pos, target.get_pos()) < SR:
             in_SR.append(pos)
-        else:
-            out_of_SR.append(pos)
 
     for pos in in_SR:
         new_message[pos] += max_contribution
 
-    # for pos in out_of_SR:
-    #     min_value = 10**10
-    #     curr_value = 0
-    #     for agent_num, set_of_messages in inbox.items():
-    #         if agent_num != self_num:
-    #             last_received_message = set_of_messages[order_of_message - 1]
-    #             for pos, value in last_received_message.items():
-    #                 pass
     return new_message
+
+
+def max_sum_2_function_message_to(nei, inbox, possible_pos, inside_fmr, target, cred, SR):
+    '''
+    :param inside_fmr:
+    :param nei:
+    :param inbox: {num_of_agent: [{(x, y): value}, (x, y): value, ...}, {}, ...], num_of_agent: [], ...}
+    :param order_of_message:
+    :param possible_pos:
+    :param max_contribution:
+    :param target:
+    :return:
+    '''
+
+    message_to = nei.get_num_of_agent()
+    target_pos = target.get_pos()
+    target_req = target.get_req()
+    target_num = target.get_num_of_agent()
+
+
+
+    if not inside_fmr:
+        return max_sum_create_null_variable_message(possible_pos)  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    max_values = get_SR_max_values(SR, inbox, target_pos, message_to)  # max_values is dictionary
+    tuple_for_new_message = get_SR_new_message(max_values, target_req, target_num, cred, message_to)
+
+    return new_function_message(possible_pos, target, SR, tuple_for_new_message)
+
+
+def new_function_message(possible_pos, target, SR, tuple_for_new_message):
+    new_message = max_sum_create_null_variable_message(possible_pos)
+    for pos in possible_pos:
+        if distance(pos, target.get_pos()) < SR:
+            new_message[pos] = tuple_for_new_message[0]
+        else:
+            new_message[pos] = tuple_for_new_message[1]
+    return new_message
+
+
+def get_SR_new_message(max_values, target_req, target_num, cred, message_to):
+    '''
+    :param max_values: dictionary
+    :param target_req: int
+    :param cred: int
+    :return:
+    '''
+    tuple_for_new_message = {0: 0, 1: 0}
+    neighbours = max_values.keys()
+    num_of_neighbours = len(neighbours)
+
+    # if message_to == 1 and target_num == 1:
+    #     print('max_values from target ', target_num, 'to robot ', message_to, ': ', max_values)
+
+    # 0 - INSIDE SR | 1 - OUTSIDE of SR
+    # go through all combinations
+    for comb_tuple in itertools.product(range(2), repeat=num_of_neighbours):
+
+        in_or_out_of_SR_of_message_to = -1
+
+        # check for impossible_combination
+        impossible_combination = False
+        for curr_nei, in_or_out_of_SR in zip(neighbours, comb_tuple):
+            if max_values[curr_nei][in_or_out_of_SR] == -1:
+                impossible_combination = True
+        if impossible_combination:
+            continue
+        if impossible_combination: raise ValueError('impossible_combination')
+
+        # calculating table_column and result_column
+        result_column = 0
+        # coverage = target_req
+        remained_coverage = target_req
+        message_to_is_out_of_SR = False
+        for curr_nei, in_or_out_of_SR in zip(neighbours, comb_tuple):
+            result_column += max_values[curr_nei][in_or_out_of_SR]
+            if curr_nei == message_to:
+                in_or_out_of_SR_of_message_to = in_or_out_of_SR  # we'll use this later
+                if in_or_out_of_SR == 1:
+                    remained_coverage = 0
+                    message_to_is_out_of_SR = True
+            else:
+                if not message_to_is_out_of_SR and in_or_out_of_SR == 0:
+                    remained_coverage = max(remained_coverage - cred, 0)
+        result_column += min(remained_coverage, cred)
+        # if message_to == 1: print(result_column)
+
+        # choosing the maximum per each in-SR and out-SR value
+        if tuple_for_new_message[in_or_out_of_SR_of_message_to] < result_column:
+            tuple_for_new_message[in_or_out_of_SR_of_message_to] = result_column
+    # if message_to == 1: print(tuple_for_new_message)
+    # minus alpha
+    min_value = min(tuple_for_new_message[0], tuple_for_new_message[1])
+    tuple_for_new_message[0] = tuple_for_new_message[0] - min_value
+    tuple_for_new_message[1] = tuple_for_new_message[1] - min_value
+
+    return tuple_for_new_message
+
+
+def get_SR_max_values(SR, inbox, target_pos, message_to):
+    neighbours = inbox.keys()
+    # 0 - INSIDE SR | 1 - OUTSIDE of SR
+    max_values = {}
+    for n in neighbours:
+        if n == message_to:
+            max_values[message_to] = {0: 0, 1: 0}
+        else:
+            # here -1 remains -1 if all the positions are inside SR or all of them outside SR
+            max_values[n] = {0: -1, 1: -1}
+            last_message = inbox[n][-1]
+            for pos, pos_value in last_message.items():
+                if distance(pos, target_pos) < SR:
+                    # in SR range
+                    max_values[n][0] = pos_value if max_values[n][0] < pos_value else max_values[n][0]
+                else:
+                    # out of SR range
+                    max_values[n][1] = pos_value if max_values[n][1] < pos_value else max_values[n][1]
+    return max_values
 
 
 def max_sum_choose_position_for(agent, possible_pos):
@@ -452,7 +566,6 @@ def print_inbox_len(required_num, agent, inbox):
         if len(inbox.keys()) == 0:
             return
         # print(agent.get_name(), agent.get_num_of_agent(), '\'s inbox: ', len(inbox[random.choice(list(inbox.keys()))]))
-
 
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------

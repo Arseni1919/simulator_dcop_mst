@@ -55,40 +55,32 @@ def select_FMR_nei(target, curr_nei, for_alg):
     return total_set
 
 
-def get_max_contribution(fmr_nei, nei, target):
-    if nei in fmr_nei:
-        return min(target.get_req(), nei.get_cred())
-    return 0
-
-
 def max_sum_function_node(target, for_alg):
     curr_nei = target.get_curr_nei()
     max_sum_nei_check(curr_nei, Agent)
     mini_iterations = for_alg[0]
-    # print('Target: ', target.get_num_of_agent(), ' its neighbors: ', curr_nei)
-    # print('Here Function Node:', threading.get_ident())
     for i in range(mini_iterations):
         order_of_message = i + 1
         receive_all_messages(target, order_of_message)
 
         inbox = target.get_access_to_inbox('copy')
-        print_inbox_len(1, target, inbox)
+        # print_inbox_len(1, target, inbox)
         fmr_nei = select_FMR_nei(target, curr_nei, for_alg)
+        # print('fmr_nei length: ', len(fmr_nei))
 
         for nei in curr_nei:
             received_message = inbox[nei.get_num_of_agent()][i]
-            # print('HERE 1, target:', target.get_num_of_agent())
-            # print('target: ', target.get_num_of_agent(), 'received_message: ', type(received_message))
             possible_pos = received_message.keys()
-            # print(possible_pos)
-            # print('HERE 2')
-            max_contribution = get_max_contribution(fmr_nei, nei, target)
-            # print('HERE')
-            new_message = max_sum_function_message_to(nei, inbox, order_of_message, possible_pos, max_contribution,
-                                                      target)
+            inside_fmr = nei in fmr_nei
+            new_message = for_alg[3](nei, inbox, possible_pos, inside_fmr,
+                                                        target, for_alg[1], for_alg[2])
             send_message_to(nei, target, new_message)
-            # print("F: max_sum_function_node send 1 message to ", nei.get_num_of_agent())
-        # print("F: max_sum_function_node sent 1 messages")
+
+            # if target.get_num_of_agent() == 1:  # and nei.get_num_of_agent() == curr_nei[0].get_num_of_agent():
+            #     print('before ', i)
+            #     print('nei: ', nei.get_num_of_agent(), 'max of messages: ', max(new_message.values()))
+
+
 
 
 def max_sum_variable_node(agent, cells, targets, agents, for_alg):
@@ -103,7 +95,7 @@ def max_sum_variable_node(agent, cells, targets, agents, for_alg):
     for i in range(mini_iterations - 1):
         order_of_message = i + 1
         inbox = agent.get_access_to_inbox('copy')
-        print_inbox_len(1, agent, inbox)
+        # print_inbox_len(1, agent, inbox)
         for nei in curr_nei:
             message = max_sum_variable_message_to(nei, inbox, order_of_message, possible_pos)
             send_message_to(nei, agent, message)
