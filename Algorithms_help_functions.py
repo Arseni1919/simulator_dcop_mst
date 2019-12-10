@@ -588,8 +588,6 @@ def get_set_of_furthest_directed_max_pos(agent, set_of_max_pos):
 
     set_of_furthest_directed_max_pos = [closest_pos]
 
-    # print(len(set_of_furthest_directed_max_pos))
-
     return set_of_furthest_directed_max_pos
 
 
