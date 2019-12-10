@@ -584,10 +584,9 @@ def get_set_of_furthest_directed_max_pos(agent, set_of_max_pos):
         directed_pos = (curr_pos[0] + int(MR * np.cos(np.deg2rad(direction))),
                         curr_pos[1] + int(MR * np.sin(np.deg2rad(direction))))
         closest_pos = get_closest_pos(set_of_max_pos, directed_pos)
+
     agent.set_direction(direction)
-
     set_of_furthest_directed_max_pos = [closest_pos]
-
     return set_of_furthest_directed_max_pos
 
 
