@@ -74,7 +74,8 @@ class Title(pygame.sprite.Sprite):
             did_prop_it = problem * length_of_algs * MAX_ITERATIONS
             did_alg_it = (index_of_alg - 1) * MAX_ITERATIONS
             did_it = iteration
-            rem_iter = total - did_prop_it - did_alg_it - did_it
+            # rem_iter = total - did_prop_it - did_alg_it - did_it
+            rem_problem = NUMBER_OF_PROBLEMS - problem
             if interval == '...':
                 self.surf.fill(SKY_COLOR)
                 font = pygame.font.SysFont("comicsansms", 30)
@@ -83,8 +84,8 @@ class Title(pygame.sprite.Sprite):
                 text = font.render("calculating...", True, (0, 0, 0))
                 self.surf.blit(text, (0, 40))
             else:
-                minutes = int(rem_iter*interval/60)
-                seconds = int((rem_iter*interval/60 - minutes)*60)
+                minutes = int(rem_problem*interval/60)
+                seconds = int((rem_problem*interval/60 - minutes)*60)
                 self.surf.fill(SKY_COLOR)
                 font = pygame.font.SysFont("comicsansms", 30)
                 text = font.render("%s" % self.title_name, True, (0, 0, 0))

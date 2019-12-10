@@ -5,7 +5,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Title.py" beforeDir="false" afterPath="$PROJECT_DIR$/Title.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_help_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_help_functions.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -385,7 +384,14 @@
       <option name="project" value="LOCAL" />
       <updated>1575986772090</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="Merge remote-tracking branch 'origin/master'&#10;&#10;# Conflicts:&#10;#&#9;README.md">
+      <created>1575992487730</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1575992487730</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

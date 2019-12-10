@@ -21,7 +21,7 @@ need_to_save_results = False
 adding_to_file_name = ''
 need_to_plot_results = True
 need_to_plot_variance = False
-need_to_plot_min_max = True
+need_to_plot_min_max = False
 alpha = 0.025  # for confidence intervals in graphs
 speed = 5  # bigger -slower, smaller - faster. don't ask why
 num_of_agents = 10
@@ -36,7 +36,7 @@ cred = 30
 MAX_ITERATIONS = 25
 NUMBER_OF_PROBLEMS = 10
 
-algorithms = ['Max_sum_4', 'Max_sum_3', 'Max_sum_2', 'Max_sum_1', 'DSA']
+algorithms = ['Max_sum_4', 'Max_sum_2', 'DSA']
 # algorithms = ['Max_sum_2', 'Max_sum_1', ]
 # algorithms = ['DSA_PILR_0.2','DSA_PILR_0.5','DSA_PILR_0.8',]
 # algorithms = ['DSA_PILR', ]
@@ -154,7 +154,7 @@ if __name__ == '__main__':
                       cred=cred,
                       show_ranges=show_ranges,
                       speed=speed)
-        time2 = pygame.time.get_ticks()
+        time4 = pygame.time.get_ticks()
         for algorithm in algorithms:
             logging.info("---------- Algorithm: %s ----------" % algorithm)
             fg = factor_graph[dict_alg[algorithm][0]]
@@ -165,6 +165,7 @@ if __name__ == '__main__':
             convergence = 0
 
             while iteration < MAX_ITERATIONS and running:
+
                 # running = False if iteration == MAX_ITERATIONS else True
                 # for loop through the event queue
                 for event in pygame.event.get():
@@ -202,8 +203,8 @@ if __name__ == '__main__':
                             executor.submit(agent.move)
                     # logging.info("Thread %s : finishing moving!", threading.get_ident())
                     # print('-----%s iteration -------' % iteration)
-                # time2 = pygame.time.get_ticks()
-                if all_arrived(agents) and time2 - time1 > 1000:
+                time2 = pygame.time.get_ticks()
+                if all_arrived(agents) and time2 - time1 > 500:
                     # -----------------------------------------
                     # UPDATING
                     # -----------------------------------------
@@ -263,7 +264,7 @@ if __name__ == '__main__':
                 pygame.display.flip()
 
         time3 = pygame.time.get_ticks()
-        interval = (time3 - time2) / 1000 + 1  # for Title of time
+        interval = (time3 - time4) / 1000 + 1  # for Title of time
     finish_sound.play()
     time.sleep(2)
     # All done! Stop and quit the mixer.
