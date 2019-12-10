@@ -126,7 +126,7 @@ if __name__ == '__main__':
     running = True
     time1 = pygame.time.get_ticks()
     time3 = pygame.time.get_ticks()
-    interval = 2
+    interval = '...'
 
     # Main loop
     for problem in range(NUMBER_OF_PROBLEMS):
@@ -154,7 +154,7 @@ if __name__ == '__main__':
                       cred=cred,
                       show_ranges=show_ranges,
                       speed=speed)
-
+        time2 = pygame.time.get_ticks()
         for algorithm in algorithms:
             logging.info("---------- Algorithm: %s ----------" % algorithm)
             fg = factor_graph[dict_alg[algorithm][0]]
@@ -202,7 +202,7 @@ if __name__ == '__main__':
                             executor.submit(agent.move)
                     # logging.info("Thread %s : finishing moving!", threading.get_ident())
                     # print('-----%s iteration -------' % iteration)
-                time2 = pygame.time.get_ticks()
+                # time2 = pygame.time.get_ticks()
                 if all_arrived(agents) and time2 - time1 > 1000:
                     # -----------------------------------------
                     # UPDATING
@@ -230,8 +230,8 @@ if __name__ == '__main__':
                                                 alg, agents.sprites(), targets.sprites(), cells.sprites(), for_alg)
                     logging.info("finishing iteration: %s ----------" % iteration)
                     # , threading.get_ident())
-                    time3 = pygame.time.get_ticks()
-                    interval = (time3 - time2) / 1000 + 1  # for Title of time
+                    # time3 = pygame.time.get_ticks()
+                    # interval = (time3 - time2) / 1000 + 1  # for Title of time
 
                 # Get the set of keys pressed and check for user input
                 pressed_keys = pygame.key.get_pressed()
@@ -262,6 +262,8 @@ if __name__ == '__main__':
                 # Update the display
                 pygame.display.flip()
 
+        time3 = pygame.time.get_ticks()
+        interval = (time3 - time2) / 1000 + 1  # for Title of time
     finish_sound.play()
     time.sleep(2)
     # All done! Stop and quit the mixer.

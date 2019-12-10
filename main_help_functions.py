@@ -13,32 +13,32 @@ def create_side_titles(alg_name, all_sprites, titles):
         title.kill()
 
     order = 0
-    alg_title = Title(alg_name=alg_name, order=order)
+    alg_title = Title(title_name=alg_name, order=order)
     titles.add(alg_title)
     all_sprites.add(alg_title)
 
     order += 1
-    other_title = Title(alg_name="Problem:", order=order)
+    other_title = Title(title_name="Problem:", order=order)
     titles.add(other_title)
     all_sprites.add(other_title)
 
     order += 1
-    other_title = Title(alg_name="Algorithm:", order=order)
+    other_title = Title(title_name="Algorithm:", order=order)
     titles.add(other_title)
     all_sprites.add(other_title)
 
     order += 1
-    other_title = Title(alg_name="Iteration:", order=order)
+    other_title = Title(title_name="Iteration:", order=order)
     titles.add(other_title)
     all_sprites.add(other_title)
 
     order += 1
-    other_title = Title(alg_name="Convergence:", order=order)
+    other_title = Title(title_name="Convergence:", order=order)
     titles.add(other_title)
     all_sprites.add(other_title)
 
     order += 1
-    other_title = Title(alg_name="Remained:", order=order)
+    other_title = Title(title_name="Remained:", order=order)
     titles.add(other_title)
     all_sprites.add(other_title)
 
