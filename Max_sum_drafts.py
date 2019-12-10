@@ -101,7 +101,7 @@ def max_sum_variable_node(agent, cells, targets, agents, for_alg):
             send_message_to(nei, agent, message)
         receive_all_messages(agent, order_of_message + 1)
     # print("HERE")
-    return max_sum_choose_position_for(agent, possible_pos)
+    return max_sum_choose_position_for(agent, possible_pos, for_alg)
 
 
 def Max_sum(kwargs):

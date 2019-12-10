@@ -12,19 +12,20 @@ from CONSTANTS import *
 # cell_size = CELL_SIZE['SMALL']
 # ---
 # OR THIS WAY:
-grid_size = 15
+grid_size = 50
 CELL_SIZE['CUSTOM'] = int(SCREEN_HEIGHT/grid_size - 2)
 cell_size = CELL_SIZE['CUSTOM']
 # ---
 show_ranges = True
-need_to_save_results = True
-adding_to_file_name = 'Max_sum__DSA_PILR__DSA__MGM'
+need_to_save_results = False
+adding_to_file_name = ''
 need_to_plot_results = True
 need_to_plot_variance = False
+need_to_plot_min_max = True
 alpha = 0.025  # for confidence intervals in graphs
 speed = 5  # bigger -slower, smaller - faster. don't ask why
-num_of_agents = 4
-num_of_targets = 3
+num_of_agents = 10
+num_of_targets = 10
 use_rate = False  # if False - it uses the num_of_targets variable, but still also uses target_rate
 target_rate = 0.055
 
@@ -32,10 +33,10 @@ target_range = (100, 100)  # max and min value of target
 MR = 5.5 * cell_size
 SR = 5.5 * cell_size
 cred = 30
-MAX_ITERATIONS = 10
-NUMBER_OF_PROBLEMS = 3
+MAX_ITERATIONS = 25
+NUMBER_OF_PROBLEMS = 10
 
-algorithms = ['Max_sum_2', ]
+algorithms = ['Max_sum_4', 'Max_sum_3', 'Max_sum_2', 'Max_sum_1', 'DSA']
 # algorithms = ['Max_sum_2', 'Max_sum_1', ]
 # algorithms = ['DSA_PILR_0.2','DSA_PILR_0.5','DSA_PILR_0.8',]
 # algorithms = ['DSA_PILR', ]
@@ -65,8 +66,10 @@ algorithms = ['Max_sum_2', ]
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 dict_alg = {
-    'Max_sum_1': (Max_sum, [5, cred, SR, max_sum_1_function_message_to]),
-    'Max_sum_2': (Max_sum, [5, cred, SR, max_sum_2_function_message_to]),
+    'Max_sum_1': (Max_sum, [1, cred, SR, max_sum_1_function_message_to, 'random']),
+    'Max_sum_2': (Max_sum, [5, cred, SR, max_sum_2_function_message_to, 'random']),
+    'Max_sum_3': (Max_sum, [5, cred, SR, max_sum_2_function_message_to, 'random_furthest']),
+    'Max_sum_4': (Max_sum, [5, cred, SR, max_sum_2_function_message_to, 'random_furthest_directed']),
     'DSA': (DSA, [0.7]),
     'DSA_2': (DSA, [0.5]),
     'DSA_3': (DSA, [0.3]),
@@ -273,7 +276,7 @@ if __name__ == '__main__':
     pickle_results_if(need_to_save_results, graphs, adding_to_file_name)
 
     # Plot results
-    plot_results_if(need_to_plot_results, need_to_plot_variance, graphs, algorithms, alpha)
+    plot_results_if(need_to_plot_results, need_to_plot_variance, need_to_plot_min_max, graphs, algorithms, alpha)
 
 '''
  - dictionary of algorithms - correct
@@ -289,6 +292,5 @@ if __name__ == '__main__':
  - make the change of the size screen depend on amount of cells in one side
  - make variable of amount of targets
  - use tqdm
- - insert t-test
  - save information about experiment
 '''

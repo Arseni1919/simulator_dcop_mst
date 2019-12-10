@@ -31,6 +31,7 @@ class Agent(pygame.sprite.Sprite):
         self.step_x = 0
         self.step_y = 0
         self.speed = speed
+        self.direction = np.random.randint(360)  # degrees
         self.curr_nei = []
         self.inbox = {}
         self._lock = threading.RLock()
@@ -117,6 +118,9 @@ class Agent(pygame.sprite.Sprite):
     def get_pos(self):
         return self.rect.center
 
+    def get_cell_size(self):
+        return self.cell_size
+
     def set_pos(self, pos):
         self.rect.center = pos
         self.future_pos = pos
@@ -144,6 +148,12 @@ class Agent(pygame.sprite.Sprite):
 
     def get_cred(self):
         return self.cred
+
+    def get_direction(self):
+        return self.direction
+
+    def set_direction(self, direction):
+        self.direction = direction
 
     def get_curr_nei(self):
         return self.curr_nei

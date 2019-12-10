@@ -536,7 +536,7 @@ def get_SR_max_values(SR, inbox, target_pos, message_to):
     return max_values
 
 
-def max_sum_choose_position_for(agent, possible_pos):
+def max_sum_choose_position_for(agent, possible_pos, for_alg):
     inbox = agent.get_access_to_inbox('copy')
     # sum of all messages
     sum_of_all_messages = max_sum_create_null_variable_message(possible_pos)
@@ -552,7 +552,62 @@ def max_sum_choose_position_for(agent, possible_pos):
     for pos, value in sum_of_all_messages.items():
         if value == max_value:
             set_of_max_pos.append(pos)
+
+    if max_value == 0:
+        if for_alg[4] == 'random_furthest':
+            set_of_furthest_max_pos = get_set_of_furthest_max_pos(agent, set_of_max_pos)
+            return random.choice(set_of_furthest_max_pos)
+        if for_alg[4] == 'random_furthest_directed':
+            set_of_furthest_directed_max_pos = get_set_of_furthest_directed_max_pos(agent, set_of_max_pos)
+            return random.choice(set_of_furthest_directed_max_pos)
     return random.choice(set_of_max_pos)
+
+
+def get_closest_pos(set_of_max_pos, directed_pos):
+    closest_pos = random.choice(set_of_max_pos)
+    for pos in set_of_max_pos:
+        if distance(directed_pos, pos) < distance(directed_pos, closest_pos):
+            closest_pos = pos
+    return closest_pos
+
+
+def get_set_of_furthest_directed_max_pos(agent, set_of_max_pos):
+    curr_pos = agent.get_pos()
+    cell_size = agent.get_cell_size()
+    direction = agent.get_direction()
+    MR = agent.get_MR()
+    directed_pos = (curr_pos[0] + int(MR*np.cos(np.deg2rad(direction))),
+                    curr_pos[1] + int(MR*np.sin(np.deg2rad(direction))))
+    closest_pos = get_closest_pos(set_of_max_pos, directed_pos)
+    while distance(closest_pos, directed_pos) > (cell_size):
+        direction = np.random.randint(360)
+        directed_pos = (curr_pos[0] + int(MR * np.cos(np.deg2rad(direction))),
+                        curr_pos[1] + int(MR * np.sin(np.deg2rad(direction))))
+        closest_pos = get_closest_pos(set_of_max_pos, directed_pos)
+    agent.set_direction(direction)
+
+    set_of_furthest_directed_max_pos = [closest_pos]
+
+    # print(len(set_of_furthest_directed_max_pos))
+
+    return set_of_furthest_directed_max_pos
+
+
+def get_set_of_furthest_max_pos(agent, set_of_max_pos):
+
+    curr_pos = agent.get_pos()
+    cell_size = agent.get_cell_size()
+    max_dist = 0
+    for pos in set_of_max_pos:
+        if distance(curr_pos, pos) > max_dist:
+            max_dist = distance(curr_pos, pos)
+
+    set_of_furthest_max_pos = []
+    for pos in set_of_max_pos:
+        if distance(curr_pos, pos) > (max_dist - cell_size):
+            set_of_furthest_max_pos.append(pos)
+    # print(len(set_of_furthest_max_pos))
+    return set_of_furthest_max_pos
 
 
 def max_sum_nei_check(curr_nei, instance):

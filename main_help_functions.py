@@ -201,7 +201,7 @@ def print_t_test_table(graphs):
     print('{eq_str}'.format(eq_str=eq_str) * (num_of_algs + 1))
 
 
-def plot_results_if(need_to_plot_results, need_to_plot_variance, graphs, algorithms, alpha=0.025):
+def plot_results_if(need_to_plot_results, need_to_plot_variance, need_to_plot_min_max, graphs, algorithms, alpha=0.025):
     if need_to_plot_results:
         print_t_test_table(graphs)
         # plt.style.use('fivethirtyeight')
@@ -241,6 +241,12 @@ def plot_results_if(need_to_plot_results, need_to_plot_variance, graphs, algorit
                 ax.fill_between(iterations, avr - t_value * std, avr + t_value * std,
                                  alpha=0.2, antialiased=True)
 
+            if need_to_plot_min_max:
+                # confidence interval
+                ax.fill_between(iterations, np.min(matrix, 1), np.max(matrix, 1),
+                                alpha=0.2, antialiased=True)
+
+
         ax.legend(loc='upper right')
         ax.set_title('Results')
         ax.set_ylabel('Convergence')
@@ -253,11 +259,20 @@ def plot_results_if(need_to_plot_results, need_to_plot_variance, graphs, algorit
 def pickle_results_if(need_to_save_results, graphs, adding_to_file_name=''):
     if need_to_save_results:
         timestr = time.strftime("%d.%m.%Y-%H:%M:%S")
+        algorithms = graphs.keys()
+        for alg in algorithms:
+            timestr = timestr + '__%s' % alg
         file_name = "data/%s_%s_file.data" % (timestr, adding_to_file_name)
         # open the file for writing
         with open(file_name, 'wb') as fileObject:
             # this writes the object a to the file named 'testfile.data'
             pickle.dump(graphs, fileObject)
+
+        # file_name = "data/%s_%s_file.info" % (timestr, adding_to_file_name)
+        # # open the file for writing
+        # with open(file_name, 'wb') as fileObject:
+        #     # this writes the object a to the file named 'testfile.data'
+        #     pickle.dump(graphs, fileObject)
 
 
 def nei_update(agents, targets, factor_graph):

@@ -97,15 +97,6 @@ pygame.init()
 dic = {'a':1, 'b':-1, 'c':-12, 'd':10, }
 
 
-
-
-for i in itertools.product(range(2), repeat=1):
-    # for j in range(len(i)):
-    #     print(i[j])
-    print(i)
-    arr = range(1, len(i) + 1)
-    for j,k in zip(arr, i):
-        print(j, k)
-    print(list(zip(arr, i)))
+print(np.random.randint(180))
 
 
