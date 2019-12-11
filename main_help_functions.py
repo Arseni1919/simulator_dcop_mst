@@ -8,7 +8,6 @@ from Agent import *
 
 # Create Side-Titles
 def create_side_titles(alg_name, all_sprites, titles):
-
     for title in titles.sprites():
         title.kill()
 
@@ -41,8 +40,6 @@ def create_side_titles(alg_name, all_sprites, titles):
     other_title = Title(title_name="Remained:", order=order)
     titles.add(other_title)
     all_sprites.add(other_title)
-
-
 
 
 # Create Field
@@ -184,9 +181,9 @@ def print_t_test_table(graphs):
     eq_str = '*' * (max_length + tab)
     print('{eq_str}'.format(eq_str=eq_str) * (num_of_algs + 1))
     eq_str = ' ' * max_length
-    print('{eq_str}\t'.format(eq_str=eq_str) * int(num_of_algs/3 + 1), end='')
+    print('{eq_str}\t'.format(eq_str=eq_str) * int(num_of_algs / 3 + 1), end='')
     print('P-VALUE TABLE\t', end='')
-    print('{eq_str}\t'.format(eq_str=eq_str) * int(num_of_algs/3 + 1))
+    print('{eq_str}\t'.format(eq_str=eq_str) * int(num_of_algs / 3 + 1))
     eq_str = '*' * (max_length + tab)
     print('{eq_str}'.format(eq_str=eq_str) * (num_of_algs + 1))
     for i in range(num_of_algs + 1):
@@ -239,13 +236,12 @@ def plot_results_if(need_to_plot_results, need_to_plot_variance, need_to_plot_mi
             if need_to_plot_variance:
                 # confidence interval
                 ax.fill_between(iterations, avr - t_value * std, avr + t_value * std,
-                                 alpha=0.2, antialiased=True)
+                                alpha=0.2, antialiased=True)
 
             if need_to_plot_min_max:
                 # confidence interval
                 ax.fill_between(iterations, np.min(matrix, 1), np.max(matrix, 1),
                                 alpha=0.2, antialiased=True)
-
 
         ax.legend(loc='upper right')
         ax.set_title('Results')
@@ -256,7 +252,9 @@ def plot_results_if(need_to_plot_results, need_to_plot_variance, need_to_plot_mi
         plt.show()
 
 
-def pickle_results_if(need_to_save_results, graphs, adding_to_file_name=''):
+def pickle_results_if(need_to_save_results, graphs, adding_to_file_name='',
+                      grid_size=-1, num_of_targets=-1, num_of_agents=-1, target_range=-1, MR=-1, SR=-1, cred=-1,
+                      MAX_ITERATIONS=-1, NUMBER_OF_PROBLEMS=-1):
     if need_to_save_results:
         timestr = time.strftime("%d.%m.%Y-%H:%M:%S")
         algorithms = graphs.keys()
@@ -265,14 +263,15 @@ def pickle_results_if(need_to_save_results, graphs, adding_to_file_name=''):
         file_name = "data/%s_%s_file.data" % (timestr, adding_to_file_name)
         # open the file for writing
         with open(file_name, 'wb') as fileObject:
-            # this writes the object a to the file named 'testfile.data'
             pickle.dump(graphs, fileObject)
 
-        # file_name = "data/%s_%s_file.info" % (timestr, adding_to_file_name)
-        # # open the file for writing
-        # with open(file_name, 'wb') as fileObject:
-        #     # this writes the object a to the file named 'testfile.data'
-        #     pickle.dump(graphs, fileObject)
+        file_name = "data/%s_%s_file.info" % (timestr, adding_to_file_name)
+        # open the file for writing
+        with open(file_name, 'wb') as fileObject:
+            info = {'graphs': list(graphs.keys()), 'grid_size': grid_size, 'num_of_targets': num_of_targets,
+                    'num_of_agents': num_of_agents, 'target_range': target_range, 'MR': MR, 'SR': SR, 'cred': cred,
+                    'MAX_ITERATIONS': MAX_ITERATIONS, 'NUMBER_OF_PROBLEMS': NUMBER_OF_PROBLEMS}
+            pickle.dump(info, fileObject)
 
 
 def nei_update(agents, targets, factor_graph):
@@ -287,12 +286,3 @@ def go_back_to_initial_positions(cells):
     for cell in cells:
         if cell.prop:
             cell.prop.set_pos(cell.get_pos())
-
-
-
-
-
-
-
-
-

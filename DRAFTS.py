@@ -96,7 +96,9 @@ pygame.init()
 
 dic = {'a':1, 'b':-1, 'c':-12, 'd':10, }
 
-
-print(np.random.randint(180))
+for i in tqdm(dic.keys()):
+    print(i)
+    # time.sleep()
+# print(np.random.randint(180))
 
 
