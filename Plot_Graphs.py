@@ -14,8 +14,7 @@ file_name = file_name[:-5] + '.info'
 with open(file_name, 'rb') as fileObject:
     # load the object from the file into var b
     info = pickle.load(fileObject)
-    pprint.pprint(info)
-    print(info)
+    pprint(info)
 
 file_name = file_name[:-5] + '.data'
 with open(file_name, 'rb') as fileObject:

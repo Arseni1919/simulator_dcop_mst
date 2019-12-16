@@ -96,16 +96,7 @@ def mgm_condition(self_agent, LR):
     return True
 
 
-def received_all_messages(self_agent, ord_of_message=1):
-    """
-    input:
-    output:
-    """
-    curr_inbox = self_agent.get_access_to_inbox('copy')
-    for _, messages in curr_inbox.items():
-        if len(messages) == (ord_of_message - 1):
-            return False
-    return True
+
 
 
 def calculate_temp_req(self_agent, targets, neighbours):
@@ -234,14 +225,26 @@ def send_and_receive_messages_to_curr_nei(self_agent, message, ord_of_message=1)
     output:
     """
     curr_nei = self_agent.get_curr_nei()
+    # curr_inbox = self_agent.get_access_to_inbox('copy')
+    # for key in curr_inbox.keys():
+    #     print(key)
+    # print(curr_nei, ' of agent ', self_agent.get_name())
     for agent in curr_nei:
         if agent is self_agent:
-            raise ValueError('agent is self_agent inside self_agent.get_curr_nei()!')
-        agent.get_access_to_inbox('message', self_agent.get_num_of_agent(), message)
-    # ---------------------------------------------------
-    while not received_all_messages(self_agent, ord_of_message):
-        time.sleep(1)
-    # ---------------------------------------------------
+            print('[ERROR]: agent is self_agent inside self_agent.get_curr_nei()!')
+        send_message_to(agent, self_agent, message)
+    receive_all_messages(self_agent, ord_of_message=ord_of_message)
+
+
+def send_named_message_to(receiver, self_agent, message):
+    """
+        input:
+        output:
+        """
+    if receiver is self_agent:
+        print('[ERROR]: receiver is self_agent inside send_message_to()!')
+    # print('agent ', self_agent.get_name(), ' here ', message)
+    receiver.get_access_to_named_inbox('message', self_agent.get_name(), message)
 
 
 def send_message_to(receiver, self_agent, message):
@@ -250,20 +253,54 @@ def send_message_to(receiver, self_agent, message):
     output:
     """
     if receiver is self_agent:
-        raise ValueError('receiver is self_agent inside send_message_to()!')
-    # print('HERE')
-    receiver.get_access_to_inbox('message', self_agent.get_num_of_agent(), message)
+        print('[ERROR]: receiver is self_agent inside send_message_to()!')
+    receiver.get_access_to_inbox('message', self_agent.get_num_of_agent(), message, self_agent.get_name())
 
 
-def receive_all_messages(self_agent, ord_of_message=1):
+
+def received_all_messages(self_agent, ord_of_message=1):
     """
     input:
     output:
     """
-    # ---------------------------------------------------
-    while not received_all_messages(self_agent, ord_of_message):
-        time.sleep(1)
-    # ---------------------------------------------------
+    curr_inbox = self_agent.get_access_to_inbox('copy')
+    # print(list(curr_inbox.keys()))
+    for _, messages in curr_inbox.items():
+        if len(messages) == (ord_of_message - 1):
+            return False
+    return True
+
+
+def received_all_messages_named_inbox(self_agent, ord_of_message, prefix):
+    if 'target' in self_agent.get_name():
+        print('[ERROR]: target in self_agent.get_name()')
+    curr_inbox = self_agent.get_access_to_named_inbox('copy')
+    # print(prefix, ' - prefix in received_all_messages_named_inbox')
+    for pre in prefix:
+        for key, messages in curr_inbox.items():
+            if pre in key:
+                if len(messages) == (ord_of_message - 1):
+                    return False
+    return True
+
+
+def receive_all_messages(self_agent, ord_of_message=1, prefix=None, HPA=False):
+    """
+    input:
+    output:
+    """
+    if not HPA:
+        # print('agent ', self_agent.get_name(), ' here')
+        # ---------------------------------------------------
+        while not received_all_messages(self_agent, ord_of_message):
+            time.sleep(1)
+        # ---------------------------------------------------
+    else:
+        # print('here robot ', self_agent.get_num_of_agent())
+        # ---------------------------------------------------
+        while not received_all_messages_named_inbox(self_agent, ord_of_message, prefix):
+            time.sleep(1)
+        # ---------------------------------------------------
 
 
 def get_req_list_max_to_min(targets):
@@ -366,6 +403,53 @@ def select_pos(pos_set, targets, SR):
 # For Max_sum:
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 
+def select_FMR_nei(target, curr_nei, for_alg):
+    '''
+    Assumptions: homogeneous agents and targets, in Fsum mode
+    '''
+    target_needs = target.get_req()
+    agent_gives = for_alg['cred']
+    r_value = int(target_needs/agent_gives + 1)
+    SR = for_alg['SR']
+
+    total_set = []
+    SR_set = []
+    rest_set = []
+
+    for nei in curr_nei:
+        total_set.append(nei)
+        if distance(nei.get_pos(), target.get_pos()) < SR:
+            SR_set.append(nei)
+        else:
+            rest_set.append(nei)
+
+    while len(total_set) > r_value:
+        max_degree, min_degree = 0, 0
+        for nei in total_set:
+            degree = len(nei.get_curr_nei())
+            if nei in rest_set:
+                max_degree = degree if max_degree < degree else max_degree
+            if nei in SR_set:
+                min_degree = degree if min_degree > degree else min_degree
+
+        if len(rest_set) > 0:
+            selected_to_remove = rest_set[0]
+            for nei in rest_set:
+                if len(nei.get_curr_nei()) == max_degree:
+                    selected_to_remove = nei
+                    break
+            total_set.remove(selected_to_remove)
+            rest_set.remove(selected_to_remove)
+        else:
+            selected_to_remove = SR_set[0]
+            for nei in SR_set:
+                if len(nei.get_curr_nei()) == min_degree:
+                    selected_to_remove = nei
+                    break
+            total_set.remove(selected_to_remove)
+            SR_set.remove(selected_to_remove)
+    return total_set
+
 
 def max_sum_create_null_variable_message(possible_pos):
     message = {}
@@ -389,36 +473,12 @@ def max_sum_variable_message_to(nei, inbox, order_of_message, possible_pos):
         new_message[pos] -= alpha
 
     if min(new_message.values()) < 0:
-        raise ValueError('new_message[pos] < 0 in max_sum_variable_message_to()')
+        print('[ERROR]: new_message[pos] < 0 in max_sum_variable_message_to()')
 
     return new_message
 
 
-def max_sum_1_function_message_to(nei, inbox, possible_pos, max_contribution_bool, target, cred, SR):
-    '''
-    :param nei:
-    :param inbox: {num_of_agent: [{(x, y): value}, (x, y): value, ...}, {}, ...], num_of_agent: [], ...}
-    :param order_of_message:
-    :param possible_pos:
-    :param max_contribution:
-    :param target:
-    :return:
-    '''
-    new_message = max_sum_create_null_variable_message(possible_pos)
-    max_contribution = min(target.get_req(), cred) if max_contribution_bool else 0
-
-    in_SR = []
-    for pos in possible_pos:
-        if distance(pos, target.get_pos()) < SR:
-            in_SR.append(pos)
-
-    for pos in in_SR:
-        new_message[pos] += max_contribution
-
-    return new_message
-
-
-def max_sum_2_function_message_to(nei, inbox, possible_pos, inside_fmr, target, cred, SR):
+def max_sum_function_message_to(nei, inbox, possible_pos, inside_fmr, target, cred, SR):
     '''
     :param inside_fmr:
     :param nei:
@@ -434,8 +494,6 @@ def max_sum_2_function_message_to(nei, inbox, possible_pos, inside_fmr, target, 
     target_pos = target.get_pos()
     target_req = target.get_req()
     target_num = target.get_num_of_agent()
-
-
 
     if not inside_fmr:
         return max_sum_create_null_variable_message(possible_pos)  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -483,7 +541,7 @@ def get_SR_new_message(max_values, target_req, target_num, cred, message_to):
                 impossible_combination = True
         if impossible_combination:
             continue
-        if impossible_combination: raise ValueError('impossible_combination')
+        if impossible_combination: print('[ERROR]: impossible_combination')
 
         # calculating table_column and result_column
         result_column = 0
@@ -536,14 +594,50 @@ def get_SR_max_values(SR, inbox, target_pos, message_to):
     return max_values
 
 
-def max_sum_choose_position_for(agent, possible_pos, for_alg):
+def hpa_correction(sum_of_all_messages, HPA, named_inbox, agent):
+    prefix = HPA['prefix']
+    self_num = agent.get_num_of_agent()
+    # print(prefix, 'inside hpa_correction')
+    for key, set_of_messages in named_inbox.items():
+        # print(key, set_of_messages)
+        if prefix in key:
+            from_index = len(prefix)
+            # print('inside hpa_correction', prefix, key, key[from_index:])
+            try:
+                agent_num = int(key[from_index:])
+                last_message = set_of_messages[-1]
+                if agent_num < self_num:
+                    if last_message in sum_of_all_messages:
+                        sum_of_all_messages[last_message] = -1
+                        # print(agent.get_name(), 'wants to get place of', key)
+            except ValueError:
+                print("[ERROR]: Oops!  agent_num was no a number. Inside  hpa_correction()")
+            # last_message = set_of_messages[-1]
+            #
+            # if agent_num < self_num:
+            #     if last_message in sum_of_all_messages:
+            #         sum_of_all_messages[last_message] = -1
+            #          print('distance: ', distance(agent.get_pos(), last_message) < agent.get_MR())
+    return sum_of_all_messages
+
+
+def max_sum_choose_position_for(agent, possible_pos, for_alg, HPA=None):
     inbox = agent.get_access_to_inbox('copy')
+    named_inbox = agent.get_access_to_named_inbox('copy')
+    # print(agent.get_num_of_agent(), ': ', len(inbox.keys()))
+    pos_policy = for_alg['pos_policy']
+
     # sum of all messages
     sum_of_all_messages = max_sum_create_null_variable_message(possible_pos)
     for target_num, set_of_messages in inbox.items():
         last_received_message = set_of_messages[-1]
         for pos, value in last_received_message.items():
             sum_of_all_messages[pos] += value
+
+    if HPA:
+        # print('HPA: ', HPA['HPA'], ' inside max_sum_choose_position_for')
+        sum_of_all_messages = hpa_correction(sum_of_all_messages, HPA, named_inbox, agent)
+        # print(type(sum_of_all_messages), len(sum_of_all_messages))
     # the max value
     max_value = max(sum_of_all_messages.values())
 
@@ -553,13 +647,18 @@ def max_sum_choose_position_for(agent, possible_pos, for_alg):
         if value == max_value:
             set_of_max_pos.append(pos)
 
+    if max_value == -1:
+        print('something strange: max_value = -1')
+        # return agent.get_pos()
+
     if max_value == 0:
-        if for_alg[4] == 'random_furthest':
+        if pos_policy == 'random_furthest':
             set_of_furthest_max_pos = get_set_of_furthest_max_pos(agent, set_of_max_pos)
             return random.choice(set_of_furthest_max_pos)
-        if for_alg[4] == 'random_furthest_directed':
+        if pos_policy == 'random_furthest_directed':
             set_of_furthest_directed_max_pos = get_set_of_furthest_directed_max_pos(agent, set_of_max_pos)
             return random.choice(set_of_furthest_directed_max_pos)
+
     return random.choice(set_of_max_pos)
 
 
@@ -610,7 +709,7 @@ def get_set_of_furthest_max_pos(agent, set_of_max_pos):
 def max_sum_nei_check(curr_nei, instance):
     for nei in curr_nei:
         if not isinstance(nei, instance):
-            raise ValueError('nei is not correct instance inside this Node')
+            print('[ERROR]: nei is not correct instance inside this Node')
 
 
 def print_inbox_len(required_num, agent, inbox):

@@ -16,7 +16,7 @@ class Target(pygame.sprite.Sprite):
         self.inbox = {}
 
         if order == -1:
-            raise ValueError('order of Target == -1')
+            print('[ERROR]: order of Target == -1')
         self.num_of_agent = order
         self.name = 'target_%s' % order
 
@@ -29,7 +29,7 @@ class Target(pygame.sprite.Sprite):
         self.surf.blit(text, (int((cell_size - wt)/2), int((cell_size - ht)/2)))
 
         if surf_center == -1:
-            raise ValueError('surf_center == -1 in Target')
+            print('[ERROR]: surf_center == -1 in Target')
         else:
             self.surf_center = surf_center
             self.rect = self.surf.get_rect(
@@ -68,7 +68,7 @@ class Target(pygame.sprite.Sprite):
     def get_curr_nei(self):
         return self.curr_nei
 
-    def get_access_to_inbox(self, type_of_requirement, num_of_agent=None, message=None):
+    def get_access_to_inbox(self, type_of_requirement, num_of_agent=None, message=None, name=None):
         with self._lock:
             # logging.info("Thread %s has the lock inside %s", num_of_agent, self.number_of_robot)
             if type_of_requirement == 'message':

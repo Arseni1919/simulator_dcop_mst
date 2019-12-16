@@ -1,5 +1,5 @@
 from Algorithms import *
-from Max_sum_drafts import *
+from Max_sum_fmr_rand_variations import *
 from main_help_functions import *
 from CONSTANTS import *
 
@@ -12,14 +12,14 @@ from CONSTANTS import *
 # cell_size = CELL_SIZE['SMALL']
 # ---
 # OR THIS WAY:
-grid_size = 50
+grid_size = 20
 CELL_SIZE['CUSTOM'] = int(SCREEN_HEIGHT/grid_size - 2)
 cell_size = CELL_SIZE['CUSTOM']
 # ---
 show_ranges = True
-need_to_save_results = True
+need_to_save_results = False
 adding_to_file_name = ''
-need_to_plot_results = True
+need_to_plot_results = False
 need_to_plot_variance = False
 need_to_plot_min_max = False
 alpha = 0.025  # for confidence intervals in graphs
@@ -30,15 +30,16 @@ use_rate = False  # if False - it uses the num_of_targets variable, but still al
 target_rate = 0.055
 
 target_range = (100, 100)  # max and min value of target
-MR = 5.5 * cell_size
-SR = 5.5 * cell_size
+MR = 4.5 * cell_size
+SR = 4.5 * cell_size
 cred = 30
-MAX_ITERATIONS = 3
-NUMBER_OF_PROBLEMS = 2
+MAX_ITERATIONS = 7
+NUMBER_OF_PROBLEMS = 1
 
-algorithms = ['Max_sum_4']
-# algorithms = ['Max_sum_4', 'Max_sum_2', 'DSA']
-# algorithms = ['Max_sum_2', 'Max_sum_1', ]
+# algorithms = ['Max_sum_4']
+algorithms = ['DSA', 'Max_sum_7', 'Max_sum_3', ]
+algorithms = ['Max_sum_7', 'Max_sum_3', 'DSA', ]
+# algorithms = ['Max_sum_2', ]
 # algorithms = ['DSA_PILR_0.2','DSA_PILR_0.5','DSA_PILR_0.8',]
 # algorithms = ['DSA_PILR', ]
 # algorithms = ['Max_sum', 'DSA_PILR_1', 'DSA_PILR_2', 'DSA_PILR_3', 'DSA_PILR_4', 'DSA', 'MGM', ]
@@ -67,10 +68,17 @@ algorithms = ['Max_sum_4']
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 dict_alg = {
-    'Max_sum_1': (Max_sum, [1, cred, SR, max_sum_1_function_message_to, 'random']),
-    'Max_sum_2': (Max_sum, [5, cred, SR, max_sum_2_function_message_to, 'random']),
-    'Max_sum_3': (Max_sum, [5, cred, SR, max_sum_2_function_message_to, 'random_furthest']),
-    'Max_sum_4': (Max_sum, [5, cred, SR, max_sum_2_function_message_to, 'random_furthest_directed']),
+    'Max_sum_2': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random',
+                            'HPA': False}),
+    'Max_sum_3': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random_furthest',
+                            'HPA': False}),
+    'Max_sum_4': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random_furthest_directed',
+                            'HPA': False}),
+    'Max_sum_5': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random',
+                            'HPA': True}),
+    'Max_sum_7': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random_furthest',
+                            'HPA': True}),
+
     'DSA': (DSA, [0.7]),
     'DSA_2': (DSA, [0.5]),
     'DSA_3': (DSA, [0.3]),
@@ -97,6 +105,7 @@ factor_graph = {
 }
 for algorithm in algorithms:
     if dict_alg[algorithm][0] not in factor_graph.keys():
+        print('[ERROR]: ')
         raise ValueError('dict_alg[algorithms][0] not in factor_graph.keys()')
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 
@@ -107,6 +116,7 @@ graphs = {}
 for algorithm in algorithms:
     graphs[algorithm] = np.zeros((MAX_ITERATIONS, NUMBER_OF_PROBLEMS))
     if algorithm not in dict_alg.keys():
+        print('[ERROR]: ')
         raise ValueError('algorithm not in dict')
 # ---------------------------
 # INITIALIZATIONS:
@@ -293,5 +303,5 @@ if __name__ == '__main__':
  - the sending message logic has to go inside the agent
  - delete send_curr_pose_to_curr_nei(agent) and put instead send_message_to_curr_nei(agent, agent.get_pos())
  - prevent collisions in DSA, DSA_PIRL and others
- - use tqdm
+ - 
 '''

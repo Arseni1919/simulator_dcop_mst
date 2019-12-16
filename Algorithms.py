@@ -32,11 +32,6 @@ def DSA(kwargs):
     for_alg = kwargs['for_alg']
 
     send_and_receive_messages_to_curr_nei(agent, agent.get_pos(), 1)
-    # logging.info("agent: %s  Inbox: %s  Thread: %s",
-    #              agent.number_of_robot,
-    #              received_all_messages(agent)[1],
-    #              threading.get_ident()
-    #              )
     possible_pos = get_possible_pos_with_MR(agent, cells, targets, agent.curr_nei)
     temp_req_set = calculate_temp_req(agent, targets, agent.curr_nei)  # form: [(target,temp_req),(target,temp_req),..]
     new_pos = select_pos(possible_pos, temp_req_set, agent.get_SR())
@@ -57,11 +52,6 @@ def DSA_PILR(kwargs):
     for_alg = kwargs['for_alg']
 
     send_and_receive_messages_to_curr_nei(agent, agent.get_pos(), 1)
-    # logging.info("agent: %s  Inbox: %s  Thread: %s",
-    #              agent.number_of_robot,
-    #              received_all_messages(agent)[1],
-    #              threading.get_ident()
-    #              )
     possible_pos = get_possible_pos_with_MR(agent, cells, targets, agent.curr_nei)
     temp_req_set = calculate_temp_req(agent, targets, agent.curr_nei)  # form: [(target,temp_req),(target,temp_req),..]
     new_pos = select_pos(possible_pos, temp_req_set, agent.get_SR())

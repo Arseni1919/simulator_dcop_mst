@@ -80,7 +80,7 @@ def create_targets(cell_size, all_sprites, targets, cells,
                 order += 1
     else:
         if num_of_targets == -1:
-            raise ValueError('bad')
+            print('[ERROR]: bad')
         while True:
             cell = random.choice(cells.sprites())
             new_target = Target(

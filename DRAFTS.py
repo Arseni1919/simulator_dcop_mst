@@ -94,10 +94,12 @@ pygame.init()
 #     print_t_test_table(graphs)
 
 
-dic = {'a':1, 'b':-1, 'c':-12, 'd':10, }
+dic = {'a':1, 'b':-1, 'c':-12, 'd':10, 10:'a'}
 
-for i in tqdm(dic.keys()):
-    print(i)
+# a = int('_1')
+if isinstance(int('_1'), int):
+    print('wrong')
+# print(a)
     # time.sleep()
 # print(np.random.randint(180))
 
