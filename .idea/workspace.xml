@@ -2,26 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="61cd4c22-dbe1-4300-a0e2-5fd10fc80455" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/data/12.12.2019-13:03:26__Max_sum_2__Max_sum_3__Max_sum_4__DSA__file.data" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/12.12.2019-13:03:26__Max_sum_2__Max_sum_3__Max_sum_4__DSA__file.info" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/12.12.2019-13:04:44__Max_sum_4__Max_sum_3__DSA__file.data" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/12.12.2019-13:04:44__Max_sum_4__Max_sum_3__DSA__file.info" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/15.12.2019-12:38:36__Max_sum_4__Max_sum_3__Max_sum_2__DSA__file.data" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/15.12.2019-12:38:36__Max_sum_4__Max_sum_3__Max_sum_2__DSA__file.info" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/15.12.2019-17:36:15__Max_sum_7__Max_sum_3__DSA__file.data" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/15.12.2019-17:36:15__Max_sum_7__Max_sum_3__DSA__file.info" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/Agent.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Algorithms.py" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Algorithms_help_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms_help_functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CONSTANTS.py" beforeDir="false" afterPath="$PROJECT_DIR$/CONSTANTS.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cell.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cell.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DRAFTS.py" beforeDir="false" afterPath="$PROJECT_DIR$/DRAFTS.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Max_sum_drafts.py" beforeDir="false" afterPath="$PROJECT_DIR$/Max_sum_fmr_rand_variations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot_Graphs.py" beforeDir="false" afterPath="$PROJECT_DIR$/Plot_Graphs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Target.py" beforeDir="false" afterPath="$PROJECT_DIR$/Target.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_help_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_help_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Max_sum_fmr_rand_variations.py" beforeDir="false" afterPath="$PROJECT_DIR$/Max_sum_fmr_rand_variations.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -422,7 +406,14 @@
       <option name="project" value="LOCAL" />
       <updated>1576070405364</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="big changes">
+      <created>1576505619424</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1576505619425</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -442,6 +433,7 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="updated" />
     <MESSAGE value="Merge remote-tracking branch 'origin/master'&#10;&#10;# Conflicts:&#10;#&#9;README.md" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/master'&#10;&#10;# Conflicts:&#10;#&#9;README.md" />
+    <MESSAGE value="big changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="big changes" />
   </component>
 </project>

@@ -12,33 +12,34 @@ from CONSTANTS import *
 # cell_size = CELL_SIZE['SMALL']
 # ---
 # OR THIS WAY:
-grid_size = 20
+grid_size = 50
 CELL_SIZE['CUSTOM'] = int(SCREEN_HEIGHT/grid_size - 2)
 cell_size = CELL_SIZE['CUSTOM']
 # ---
 show_ranges = True
-need_to_save_results = False
-adding_to_file_name = ''
-need_to_plot_results = False
+need_to_save_results = True
+adding_to_file_name = 'HPA'
+need_to_plot_results = True
 need_to_plot_variance = False
 need_to_plot_min_max = False
 alpha = 0.025  # for confidence intervals in graphs
 speed = 5  # bigger -slower, smaller - faster. don't ask why
-num_of_agents = 10
-num_of_targets = 10
+num_of_agents = 20
+num_of_targets = 20
 use_rate = False  # if False - it uses the num_of_targets variable, but still also uses target_rate
 target_rate = 0.055
 
 target_range = (100, 100)  # max and min value of target
-MR = 4.5 * cell_size
-SR = 4.5 * cell_size
+MR = 5.5 * cell_size
+SR = 5.5 * cell_size
 cred = 30
-MAX_ITERATIONS = 7
-NUMBER_OF_PROBLEMS = 1
+MAX_ITERATIONS = 25
+NUMBER_OF_PROBLEMS = 10
 
 # algorithms = ['Max_sum_4']
-algorithms = ['DSA', 'Max_sum_7', 'Max_sum_3', ]
-algorithms = ['Max_sum_7', 'Max_sum_3', 'DSA', ]
+# algorithms = ['DSA', 'Max_sum_7', 'Max_sum_3', ]
+# algorithms = ['Max_sum_3', 'Max_sum_7', 'Max_sum_2', 'DSA', ]
+algorithms = ['Max_sum_1', 'Max_sum_2', 'Max_sum_3', 'Max_sum_4', 'DSA', ]
 # algorithms = ['Max_sum_2', ]
 # algorithms = ['DSA_PILR_0.2','DSA_PILR_0.5','DSA_PILR_0.8',]
 # algorithms = ['DSA_PILR', ]
@@ -68,15 +69,13 @@ algorithms = ['Max_sum_7', 'Max_sum_3', 'DSA', ]
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 dict_alg = {
-    'Max_sum_2': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random',
+    'Max_sum_1': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random',
                             'HPA': False}),
-    'Max_sum_3': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random_furthest',
+    'Max_sum_2': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random_furthest',
                             'HPA': False}),
-    'Max_sum_4': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random_furthest_directed',
-                            'HPA': False}),
-    'Max_sum_5': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random',
+    'Max_sum_3': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random',
                             'HPA': True}),
-    'Max_sum_7': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random_furthest',
+    'Max_sum_4': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random_furthest',
                             'HPA': True}),
 
     'DSA': (DSA, [0.7]),

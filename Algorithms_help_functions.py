@@ -257,7 +257,6 @@ def send_message_to(receiver, self_agent, message):
     receiver.get_access_to_inbox('message', self_agent.get_num_of_agent(), message, self_agent.get_name())
 
 
-
 def received_all_messages(self_agent, ord_of_message=1):
     """
     input:
@@ -594,50 +593,44 @@ def get_SR_max_values(SR, inbox, target_pos, message_to):
     return max_values
 
 
-def hpa_correction(sum_of_all_messages, HPA, named_inbox, agent):
-    prefix = HPA['prefix']
-    self_num = agent.get_num_of_agent()
-    # print(prefix, 'inside hpa_correction')
-    for key, set_of_messages in named_inbox.items():
-        # print(key, set_of_messages)
-        if prefix in key:
-            from_index = len(prefix)
-            # print('inside hpa_correction', prefix, key, key[from_index:])
-            try:
-                agent_num = int(key[from_index:])
-                last_message = set_of_messages[-1]
-                if agent_num < self_num:
-                    if last_message in sum_of_all_messages:
-                        sum_of_all_messages[last_message] = -1
-                        # print(agent.get_name(), 'wants to get place of', key)
-            except ValueError:
-                print("[ERROR]: Oops!  agent_num was no a number. Inside  hpa_correction()")
-            # last_message = set_of_messages[-1]
-            #
-            # if agent_num < self_num:
-            #     if last_message in sum_of_all_messages:
-            #         sum_of_all_messages[last_message] = -1
-            #          print('distance: ', distance(agent.get_pos(), last_message) < agent.get_MR())
-    return sum_of_all_messages
+# def hpa_correction(sum_of_all_messages, HPA, named_inbox, agent):
+#     prefix = HPA['prefix']
+#     self_num = agent.get_num_of_agent()
+#     # print(prefix, 'inside hpa_correction')
+#     for key, set_of_messages in named_inbox.items():
+#         # print(key, set_of_messages)
+#         if prefix in key:
+#             from_index = len(prefix)
+#             # print('inside hpa_correction', prefix, key, key[from_index:])
+#             try:
+#                 agent_num = int(key[from_index:])
+#                 last_message = set_of_messages[-1]
+#                 if agent_num < self_num:
+#                     if last_message in sum_of_all_messages:
+#                         sum_of_all_messages[last_message] = -1
+#                         # print(agent.get_name(), 'wants to get place of', key)
+#             except ValueError:
+#                 print("[ERROR]: Oops!  agent_num was no a number. Inside  hpa_correction()")
+#             # last_message = set_of_messages[-1]
+#             #
+#             # if agent_num < self_num:
+#             #     if last_message in sum_of_all_messages:
+#             #         sum_of_all_messages[last_message] = -1
+#             #          print('distance: ', distance(agent.get_pos(), last_message) < agent.get_MR())
+#     return sum_of_all_messages
 
 
-def max_sum_choose_position_for(agent, possible_pos, for_alg, HPA=None):
-    inbox = agent.get_access_to_inbox('copy')
-    named_inbox = agent.get_access_to_named_inbox('copy')
-    # print(agent.get_num_of_agent(), ': ', len(inbox.keys()))
-    pos_policy = for_alg['pos_policy']
-
+def get_sum_of_all_messages(inbox, possible_pos):
     # sum of all messages
     sum_of_all_messages = max_sum_create_null_variable_message(possible_pos)
     for target_num, set_of_messages in inbox.items():
         last_received_message = set_of_messages[-1]
         for pos, value in last_received_message.items():
             sum_of_all_messages[pos] += value
+    return sum_of_all_messages
 
-    if HPA:
-        # print('HPA: ', HPA['HPA'], ' inside max_sum_choose_position_for')
-        sum_of_all_messages = hpa_correction(sum_of_all_messages, HPA, named_inbox, agent)
-        # print(type(sum_of_all_messages), len(sum_of_all_messages))
+
+def get_set_of_max_pos(agent, sum_of_all_messages, pos_policy):
     # the max value
     max_value = max(sum_of_all_messages.values())
 
@@ -648,18 +641,90 @@ def max_sum_choose_position_for(agent, possible_pos, for_alg, HPA=None):
             set_of_max_pos.append(pos)
 
     if max_value == -1:
-        print('something strange: max_value = -1')
-        # return agent.get_pos()
+        print('[ERROR]: something strange: max_value = -1')
 
     if max_value == 0:
         if pos_policy == 'random_furthest':
             set_of_furthest_max_pos = get_set_of_furthest_max_pos(agent, set_of_max_pos)
-            return random.choice(set_of_furthest_max_pos)
+            return set_of_furthest_max_pos
         if pos_policy == 'random_furthest_directed':
             set_of_furthest_directed_max_pos = get_set_of_furthest_directed_max_pos(agent, set_of_max_pos)
-            return random.choice(set_of_furthest_directed_max_pos)
+            return set_of_furthest_directed_max_pos
+    return set_of_max_pos
 
+# def get_set_of_future_pos(agent, possible_pos, for_alg):
+#     inbox = agent.get_access_to_inbox('copy')
+#     pos_policy = for_alg['pos_policy']
+
+    # sum of all messages
+    # sum_of_all_messages = max_sum_create_null_variable_message(possible_pos)
+    # for target_num, set_of_messages in inbox.items():
+    #     last_received_message = set_of_messages[-1]
+    #     for pos, value in last_received_message.items():
+    #         sum_of_all_messages[pos] += value
+    # sum_of_all_messages = get_sum_of_all_messages(inbox, possible_pos)
+    # return get_set_of_max_pos(agent, sum_of_all_messages, pos_policy)
+    # the max value
+    # max_value = max(sum_of_all_messages.values())
+    #
+    # # array of positions with maximal value
+    # set_of_max_pos = []
+    # for pos, value in sum_of_all_messages.items():
+    #     if value == max_value:
+    #         set_of_max_pos.append(pos)
+    #
+    # if max_value == -1:
+    #     print('[ERROR]: something strange: max_value = -1')
+    #
+    # if max_value == 0:
+    #     if pos_policy == 'random_furthest':
+    #         set_of_furthest_max_pos = get_set_of_furthest_max_pos(agent, set_of_max_pos)
+    #         return set_of_furthest_max_pos
+    #     if pos_policy == 'random_furthest_directed':
+    #         set_of_furthest_directed_max_pos = get_set_of_furthest_directed_max_pos(agent, set_of_max_pos)
+    #         return set_of_furthest_directed_max_pos
+    #
+    # return set_of_max_pos
+
+
+def max_sum_choose_position_for(agent, possible_pos, for_alg):
+    inbox = agent.get_access_to_inbox('copy')
+    pos_policy = for_alg['pos_policy']
+    sum_of_all_messages = get_sum_of_all_messages(inbox, possible_pos)
+    set_of_max_pos = get_set_of_max_pos(agent, sum_of_all_messages, pos_policy)
     return random.choice(set_of_max_pos)
+
+    # inbox = agent.get_access_to_inbox('copy')
+    # pos_policy = for_alg['pos_policy']
+    #
+    # # sum of all messages
+    # sum_of_all_messages = max_sum_create_null_variable_message(possible_pos)
+    # for target_num, set_of_messages in inbox.items():
+    #     last_received_message = set_of_messages[-1]
+    #     for pos, value in last_received_message.items():
+    #         sum_of_all_messages[pos] += value
+    #
+    # # the max value
+    # max_value = max(sum_of_all_messages.values())
+    #
+    # # array of positions with maximal value
+    # set_of_max_pos = []
+    # for pos, value in sum_of_all_messages.items():
+    #     if value == max_value:
+    #         set_of_max_pos.append(pos)
+    #
+    # if max_value == -1:
+    #     print('[ERROR]: something strange: max_value = -1')
+    #
+    # if max_value == 0:
+    #     if pos_policy == 'random_furthest':
+    #         set_of_furthest_max_pos = get_set_of_furthest_max_pos(agent, set_of_max_pos)
+    #         return random.choice(set_of_furthest_max_pos)
+    #     if pos_policy == 'random_furthest_directed':
+    #         set_of_furthest_directed_max_pos = get_set_of_furthest_directed_max_pos(agent, set_of_max_pos)
+    #         return random.choice(set_of_furthest_directed_max_pos)
+    #
+    # return random.choice(set_of_max_pos)
 
 
 def get_closest_pos(set_of_max_pos, directed_pos):
