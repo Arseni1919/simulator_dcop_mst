@@ -196,6 +196,8 @@ class Agent(pygame.sprite.Sprite):
                 if self.number_of_robot != agent.number_of_robot:
                     if distance(self.get_pos(), agent.get_pos()) < (self.SR + self.MR + agent.get_SR() + agent.get_MR()):
                         self.curr_nei.append(agent)
+                    if distance(self.get_pos(), agent.get_pos()) < (self.MR + agent.get_MR()):
+                        self.curr_robot_nei.append(agent)
         else:
             self.curr_robot_nei = []
             for target in targets:

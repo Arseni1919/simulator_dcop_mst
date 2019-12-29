@@ -3,7 +3,7 @@ from main_help_functions import *
 # ---------------------------
 # ------INPUT SETTINGS-------
 # ---------------------------
-file_name = "11.12.2019-15:15:43__Max_sum_4__file.data"
+file_name = "24.12.2019-17:55:46__Max_sum_1__Max_sum_2__Max_sum_3__Max_sum_4__DSA_HPA_file.data"
 need_to_plot_variance = False
 need_to_plot_min_max = False
 # ---------------------------
