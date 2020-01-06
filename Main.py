@@ -12,7 +12,7 @@ from CONSTANTS import *
 # cell_size = CELL_SIZE['SMALL']
 # ---
 # OR THIS WAY:
-grid_size = 50
+grid_size = 70
 CELL_SIZE['CUSTOM'] = int(SCREEN_HEIGHT/grid_size - 2)
 cell_size = CELL_SIZE['CUSTOM']
 # ---
@@ -34,10 +34,10 @@ MR = 5.5 * cell_size
 SR = 5.5 * cell_size
 cred = 30
 MAX_ITERATIONS = 25
-NUMBER_OF_PROBLEMS = 10
+NUMBER_OF_PROBLEMS = 20
 
 # algorithms = ['Max_sum_4']
-algorithms = ['Max_sum_5', 'Max_sum_4', 'Max_sum_3', 'DSA_HPA',]
+algorithms = ['Max_sum_7', 'Max_sum_6', 'Max_sum_4', 'DSA_HPA',]
 # algorithms = ['Max_sum_3', 'Max_sum_7', 'Max_sum_2', 'DSA', ]
 # algorithms = ['Max_sum_4', 'Max_sum_2', 'Max_sum_3', 'Max_sum_1', 'DSA', ]
 # algorithms = ['Max_sum_2', ]
@@ -75,8 +75,12 @@ dict_alg = {
                             'HPA': True}),
     'Max_sum_4': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random_furthest',
                             'HPA': True}),
-    'Max_sum_5': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random_furthest',
+    'Max_sum_5': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random',
                             'MSHPA': True}),
+    'Max_sum_6': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random_furthest',
+                            'MSHPA': True}),
+    'Max_sum_7': (Max_sum_TAC, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random_furthest',
+                            'TAC': True}),
 
     'DSA_HPA': (DSA, [0.7, {'HPA': True}]),
     'DSA': (DSA, [0.7, {'HPA': False}]),
@@ -98,6 +102,7 @@ dict_alg = {
 }
 
 factor_graph = {
+    Max_sum_TAC: True,
     Max_sum: True,
     DSA: False,
     MGM: False,

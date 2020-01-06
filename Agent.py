@@ -134,11 +134,12 @@ class Agent(pygame.sprite.Sprite):
                 # logging.info("Thread %s has the message: %s", num_of_agent, message)
                 if num_of_agent in self.inbox:
                     self.inbox[num_of_agent].append(message)
+                    self.named_inbox[name].append(message)
                 else:
-                    print('[ERROR]: num_of_agent is not in self.inbox')
+                    print('[ERROR]: num_of_agent is NOT in self.inbox')
                     # print(num_of_agent, ' inside Agent')
                 # logging.info("Agent %s after update has the inbox: %s", self.number_of_robot, self.inbox)
-                self.named_inbox[name].append(message)
+
             if type_of_requirement == 'copy':
                 # logging.info("Thread %s about to release the lock!!!! inbox: %s", num_of_agent, self.inbox)
                 return copy.deepcopy(self.inbox)
