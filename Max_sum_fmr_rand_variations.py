@@ -29,7 +29,7 @@ def max_sum_function_node(target, for_alg):
             send_message_to(nei, target, new_message)
 
 
-def max_sum_variable_node(agent, cells, targets, agents, for_alg):  # TAC
+def max_sum_variable_node(agent, cells, targets, agents, for_alg):
     curr_nei = agent.get_curr_nei()
     max_sum_nei_check(curr_nei, Target)
     HPA = for_alg['HPA'] if 'HPA' in for_alg else False
@@ -70,40 +70,40 @@ def max_sum_TAC_variable_node(agent, cells, targets, agents, for_alg):
     possible_pos = get_possible_pos_with_MR_general(agent, cells, targets, agents)
     new_message = max_sum_create_null_variable_message(possible_pos)
 
-    send_and_receive_TAC(agent, new_message, curr_robot_nei, order_of_message, possible_pos)
+    send_and_receive_TAC(agent, new_message, order_of_message, order_of_named_message, possible_pos)
     order_of_named_message += 2
     order_of_message += 1
 
     for i in range(mini_iterations - 1):
-        inbox = agent.get_access_to_inbox('copy')
 
         # var to targets
         for nei in curr_nei:
-            message_to_nei = var_message_to_func(nei, agent, possible_pos)  # , my_sum_of_all_messages)
+            message_to_nei = var_message_to_func(nei, agent, possible_pos, i)  # , my_sum_of_all_messages)
             send_message_to(nei, agent, message_to_nei)
         wait_to_receive(agent, order_of_message)
         order_of_message += 1
 
         # var to func robots
         for nei in curr_robot_nei:
-            message_to_nei = var_message_to_func(nei, agent, possible_pos)  # , my_sum_of_all_messages)
+            message_to_nei = var_message_to_func(nei, agent, possible_pos, i)  # , my_sum_of_all_messages)
             send_named_message_to(nei, agent, message_to_nei)
         wait_to_receive_certain_named(agent, curr_robot_nei, order_of_named_message)
         order_of_named_message += 1
 
         # func to var robots
-        for nei in curr_robot_nei:
-            nei_sum_of_all_messages = robot_func_to_var_message(nei, agent, new_message)
-            send_named_message_to(nei, agent, nei_sum_of_all_messages)
-        wait_to_receive_certain_named(agent, curr_robot_nei, order_of_message)
-        order_of_named_message += 1
-
+        inbox = agent.get_access_to_inbox('copy')
         new_message = get_sum_of_all_messages(inbox, possible_pos)
+        for nei in curr_robot_nei:
+            message_to_nei = robot_func_to_var_message_TAC(nei, agent, new_message, i)
+            send_named_message_to(nei, agent, message_to_nei)
+        wait_to_receive_certain_named(agent, curr_robot_nei, order_of_named_message)
+        order_of_named_message += 1
 
     sum_of_all_TAC_messages = get_sum_of_all_TAC_messages(agent, possible_pos)
     if max(sum_of_all_TAC_messages.values()) < 0:
+        print(agent.get_name(), 'here!!!!!!!!!!!!!!!', max(sum_of_all_TAC_messages.values()))
         return agent.get_pos()
-    # print(agent.get_name(), 'here!!!!!!!!!!!!!!!')
+
     set_of_max_pos = get_set_of_max_pos(agent, sum_of_all_TAC_messages, for_alg['pos_policy'])
     next_pos = random.choice(set_of_max_pos)
     return next_pos

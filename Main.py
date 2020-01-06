@@ -12,7 +12,7 @@ from CONSTANTS import *
 # cell_size = CELL_SIZE['SMALL']
 # ---
 # OR THIS WAY:
-grid_size = 70
+grid_size = 20
 CELL_SIZE['CUSTOM'] = int(SCREEN_HEIGHT/grid_size - 2)
 cell_size = CELL_SIZE['CUSTOM']
 # ---
@@ -24,8 +24,8 @@ need_to_plot_variance = False
 need_to_plot_min_max = False
 alpha = 0.025  # for confidence intervals in graphs
 speed = 5  # bigger -slower, smaller - faster. don't ask why
-num_of_agents = 20
-num_of_targets = 20
+num_of_agents = 10
+num_of_targets = 10
 use_rate = False  # if False - it uses the num_of_targets variable, but still also uses target_rate
 target_rate = 0.055
 
@@ -37,7 +37,8 @@ MAX_ITERATIONS = 25
 NUMBER_OF_PROBLEMS = 20
 
 # algorithms = ['Max_sum_4']
-algorithms = ['Max_sum_7', 'Max_sum_6', 'Max_sum_4', 'DSA_HPA',]
+# algorithms = ['Max_sum_7', 'Max_sum_6', 'Max_sum_4', 'DSA_HPA',]
+algorithms = ['Max_sum_7',]
 # algorithms = ['Max_sum_3', 'Max_sum_7', 'Max_sum_2', 'DSA', ]
 # algorithms = ['Max_sum_4', 'Max_sum_2', 'Max_sum_3', 'Max_sum_1', 'DSA', ]
 # algorithms = ['Max_sum_2', ]

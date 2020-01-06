@@ -2,15 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="61cd4c22-dbe1-4300-a0e2-5fd10fc80455" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/data/29.12.2019-19:41:11__Max_sum_6__Max_sum_5__Max_sum_4__Max_sum_3__DSA_HPA_MSHPA_HPA_file.data" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/29.12.2019-19:41:11__Max_sum_6__Max_sum_5__Max_sum_4__Max_sum_3__DSA_HPA_MSHPA_HPA_file.info" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/Agent.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Algorithms_help_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms_help_functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DRAFTS.py" beforeDir="false" afterPath="$PROJECT_DIR$/DRAFTS.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Max_sum_fmr_rand_variations.py" beforeDir="false" afterPath="$PROJECT_DIR$/Max_sum_fmr_rand_variations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot_Graphs.py" beforeDir="false" afterPath="$PROJECT_DIR$/Plot_Graphs.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -176,8 +171,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.main" />
-        <item itemvalue="Python.DRAFTS" />
         <item itemvalue="Python.Plot_Graphs" />
+        <item itemvalue="Python.DRAFTS" />
         <item itemvalue="Python.Agent" />
         <item itemvalue="Python.CONSTANTS" />
       </list>
@@ -432,7 +427,14 @@
       <option name="project" value="LOCAL" />
       <updated>1577622697163</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="big changes">
+      <created>1578318744809</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1578318744811</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
