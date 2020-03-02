@@ -5,7 +5,7 @@ from CONSTANTS import *
 # Define the cell object by extending pygame.sprite.Sprite
 # Use an image for a better-looking sprite
 class Cell(pygame.sprite.Sprite):
-    def __init__(self, cell_size=CELL_SIZE['BIG'], surf_center=-1):
+    def __init__(self, cell_size=CELL_SIZE, surf_center=-1):
         super(Cell, self).__init__()
         self.cell_size = cell_size
         self.surf = pygame.Surface((cell_size, cell_size))

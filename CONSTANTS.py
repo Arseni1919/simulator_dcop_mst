@@ -15,14 +15,15 @@ import copy
 from scipy.stats import t
 from scipy import stats
 import itertools
-from tqdm import tqdm
+# from tqdm import tqdm
 from pprint import pprint
+import statistics
 
 
 # Define constants for the screen width and height
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 690
-# SCREEN_HEIGHT = 750
+# SCREEN_HEIGHT = 850
 
 # have to be odd number for move method of Agent
 CELL_SIZE = {

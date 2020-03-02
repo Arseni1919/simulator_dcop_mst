@@ -252,7 +252,7 @@ def plot_results_if(need_to_plot_results, need_to_plot_variance, need_to_plot_mi
         plt.show()
 
 
-def pickle_results_if(need_to_save_results, graphs, adding_to_file_name='',
+def pickle_results_if(need_to_save_results, graphs, collisions, adding_to_file_name='',
                       grid_size=-1, num_of_targets=-1, num_of_agents=-1, target_range=-1, MR=-1, SR=-1, cred=-1,
                       MAX_ITERATIONS=-1, NUMBER_OF_PROBLEMS=-1):
     if need_to_save_results:
@@ -268,11 +268,10 @@ def pickle_results_if(need_to_save_results, graphs, adding_to_file_name='',
         file_name = "data/%s_%s_file.info" % (timestr, adding_to_file_name)
         # open the file for writing
         with open(file_name, 'wb') as fileObject:
-            info = {'graphs': list(graphs.keys()), 'grid_size': grid_size, 'num_of_targets': num_of_targets,
+            info = {'graphs': list(graphs.keys()), 'collisions': collisions, 'grid_size': grid_size, 'num_of_targets': num_of_targets,
                     'num_of_agents': num_of_agents, 'target_range': target_range, 'MR': MR, 'SR': SR, 'cred': cred,
                     'MAX_ITERATIONS': MAX_ITERATIONS, 'NUMBER_OF_PROBLEMS': NUMBER_OF_PROBLEMS}
             pickle.dump(info, fileObject)
-
 
 def nei_update(agents, targets, factor_graph):
     for agent in agents:

@@ -3,7 +3,7 @@ from main_help_functions import *
 # ---------------------------
 # ------INPUT SETTINGS-------
 # ---------------------------
-file_name = "29.12.2019-19:41:11__Max_sum_6__Max_sum_5__Max_sum_4__Max_sum_3__DSA_HPA_MSHPA_HPA_file.data"
+file_name = "08.01.2020-22_54_47__DSA__Max_sum_MST_vanilla__DSA_HPA__Max_sum_HPA__Max_sum_TAC_DSA_vs_MS_file.data"
 need_to_plot_variance = False
 need_to_plot_min_max = False
 # ---------------------------
@@ -14,7 +14,10 @@ file_name = file_name[:-5] + '.info'
 with open(file_name, 'rb') as fileObject:
     # load the object from the file into var b
     info = pickle.load(fileObject)
+    for k, v in info['collisions'].items():
+        print(k, 'collisions mean: ', (statistics.mean(v)/2), 'std:', (statistics.stdev(v)/2))
     pprint(info)
+
 
 file_name = file_name[:-5] + '.data'
 with open(file_name, 'rb') as fileObject:

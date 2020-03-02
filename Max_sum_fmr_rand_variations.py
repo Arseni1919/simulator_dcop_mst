@@ -101,7 +101,7 @@ def max_sum_TAC_variable_node(agent, cells, targets, agents, for_alg):
 
     sum_of_all_TAC_messages = get_sum_of_all_TAC_messages(agent, possible_pos)
     if max(sum_of_all_TAC_messages.values()) < 0:
-        print(agent.get_name(), 'here!!!!!!!!!!!!!!!', max(sum_of_all_TAC_messages.values()))
+        # print(agent.get_name(), 'here!!!!!!!!!!!!!!!', max(sum_of_all_TAC_messages.values()))
         return agent.get_pos()
 
     set_of_max_pos = get_set_of_max_pos(agent, sum_of_all_TAC_messages, for_alg['pos_policy'])

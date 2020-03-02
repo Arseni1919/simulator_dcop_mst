@@ -12,33 +12,33 @@ from CONSTANTS import *
 # cell_size = CELL_SIZE['SMALL']
 # ---
 # OR THIS WAY:
-grid_size = 20
+grid_size = 10
 CELL_SIZE['CUSTOM'] = int(SCREEN_HEIGHT/grid_size - 2)
 cell_size = CELL_SIZE['CUSTOM']
 # ---
 show_ranges = True
 need_to_save_results = True
-adding_to_file_name = 'MSHPA_HPA'
+adding_to_file_name = 'DSA_vs_MS'
 need_to_plot_results = True
 need_to_plot_variance = False
 need_to_plot_min_max = False
 alpha = 0.025  # for confidence intervals in graphs
 speed = 5  # bigger -slower, smaller - faster. don't ask why
-num_of_agents = 10
-num_of_targets = 10
+num_of_agents = 4
+num_of_targets = 3
 use_rate = False  # if False - it uses the num_of_targets variable, but still also uses target_rate
 target_rate = 0.055
 
 target_range = (100, 100)  # max and min value of target
-MR = 5.5 * cell_size
-SR = 5.5 * cell_size
+MR = 2.5 * cell_size
+SR = 2.5 * cell_size
 cred = 30
 MAX_ITERATIONS = 25
-NUMBER_OF_PROBLEMS = 20
+NUMBER_OF_PROBLEMS = 50
 
 # algorithms = ['Max_sum_4']
-# algorithms = ['Max_sum_7', 'Max_sum_6', 'Max_sum_4', 'DSA_HPA',]
-algorithms = ['Max_sum_7',]
+algorithms = ['DSA_HPA',  'Max_sum_TAC',  'DSA',  'Max_sum_MST',  'Max_sum_HPA',  ]
+# algorithms = ['Max_sum_7',]
 # algorithms = ['Max_sum_3', 'Max_sum_7', 'Max_sum_2', 'DSA', ]
 # algorithms = ['Max_sum_4', 'Max_sum_2', 'Max_sum_3', 'Max_sum_1', 'DSA', ]
 # algorithms = ['Max_sum_2', ]
@@ -70,17 +70,17 @@ algorithms = ['Max_sum_7',]
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------
 dict_alg = {
-    'Max_sum_1': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random'}),
+    'Max_sum_MST': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random'}),
     'Max_sum_2': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random_furthest'}),
     'Max_sum_3': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random',
                             'HPA': True}),
-    'Max_sum_4': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random_furthest',
+    'Max_sum_HPA': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random_furthest',
                             'HPA': True}),
     'Max_sum_5': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random',
                             'MSHPA': True}),
     'Max_sum_6': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random_furthest',
                             'MSHPA': True}),
-    'Max_sum_7': (Max_sum_TAC, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random_furthest',
+    'Max_sum_TAC': (Max_sum_TAC, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random_furthest',
                             'TAC': True}),
 
     'DSA_HPA': (DSA, [0.7, {'HPA': True}]),
@@ -124,6 +124,14 @@ for algorithm in algorithms:
     if algorithm not in dict_alg.keys():
         print('[ERROR]: ')
         raise ValueError('algorithm not in dict')
+# ---------------------------
+
+# ---------------------------
+# ----------GRAPHS-----------
+# ---------------------------
+collisions = {}
+for algorithm in algorithms:
+    collisions[algorithm] = []
 # ---------------------------
 # INITIALIZATIONS:
 clock = pygame.time.Clock()
@@ -180,6 +188,7 @@ if __name__ == '__main__':
             go_back_to_initial_positions(cells)
             iteration = 0
             convergence = 0
+            collisions_num = 0
 
             while iteration < MAX_ITERATIONS and running:
 
@@ -220,8 +229,19 @@ if __name__ == '__main__':
                             executor.submit(agent.move)
                     # logging.info("Thread %s : finishing moving!", threading.get_ident())
                     # print('-----%s iteration -------' % iteration)
+
                 time2 = pygame.time.get_ticks()
                 if all_arrived(agents) and time2 - time1 > 500:
+                    # -----------------------------------------
+                    # Collisions:
+                    # -----------------------------------------
+                    for a1 in agents.sprites():
+                        for a2 in agents.sprites():
+                            if a1.get_num_of_agent() == a2.get_num_of_agent():
+                                continue
+                            if a1.get_pos() == a2.get_pos():
+                                collisions_num += 1
+                    # -----------------------------------------
                     # -----------------------------------------
                     # UPDATING
                     # -----------------------------------------
@@ -270,6 +290,8 @@ if __name__ == '__main__':
                 for entity in all_sprites:
                     screen.blit(entity.surf, entity.rect)
 
+
+
                 # # Check if any enemies have collided with the player
                 # if pygame.sprite.spritecollideany(agents.sprites()[0], targets):
                 #     # If so, then remove the player and stop the loop
@@ -279,6 +301,8 @@ if __name__ == '__main__':
 
                 # Update the display
                 pygame.display.flip()
+
+            collisions[algorithm].append(collisions_num)
 
         time3 = pygame.time.get_ticks()
         interval = (time3 - time4) / 1000 + 1  # for Title of time
@@ -293,7 +317,7 @@ if __name__ == '__main__':
     pygame.quit()
 
     # Save the results
-    pickle_results_if(need_to_save_results, graphs, adding_to_file_name,
+    pickle_results_if(need_to_save_results, graphs, collisions, adding_to_file_name,
                       grid_size, num_of_targets, num_of_agents, target_range, MR, SR, cred,
                       MAX_ITERATIONS, NUMBER_OF_PROBLEMS)
 
