@@ -106,6 +106,7 @@ def max_sum_TAC_variable_node(agent, cells, targets, agents, for_alg):
 
     set_of_max_pos = get_set_of_max_pos(agent, sum_of_all_TAC_messages, for_alg['pos_policy'])
     next_pos = random.choice(set_of_max_pos)
+
     return next_pos
 
 

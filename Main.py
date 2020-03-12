@@ -24,8 +24,8 @@ need_to_plot_variance = False
 need_to_plot_min_max = False
 alpha = 0.025  # for confidence intervals in graphs
 speed = 5  # bigger -slower, smaller - faster. don't ask why
-num_of_agents = 4
-num_of_targets = 3
+num_of_agents = 10
+num_of_targets = 2
 use_rate = False  # if False - it uses the num_of_targets variable, but still also uses target_rate
 target_rate = 0.055
 
@@ -33,11 +33,12 @@ target_range = (100, 100)  # max and min value of target
 MR = 2.5 * cell_size
 SR = 2.5 * cell_size
 cred = 30
-MAX_ITERATIONS = 25
-NUMBER_OF_PROBLEMS = 50
+MAX_ITERATIONS = 5
+NUMBER_OF_PROBLEMS = 5
 
 # algorithms = ['Max_sum_4']
-algorithms = ['DSA_HPA',  'Max_sum_TAC',  'DSA',  'Max_sum_MST',  'Max_sum_HPA',  ]
+algorithms = ['Max_sum_HPA',]
+# algorithms = ['DSA_HPA',  'Max_sum_TAC',  'DSA',  'Max_sum_MST',  'Max_sum_HPA',  ]
 # algorithms = ['Max_sum_7',]
 # algorithms = ['Max_sum_3', 'Max_sum_7', 'Max_sum_2', 'DSA', ]
 # algorithms = ['Max_sum_4', 'Max_sum_2', 'Max_sum_3', 'Max_sum_1', 'DSA', ]

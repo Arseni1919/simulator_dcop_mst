@@ -6,3 +6,4 @@ env
 .coverage
 .idea
 .idea/workspace.xml
+data
