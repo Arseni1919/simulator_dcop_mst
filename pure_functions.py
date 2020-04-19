@@ -32,6 +32,8 @@ def create_tuple_of_agent(agent):
                       num_of_target_nei=len(agent.get_curr_nei()), num_of_robot_nei=len(agent.get_curr_robot_nei()),
                       SR=agent.get_SR(), MR=agent.get_MR())
 
+# bla
+
 
 def create_tuple_of_target(target):
     return TargetTuple(pos=target.get_pos(),

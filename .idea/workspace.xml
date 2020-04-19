@@ -2,19 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="61cd4c22-dbe1-4300-a0e2-5fd10fc80455" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.ipynb_checkpoints/DRAFTS-checkpoint.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DRAFTS.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Max_sam_fmr_TAC.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/Agent.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Algorithms_help_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms_help_functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CONSTANTS.py" beforeDir="false" afterPath="$PROJECT_DIR$/CONSTANTS.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DRAFTS.py" beforeDir="false" afterPath="$PROJECT_DIR$/DRAFTS.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Max_sum_fmr_rand_variations.py" beforeDir="false" afterPath="$PROJECT_DIR$/Max_sum_fmr_rand_variations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Target.py" beforeDir="false" afterPath="$PROJECT_DIR$/Target.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_help_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_help_functions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pure_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/pure_functions.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -459,7 +447,14 @@
       <option name="project" value="LOCAL" />
       <updated>1584003058066</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="changes">
+      <created>1587276094681</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1587276094682</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
