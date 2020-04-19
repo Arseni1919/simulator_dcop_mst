@@ -83,18 +83,19 @@ def create_targets(cell_size, all_sprites, targets, cells,
             print('[ERROR]: bad')
         while True:
             cell = random.choice(cells.sprites())
-            new_target = Target(
-                cell_size,
-                order=order,
-                req=random.randint(target_range[0], target_range[1]),
-                surf_center=cell.surf_center
-            )
-            cell.prop = new_target
-            targets.add(new_target)
-            all_sprites.add(new_target)
-            order += 1
-            if num_of_targets == len(targets.sprites()):
-                break
+            if not cell.prop:
+                new_target = Target(
+                    cell_size,
+                    order=order,
+                    req=random.randint(target_range[0], target_range[1]),
+                    surf_center=cell.surf_center
+                )
+                cell.prop = new_target
+                targets.add(new_target)
+                all_sprites.add(new_target)
+                order += 1
+                if num_of_targets == len(targets.sprites()):
+                    break
 
     # for target in targets:
     #     print(target.get_pos())
@@ -130,6 +131,18 @@ def create_agents(cell_size, all_sprites, agents, cells,
                     all_sprites.add(new_agent)
                     assigned = True
                     break
+
+
+def add_cell_and_target_tuples(agents, cells, targets):
+
+    for agent in agents.sprites():
+        for cell in cells.sprites():
+            agent.cells.append(CellTuple(pos=cell.get_pos()))
+        for target in targets.sprites():
+            agent.targets.append(TargetTuple(pos=target.get_pos(),
+                                             req=target.get_req(),
+                                             name=target.get_name(), num=target.get_num_of_agent()))
+
 
 
 def all_arrived(agents):
@@ -273,12 +286,25 @@ def pickle_results_if(need_to_save_results, graphs, collisions, adding_to_file_n
                     'MAX_ITERATIONS': MAX_ITERATIONS, 'NUMBER_OF_PROBLEMS': NUMBER_OF_PROBLEMS}
             pickle.dump(info, fileObject)
 
-def nei_update(agents, targets, factor_graph):
+
+def nei_update(agents, targets, factor_graph, for_alg):
     for agent in agents:
-        agent.nei_update(agents, targets, factor_graph)
+        agent.find_all_nei(agents, targets, factor_graph)
 
     for target in targets:
-        target.nei_update(agents, factor_graph)
+        target.find_all_nei(agents, factor_graph)
+
+    for agent in agents:
+        agent.nei_tuple_update(factor_graph, for_alg)
+    for target in targets:
+        target.nei_tuple_update(factor_graph, for_alg)
+
+
+def create_dictionary(agents, targets):
+    for agent in agents.sprites():
+        OBJECTS[agent.get_name()] = agent
+    for target in targets.sprites():
+        OBJECTS[target.get_name()] = target
 
 
 def go_back_to_initial_positions(cells):

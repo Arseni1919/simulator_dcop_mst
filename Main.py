@@ -1,5 +1,6 @@
 from Algorithms import *
 from Max_sum_fmr_rand_variations import *
+from Max_sam_fmr_TAC import *
 from main_help_functions import *
 from CONSTANTS import *
 
@@ -12,12 +13,12 @@ from CONSTANTS import *
 # cell_size = CELL_SIZE['SMALL']
 # ---
 # OR THIS WAY:
-grid_size = 10
+grid_size = 20
 CELL_SIZE['CUSTOM'] = int(SCREEN_HEIGHT/grid_size - 2)
 cell_size = CELL_SIZE['CUSTOM']
 # ---
 show_ranges = True
-need_to_save_results = True
+need_to_save_results = False
 adding_to_file_name = 'DSA_vs_MS'
 need_to_plot_results = True
 need_to_plot_variance = False
@@ -25,7 +26,7 @@ need_to_plot_min_max = False
 alpha = 0.025  # for confidence intervals in graphs
 speed = 5  # bigger -slower, smaller - faster. don't ask why
 num_of_agents = 10
-num_of_targets = 2
+num_of_targets = 10
 use_rate = False  # if False - it uses the num_of_targets variable, but still also uses target_rate
 target_rate = 0.055
 
@@ -33,11 +34,11 @@ target_range = (100, 100)  # max and min value of target
 MR = 2.5 * cell_size
 SR = 2.5 * cell_size
 cred = 30
-MAX_ITERATIONS = 5
+MAX_ITERATIONS = 10
 NUMBER_OF_PROBLEMS = 5
 
 # algorithms = ['Max_sum_4']
-algorithms = ['Max_sum_HPA',]
+algorithms = ['Max_sum_TAC',]
 # algorithms = ['DSA_HPA',  'Max_sum_TAC',  'DSA',  'Max_sum_MST',  'Max_sum_HPA',  ]
 # algorithms = ['Max_sum_7',]
 # algorithms = ['Max_sum_3', 'Max_sum_7', 'Max_sum_2', 'DSA', ]
@@ -82,7 +83,7 @@ dict_alg = {
     'Max_sum_6': (Max_sum, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random_furthest',
                             'MSHPA': True}),
     'Max_sum_TAC': (Max_sum_TAC, {'mini_iterations': 5, 'cred': cred, 'SR': SR, 'pos_policy': 'random_furthest',
-                            'TAC': True}),
+                            'TAC': True, 'factor_graph': True}),
 
     'DSA_HPA': (DSA, [0.7, {'HPA': True}]),
     'DSA': (DSA, [0.7, {'HPA': False}]),
@@ -141,11 +142,6 @@ pygame.init()
 screen = pygame.display.set_mode((SCREEN_HEIGHT + 202, SCREEN_HEIGHT), pygame.SRCALPHA)
 finish_sound = pygame.mixer.Sound("sounds/Bell_2.ogg")
 
-# Create a custom event for adding a new enemy
-ADDENEMY = pygame.USEREVENT + 1
-pygame.time.set_timer(ADDENEMY, 250)
-MOVEAGENTS = pygame.USEREVENT + 2
-pygame.time.set_timer(MOVEAGENTS, 2000)
 
 if __name__ == '__main__':
     # Variable to keep the main loop running
@@ -180,9 +176,12 @@ if __name__ == '__main__':
                       cred=cred,
                       show_ranges=show_ranges,
                       speed=speed)
+        add_cell_and_target_tuples(agents, cells, targets)
+        create_dictionary(agents, targets)
         time4 = pygame.time.get_ticks()
         for algorithm in algorithms:
             logging.info("---------- Algorithm: %s ----------" % algorithm)
+            alg, for_alg = dict_alg[algorithm]
             fg = factor_graph[dict_alg[algorithm][0]]
             # Renders the titles aside of a field
             create_side_titles(algorithm, all_sprites, titles)
@@ -204,24 +203,6 @@ if __name__ == '__main__':
                     # Check for QUIT event. If QUIT, then set running to false.
                     elif event.type == QUIT:
                         running = False
-
-                    # Add a new enemy?
-                    elif event.type == ADDENEMY:
-                        # Create the new enemy and add it to sprite groups
-                        # new_enemy = Target(cell_size)
-                        # targets.add(new_enemy)
-                        # all_sprites.add(new_enemy)
-                        # titles.update(len(targets.sprites()))
-                        pass
-
-                    # Add a new cloud?
-                    elif event.type == MOVEAGENTS:
-                        # Create the new cloud and add it to sprite groups
-                        # new_cloud = Cell()
-                        # cells.add(new_cloud)
-                        # all_sprites.add(new_cloud)
-                        # time1 = pygame.time.get_ticks()
-                        pass
 
                 if not all_arrived(agents):
                     # makes a join to everybody
@@ -250,7 +231,7 @@ if __name__ == '__main__':
                     graphs[algorithm][iteration][problem] = convergence
                     iteration += 1
 
-                    nei_update(agents.sprites(), targets.sprites(), fg)
+                    nei_update(agents.sprites(), targets.sprites(), fg, for_alg)
 
                     # print('---')
                     # logging.info("iteration: %s  Thread %s : ", iteration, threading.get_ident())
@@ -259,14 +240,15 @@ if __name__ == '__main__':
                     # makes a join to everybody
                     max_workers = (len(agents.sprites()) + len(targets.sprites()) + 1) if fg else len(agents.sprites())
                     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-                        alg, for_alg = dict_alg[algorithm]
-                        for agent in agents.sprites():
-                            executor.submit(agent.alg_update,
-                                            alg, agents.sprites(), targets.sprites(), cells.sprites(), for_alg)
+                        # alg, for_alg = dict_alg[algorithm]
                         if fg:
                             for target in targets.sprites():
                                 executor.submit(target.alg_update,
                                                 alg, agents.sprites(), targets.sprites(), cells.sprites(), for_alg)
+                        for agent in agents.sprites():
+                            executor.submit(agent.alg_update,
+                                            alg, agents.sprites(), targets.sprites(), cells.sprites(), for_alg)
+
                     logging.info("finishing iteration: %s ----------" % iteration)
                     # , threading.get_ident())
                     # time3 = pygame.time.get_ticks()
@@ -290,15 +272,6 @@ if __name__ == '__main__':
                 # all_sprites.draw(screen)
                 for entity in all_sprites:
                     screen.blit(entity.surf, entity.rect)
-
-
-
-                # # Check if any enemies have collided with the player
-                # if pygame.sprite.spritecollideany(agents.sprites()[0], targets):
-                #     # If so, then remove the player and stop the loop
-                #     # player.kill()
-                #     pass
-
 
                 # Update the display
                 pygame.display.flip()

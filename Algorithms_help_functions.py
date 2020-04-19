@@ -169,17 +169,13 @@ def get_possible_pos_with_MR(self_agent, cells, targets, neighbours):
     return possible_pos
 
 
-def get_possible_pos_with_MR_general(self_agent, cells, targets, agents):
-    """
-    input:
-    output:
-    """
+def get_possible_pos_with_MR_general(self_agent):
     possible_pos = []
     help_set = []
 
     # all cells that are in MR range
-    for cell in cells:
-        if distance(self_agent.get_pos(), cell.get_pos()) < self_agent.get_MR():
+    for cell in self_agent.cells:
+        if distance(self_agent.get_pos(), cell.pos) < self_agent.get_MR():
             help_set.append(cell)
 
     cell_set = help_set
@@ -188,8 +184,8 @@ def get_possible_pos_with_MR_general(self_agent, cells, targets, agents):
     # minus agents' cells
     for cell in cell_set:
         captured = False
-        for agent in agents:
-            if agent.get_pos() == cell.get_pos() and agent.get_num_of_agent() != self_agent.get_num_of_agent():
+        for agent in self_agent.robot_nei_tuples:
+            if agent.pos == cell.pos and agent.num != self_agent.get_num_of_agent():
                 captured = True
                 break
         if not captured:
@@ -202,8 +198,8 @@ def get_possible_pos_with_MR_general(self_agent, cells, targets, agents):
     # minus targets' cells
     for cell in cell_set:
         captured = False
-        for target in targets:
-            if target.get_pos() == cell.get_pos():
+        for target in self_agent.target_nei_tuples:
+            if target.pos == cell.pos:
                 captured = True
                 break
         if not captured:
@@ -215,7 +211,7 @@ def get_possible_pos_with_MR_general(self_agent, cells, targets, agents):
 
     # copy only the positions
     for cell in cell_set:
-        possible_pos.append(cell.get_pos())
+        possible_pos.append(cell.pos)
     return possible_pos
 
 
@@ -236,7 +232,15 @@ def send_and_receive_messages_to_curr_nei(self_agent, message, ord_of_message=1)
     wait_to_receive(self_agent, ord_of_message=ord_of_message)
 
 
-def send_named_message_to(receiver, self_agent, message):
+def send_to(receiver, sender, message, type_of_requirement='', index_of_iteration=0):
+    receiver = OBJECTS[receiver]
+    sender = OBJECTS[sender]
+    # send_named_message_to(receiver, sender, message, message_type)
+    # if receiver is sender:
+    #     print('[ERROR]: receiver is self_agent inside send_message_to()!')
+    receiver.get_access_to_inbox_TAC(type_of_requirement, sender.get_name(), message, index_of_iteration)
+
+def send_named_message_to(receiver, self_agent, message, message_type='message'):
     """
         input:
         output:
@@ -244,7 +248,7 @@ def send_named_message_to(receiver, self_agent, message):
     if receiver is self_agent:
         print('[ERROR]: receiver is self_agent inside send_message_to()!')
     # print('agent ', self_agent.get_name(), ' here ', message)
-    receiver.get_access_to_named_inbox('message', self_agent.get_name(), message)
+    receiver.get_access_to_named_inbox(message_type, self_agent.get_name(), message)
 
 
 def send_message_to(receiver, self_agent, message):
@@ -499,21 +503,16 @@ def max_sum_function_message_to(nei, inbox, possible_pos, inside_fmr, target, cr
     max_values = get_SR_max_values(SR, inbox, target_pos, message_to)  # max_values is dictionary
     tuple_for_new_message = get_SR_new_message(max_values, target_req, target_num, cred, message_to)
 
-    return new_function_message(possible_pos, target, SR, tuple_for_new_message, nei, inbox)  # TAC
+    return new_function_message(possible_pos, target, SR, tuple_for_new_message)  # TAC
 
 
-def new_function_message(possible_pos, target, SR, tuple_for_new_message, nei, inbox):
+def new_function_message(possible_pos, target, SR, tuple_for_new_message):
     new_message = max_sum_create_null_variable_message(possible_pos)
     for pos in possible_pos:
         if distance(pos, target.get_pos()) < SR:
             new_message[pos] = tuple_for_new_message[0]
         else:
             new_message[pos] = tuple_for_new_message[1]
-
-    # last_message = inbox[nei.get_num_of_agent()][-1]
-    # for pos, val in last_message.items():
-    #     if val == -1:
-    #         new_message[pos] = -1
 
     return new_message
 
@@ -608,35 +607,6 @@ def get_sum_of_all_messages(inbox, possible_pos):
             #     sum_of_all_messages[pos] = -1
             #     continue
             sum_of_all_messages[pos] += value
-    return sum_of_all_messages
-
-
-def get_sum_of_all_TAC_messages(agent, possible_pos):
-    named_inbox = agent.get_access_to_named_inbox('copy')
-    curr_nei = agent.get_curr_nei()
-    curr_robot_nei = agent.get_curr_robot_nei()
-    # sum of all messages
-    sum_of_all_messages = max_sum_create_null_variable_message(possible_pos)
-    for nei in curr_nei:
-        last_received_message = named_inbox[nei.get_name()][-1]
-        for pos, value in last_received_message.items():
-            if pos in sum_of_all_messages:
-                sum_of_all_messages[pos] += value
-
-    for nei in curr_robot_nei:
-        last_received_message = named_inbox[nei.get_name()][-1]
-        # for pos in last_received_message.keys():
-        #     if pos not in sum_of_all_messages:
-        #         print('baaaad')
-        for pos, value in last_received_message.items():
-            if pos in sum_of_all_messages:
-                if sum_of_all_messages[pos] < 0:
-                    continue
-                if value < 0:
-                    sum_of_all_messages[pos] = -1
-                    continue
-                sum_of_all_messages[pos] += value
-    # print(max(sum_of_all_messages.values()), 'in get_sum_of_all_TAC_messages')
     return sum_of_all_messages
 
 
@@ -811,6 +781,9 @@ def calculate_pos_for_MSHPA(agent, possible_pos, for_alg):
     return random.choice(set_of_max_pos)
 
 
+
+
+
 def create_list_of_robot_nei(receiver, sender):
     if receiver.get_num_of_agent() == sender.get_num_of_agent():
         return sender.get_curr_robot_nei()
@@ -839,86 +812,36 @@ def robot_func_to_var_message(receiver, sender, sum_of_all_messages):
     return new_message
 
 
-def robot_func_to_var_message_TAC(receiver, sender, sum_of_all_messages, index=0):
-    num_of_receiver = receiver.get_num_of_agent()
-    curr_robot_nei = create_list_of_robot_nei(receiver, sender)
-    temp_named_inbox = sender.get_access_to_named_inbox('copy').copy()
-    temp_named_inbox[sender.get_name()] = [sum_of_all_messages]
-    new_message = temp_named_inbox[receiver.get_name()][index*2]
-
-    for nei in curr_robot_nei:
-        message = temp_named_inbox[nei.get_name()][-1]
-        num_of_nei = nei.get_num_of_agent()
-        if num_of_nei < num_of_receiver:
-            for pos, value in message.items():
-                # if value > -1:
-                if pos in new_message:
-                    new_message[pos] = -1
-    return new_message
 
 
-def var_message_to_func(receiver, sender, possible_pos, my_sum_of_all_messages=None, index=0):
-    named_inbox = sender.get_access_to_named_inbox('copy')
-    receiver_name = receiver.get_name()
-
-    # sum of the messages together
-    new_message = max_sum_create_null_variable_message(possible_pos)
-    for name, messages in named_inbox.items():
-        if name != receiver_name:
-            last_message = messages[-1]
-            for pos, value in last_message.items():
-                if pos in new_message:
-                    if new_message[pos] < 0:
-                        continue
-                    elif value < 0:
-                        new_message[pos] = -1
-                        continue
-                    else:
-                        new_message[pos] += value
-
-    # subtract discount factor alpha
-    alpha = max(new_message.values())
-    if alpha < 0:
-        print('[ERROR]: [1] alpha < 0 in var_message_to_func()', alpha, 'the sender:', sender.get_name(),
-              'the receiver:', receiver.get_name())
-    for val in new_message.values():
-        if val < 0:
-            continue
-        alpha = val if val < alpha else alpha
-
-    for pos in possible_pos:
-        if new_message[pos] < 0:
-            continue
-        new_message[pos] -= alpha
-
-    # if alpha < 0:
-    #     print('[ERROR]: [2] alpha < 0 in var_message_to_func()', alpha)
-
-    return new_message
 
 
-def send_and_receive_TAC(agent, message, order_of_message, order_of_named_message, possible_pos):
-    # for Targets
-    curr_nei = agent.get_curr_nei()
-    curr_robot_nei = agent.get_curr_robot_nei()
-    for nei in curr_nei:
-        if nei is agent:
-            print('[ERROR]: agent is self_agent inside self_agent.get_curr_nei()!')
-        send_message_to(nei, agent, message)
-    wait_to_receive(agent, order_of_message)
+# def send_and_receive_TAC(agent, message, order_of_message, order_of_named_message, possible_pos):
+#     curr_target_nei = agent.get_curr_nei()
+#     curr_robot_nei = agent.get_curr_robot_nei()
+#
+#     # for Targets
+#     for nei in curr_target_nei:
+#         if nei is agent:
+#             print('[ERROR]: agent is self_agent inside self_agent.get_curr_nei()!')
+#         send_message_to(nei, agent, message)
+#     wait_to_receive(agent, order_of_message)
+#
+#     # var to func robots
+#     for nei in curr_robot_nei:
+#         send_named_message_to(nei, agent, message)
+#     wait_to_receive_certain_named(agent, curr_robot_nei, order_of_named_message)
+#     order_of_named_message += 1
+#
+#     # func to var robots
+#     inbox = agent.get_access_to_inbox('copy')
+#     new_message = get_sum_of_all_messages(inbox, possible_pos)
+#     for nei in curr_robot_nei:
+#         message_to_nei = robot_func_to_var_message_TAC(nei, agent, new_message, index=0)
+#         send_named_message_to(nei, agent, message_to_nei)
+#     wait_to_receive_certain_named(agent, curr_robot_nei, order_of_named_message)
 
-    # var to func robots
-    for nei in curr_robot_nei:
-        send_named_message_to(nei, agent, message)
-    wait_to_receive_certain_named(agent, curr_robot_nei, order_of_named_message)
-    order_of_named_message += 1
-    # func to var robots
-    inbox = agent.get_access_to_inbox('copy')
-    new_message = get_sum_of_all_messages(inbox, possible_pos)
-    for nei in curr_robot_nei:
-        message_to_nei = robot_func_to_var_message_TAC(nei, agent, new_message, index=0)
-        send_named_message_to(nei, agent, message_to_nei)
-    wait_to_receive_certain_named(agent, curr_robot_nei, order_of_named_message)
+
 
 
 # ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------

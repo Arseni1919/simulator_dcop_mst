@@ -14,6 +14,9 @@ class Target(pygame.sprite.Sprite):
         self.temp_req = req
         self.curr_nei = []
         self.inbox = {}
+        self.named_inbox = {}
+        self.tuple_keys_inbox = {}
+        self.robot_nei_tuples = []
 
         if order == -1:
             print('[ERROR]: order of Target == -1')
@@ -52,7 +55,7 @@ class Target(pygame.sprite.Sprite):
     def get_num_of_agent(self):
         return self.num_of_agent
 
-    def nei_update(self, agents, factor_graph):
+    def find_all_nei(self, agents, factor_graph):
         if factor_graph:
             # Update self.curr_nei
             self.curr_nei = []
@@ -64,6 +67,18 @@ class Target(pygame.sprite.Sprite):
             self.inbox = {}
             for agent in self.curr_nei:
                 self.inbox[agent.get_num_of_agent()] = []
+
+    def nei_tuple_update(self, factor_graph, for_alg):
+        if factor_graph:
+            self.named_inbox = {}
+            self.robot_nei_tuples = []
+            for agent in self.curr_nei:
+                self.robot_nei_tuples.append(create_tuple_of_agent(agent))
+                self.named_inbox[agent.get_name()] = []
+
+            self.tuple_keys_inbox = {}
+            for i in range(for_alg['mini_iterations']):
+                self.tuple_keys_inbox[i] = {}
 
     def get_curr_nei(self):
         return self.curr_nei
@@ -80,6 +95,25 @@ class Target(pygame.sprite.Sprite):
                 return copy.deepcopy(self.inbox)
             # logging.info("Thread %s about to release lock inside %s", num_of_agent, self.number_of_robot)
 
+    def get_access_to_named_inbox(self, type_of_requirement, name_of_agent=None, message=None):
+        with self._lock:
+            if type_of_requirement == 'message':
+                if name_of_agent in self.named_inbox:
+                    self.named_inbox[name_of_agent].append(message)
+                else:
+                    print('[ERROR]: num_of_agent is not in self.inbox')
+            if type_of_requirement == 'copy':
+                return copy.deepcopy(self.named_inbox)
+
+    def get_access_to_inbox_TAC(self, type_of_requirement, name_of_agent=None, message=None, index_of_iteration=0):
+        with self._lock:
+
+            if type_of_requirement == copy_types.copy:
+                return copy.deepcopy(self.tuple_keys_inbox)
+
+            if type_of_requirement in message_types:
+                self.tuple_keys_inbox[index_of_iteration][(name_of_agent, type_of_requirement)] = message
+
     def alg_update(self, algorithm, agents, targets, cells, for_alg):
         algorithm(self.preprocessing(
             agent=self,
@@ -93,7 +127,6 @@ class Target(pygame.sprite.Sprite):
 
     def preprocessing(self, **kwargs):
         return kwargs
-
 
     def get_pos(self):
         return self.rect.center

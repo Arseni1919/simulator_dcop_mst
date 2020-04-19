@@ -36,7 +36,13 @@ class Agent(pygame.sprite.Sprite):
         self.curr_robot_nei = []
         self.inbox = {}
         self.named_inbox = {}
+        self.tuple_keys_inbox = {}
         self._lock = threading.RLock()
+        self.cells = []
+        self.targets = []
+        self.target_nei_tuples = []
+        self.robot_nei_tuples = []
+        self.all_nei_tuples = []
 
         self.surf = pygame.Surface((2 * MR, 2 * MR), pygame.SRCALPHA)
 
@@ -162,6 +168,16 @@ class Agent(pygame.sprite.Sprite):
                 return copy.deepcopy(self.named_inbox)
         # print(name_of_agent, 'get_access_to_named_inbox!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 
+    def get_access_to_inbox_TAC(self, type_of_requirement, name_of_agent=None, message=None, index_of_iteration=0):
+
+        with self._lock:
+
+            if type_of_requirement == copy_types.copy:
+                return copy.deepcopy(self.tuple_keys_inbox)
+
+            if type_of_requirement in message_types:
+                self.tuple_keys_inbox[index_of_iteration][(name_of_agent, type_of_requirement)] = message
+
     def get_SR(self):
         return self.SR
 
@@ -189,7 +205,9 @@ class Agent(pygame.sprite.Sprite):
     def get_num_of_agent(self):
         return self.number_of_robot
 
-    def nei_update(self, agents, targets, factor_graph):
+    def find_all_nei(self, agents, targets, factor_graph):
+        # TargetTuple = namedtuple('TargetTuple', ['pos', 'req', 'name', 'num'])
+        # AgentTuple = namedtuple('AgentTuple', ['pos', 'num_of_robot_nei', 'num_of_target_nei', 'name', 'num', 'cred'])
         # Update self.curr_nei
         self.curr_nei = []
         if not factor_graph:
@@ -204,6 +222,7 @@ class Agent(pygame.sprite.Sprite):
             for target in targets:
                 if distance(self.get_pos(), target.get_pos()) < (self.SR + self.MR):
                     self.curr_nei.append(target)
+
             for agent in agents:
                 if self.number_of_robot != agent.number_of_robot:
                     if distance(self.get_pos(), agent.get_pos()) < (self.MR + agent.get_MR()):
@@ -220,26 +239,34 @@ class Agent(pygame.sprite.Sprite):
 
         self.future_pos = self.rect.center
 
+    def nei_tuple_update(self, factor_graph, for_alg):
+        if factor_graph:
 
-        # logging.info("Thread %s : finishing update", threading.get_ident())
+            self.target_nei_tuples = []
+            self.robot_nei_tuples = []
+            self.all_nei_tuples = []
+            self.tuple_keys_inbox = {}
+            self.named_inbox = {}
 
-        # if pressed_keys[K_UP]:
-        #     self.rect.move_ip(0, -5)
-        # if pressed_keys[K_DOWN]:
-        #     self.rect.move_ip(0, 5)
-        # if pressed_keys[K_LEFT]:
-        #     self.rect.move_ip(-5, 0)
-        # if pressed_keys[K_RIGHT]:
-        #     self.rect.move_ip(5, 0)
-        #
-        # # Keep player on the screen
-        # if self.rect.left < 0:
-        #     self.rect.left = 0
-        # if self.rect.right > SCREEN_HEIGHT:
-        #     self.rect.right = SCREEN_HEIGHT
-        # if self.rect.top <= 0:
-        #     self.rect.top = 0
-        # if self.rect.bottom >= SCREEN_HEIGHT:
-        #     self.rect.bottom = SCREEN_HEIGHT
+            for target in self.curr_nei:
+                self.target_nei_tuples.append(create_tuple_of_target(target))
+                self.named_inbox[target.get_name()] = []
+
+            for agent in self.curr_robot_nei:
+                self.robot_nei_tuples.append(create_tuple_of_agent(agent))
+                self.named_inbox[agent.get_name()] = []
+            self.robot_nei_tuples.append(create_tuple_of_agent(self))
+
+            self.all_nei_tuples.extend(self.target_nei_tuples)
+            self.all_nei_tuples.extend(self.robot_nei_tuples)
+
+            for i in range(for_alg['mini_iterations']):
+                self.tuple_keys_inbox[i] = {}
+
+
+
+
+# logging.info("Thread %s : finishing update", threading.get_ident())
+
 
 

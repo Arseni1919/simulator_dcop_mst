@@ -94,7 +94,13 @@ pygame.init()
 #     print_t_test_table(graphs)
 
 
-print('name' != 'namce')
+def foo():
+    print('a')
+
+def foo():
+    print('b')
+
+foo()
 # print(a)
     # time.sleep()
 # print(np.random.randint(180))

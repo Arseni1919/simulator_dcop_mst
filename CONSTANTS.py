@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import math
 import numpy as np
 import pickle
+import json
 import copy
 from scipy.stats import t
 from scipy import stats
@@ -18,6 +19,26 @@ import itertools
 # from tqdm import tqdm
 from pprint import pprint
 import statistics
+from collections import namedtuple
+
+CellTuple = namedtuple('CellTuple', ['pos',])
+TargetTuple = namedtuple('TargetTuple', ['pos', 'req', 'name', 'num'])
+AgentTuple = namedtuple('AgentTuple', ['pos', 'num_of_robot_nei', 'num_of_target_nei', 'name', 'num', 'cred', 'SR', 'MR'])
+MessageType = namedtuple('MessageType', ['from_var_to_func',
+                                         'from_func_pos_collisions_to_var',
+                                         'from_func_dir_collisions_to_var',
+                                         'from_func_target_to_var'])
+message_types = MessageType(from_var_to_func='from_var_to_func',
+                            from_func_pos_collisions_to_var='from_func_pos_collisions_to_var',
+                            from_func_dir_collisions_to_var='from_func_dir_collisions_to_var',
+                            from_func_target_to_var='from_func_target_to_var')
+from_func_to_var_types = (message_types.from_func_pos_collisions_to_var, message_types.from_func_target_to_var,
+                          message_types.from_func_dir_collisions_to_var)
+TypesOfRequirement = namedtuple('TypesOfRequirement', ['copy', 'copy_var_dicts', 'copy_func_dicts'])
+copy_types = TypesOfRequirement('copy', 'copy_var_dicts', 'copy_func_dicts')
+
+
+OBJECTS = {}
 
 
 # Define constants for the screen width and height
