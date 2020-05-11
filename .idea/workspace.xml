@@ -3,6 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="61cd4c22-dbe1-4300-a0e2-5fd10fc80455" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Algorithms_help_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms_help_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CONSTANTS.py" beforeDir="false" afterPath="$PROJECT_DIR$/CONSTANTS.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DRAFTS.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/DRAFTS.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Max_sam_fmr_TAC.py" beforeDir="false" afterPath="$PROJECT_DIR$/Max_sam_fmr_TAC.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pure_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/pure_functions.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -454,7 +459,14 @@
       <option name="project" value="LOCAL" />
       <updated>1587276094682</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="changes">
+      <created>1587276604937</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1587276604937</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

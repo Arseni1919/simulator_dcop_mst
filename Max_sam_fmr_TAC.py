@@ -160,14 +160,25 @@ def var_message_to_func_TAC(sender, receiver, index_of_iteration, message_type_o
     return new_message
 
 
-def create_list_of_robot_nei_TAC(receiver, sender):
-    if receiver.num == sender.get_num_of_agent():
-        print('receiver.num == sender.get_num_of_agent()!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-    curr_list = [create_tuple_of_agent(sender)]
-    for nei in sender.robot_nei_tuples:
-        if nei.num != receiver.num:
-            curr_list.append(nei)
-    return curr_list
+def func_dir_clns_robot_to_var_robot_message_TAC(sender, receiver, index_of_iteration,
+                                                 message_type_of_sender, message_type_of_receiver, addings):
+    inbox = sender.get_access_to_inbox_TAC(copy_types.copy)
+    inbox = inbox[index_of_iteration]
+    new_message = inbox[(receiver.name, message_type_of_receiver)]
+
+    for nei in sender.all_nei_tuples:
+        if receiver.name != nei.name:
+            for pos in new_message.keys():
+                if pos != receiver.pos:
+                    angle = getAngle(nei.pos, receiver.pos, pos)
+                    if angle < 90:
+                        dist_from_nei = distance(receiver.pos, nei.pos)
+                        hypotenuse = dist_from_nei/math.cos(math.radians(angle))
+                        distance_of_receiver_from_pos = distance(receiver.pos, pos)
+                        if distance_of_receiver_from_pos > hypotenuse:
+                            new_message[pos] = -1
+
+    return new_message
 
 
 def func_pos_clns_robot_to_var_robot_message_TAC(sender, receiver, index_of_iteration,
@@ -191,15 +202,6 @@ def func_pos_clns_robot_to_var_robot_message_TAC(sender, receiver, index_of_iter
     return new_message
 
 
-
-def get_tuples_of_receivers_from_var(lists_to_unite):
-    new_list = []
-    for curr_list in lists_to_unite:
-        for item in curr_list:
-            new_list.append(copy.deepcopy(item))
-    return new_list
-
-
 def wait_to_receive_certain_named_TAC(to_agent, from_list_of_senders, index_of_iteration, message_type_to_wait):
     # wait for the messages
     not_received = True
@@ -213,6 +215,19 @@ def wait_to_receive_certain_named_TAC(to_agent, from_list_of_senders, index_of_i
                 break
 
 
+def convert_message_to_json_format(sender, message_to_nei, message_type_of_sender, index_of_iteration):
+    new_message_to_nei = {}
+
+    if message_type_of_sender in dictionary_message_types:
+        for k, v in message_to_nei.items():
+            new_message_to_nei[json.dumps(k)] = v
+
+    if message_type_of_sender == message_types.from_var_to_func_only_pos:
+        new_message_to_nei = json.dumps(message_to_nei)
+
+    return json.dumps((sender, new_message_to_nei, message_type_of_sender, index_of_iteration))
+
+
 def send_TAC(sender_object, receivers_named_tuples, message_func,
              message_type_of_sender, message_type_of_receiver, index_of_iteration, addings=None):
     for nei_named_tuple in receivers_named_tuples:
@@ -221,8 +236,29 @@ def send_TAC(sender_object, receivers_named_tuples, message_func,
         # if addings and addings['kind'] == 3:
         #     print('%s created the message for %s and the message is: %s' %
         #           (sender_object.get_name(), nei_named_tuple.name, message_to_nei))
-        send_to(receiver=nei_named_tuple.name, sender=sender_object.get_name(), message=message_to_nei,
-                type_of_requirement=message_type_of_sender, index_of_iteration=index_of_iteration)
+        str_message_to_nei = convert_message_to_json_format(sender_object.get_name(),
+                                                            message_to_nei, message_type_of_sender, index_of_iteration)
+        send_to(receiver=nei_named_tuple.name, message=str_message_to_nei)
+
+
+def get_next_pos_out_of_sum_of_all_TAC_messages(agent, for_alg):
+    mini_iterations = for_alg['mini_iterations']
+    sum_of_all_TAC_messages = get_sum_of_all_func_messages_TAC(agent, mini_iterations - 1)
+    if max(sum_of_all_TAC_messages.values()) < 0:
+        return agent.get_pos()
+
+    set_of_max_pos = get_set_of_max_pos(agent, sum_of_all_TAC_messages, for_alg['pos_policy'])
+    return random.choice(set_of_max_pos)
+
+
+def final_pos_func(agent, next_pos, iteration_to_look_in, message_type_to_look_for):
+    inbox = agent.get_access_to_inbox_TAC(copy_types.copy)
+    inbox = inbox[iteration_to_look_in]
+    for nei in agent.robot_nei_tuples:
+        if nei.num < agent.get_num_of_agent():
+            if inbox[(nei.name, message_type_to_look_for)] == next_pos:
+                return agent.get_pos()
+    return next_pos
 
 
 def send_and_receive_TAC(sender_object, receivers_named_tuples, message_func,
@@ -254,7 +290,6 @@ def max_sum_TAC_function_node(target, for_alg):
                              message_type_of_receiver=message_types.from_var_to_func,
                              index_of_iteration=index_of_iteration,
                              addings={'fmr_nei': fmr_nei})
-        pass
 
 
 def max_sum_TAC_variable_node(agent, for_alg):
@@ -271,33 +306,54 @@ def max_sum_TAC_variable_node(agent, for_alg):
                              addings={'kind': 3}
                              )
 
-        # # var-robots to func-robots
-        send_and_receive_TAC(sender_object=agent, receivers_named_tuples=agent.robot_nei_tuples,
-                             message_func=var_message_to_func_TAC,
-                             message_type_of_sender=message_types.from_var_to_func,
-                             message_type_of_receiver=message_types.from_var_to_func,
-                             index_of_iteration=index_of_iteration,
-                             addings={'kind': 3}
-                             )
+    next_pos = get_next_pos_out_of_sum_of_all_TAC_messages(agent, for_alg)
 
-        # func-robots to var-robots
-        send_and_receive_TAC(sender_object=agent, receivers_named_tuples=agent.robot_nei_tuples,
-                             message_func=func_pos_clns_robot_to_var_robot_message_TAC,
-                             message_type_of_sender=message_types.from_func_pos_collisions_to_var,
-                             message_type_of_receiver=message_types.from_var_to_func,
-                             index_of_iteration=index_of_iteration,
-                             addings={'kind': 3}
-                             )
+    # var-robots to func-pos-robots
+    send_and_receive_TAC(sender_object=agent, receivers_named_tuples=agent.robot_nei_tuples,
+                         message_func=lambda *x: next_pos,
+                         message_type_of_sender=message_types.from_var_to_func_only_pos,
+                         message_type_of_receiver=message_types.from_var_to_func_only_pos,
+                         index_of_iteration=(mini_iterations - 1),
+                         addings=None
+                         )
 
+    return final_pos_func(agent, next_pos, (mini_iterations - 1), message_types.from_var_to_func_only_pos)
 
-    sum_of_all_TAC_messages = get_sum_of_all_func_messages_TAC(agent, mini_iterations-1)
-    if max(sum_of_all_TAC_messages.values()) < 0:
-        return agent.get_pos()
+    # var-robots to func-dir-robots
+    # send_and_receive_TAC(sender_object=agent, receivers_named_tuples=agent.robot_nei_tuples,
+    #                      message_func=var_message_to_func_TAC,
+    #                      message_type_of_sender=message_types.from_var_to_func_dir,
+    #                      message_type_of_receiver=message_types.from_var_to_func_dir,
+    #                      index_of_iteration=index_of_iteration,
+    #                      addings={'kind': 3}
+    #                      )
 
-    set_of_max_pos = get_set_of_max_pos(agent, sum_of_all_TAC_messages, for_alg['pos_policy'])
-    next_pos = random.choice(set_of_max_pos)
+    # func-robots to var-robots
+    # send_and_receive_TAC(sender_object=agent, receivers_named_tuples=agent.robot_nei_tuples,
+    #                      message_func=func_pos_clns_robot_to_var_robot_message_TAC,
+    #                      message_type_of_sender=message_types.from_func_pos_collisions_to_var,
+    #                      message_type_of_receiver=message_types.from_var_to_func,
+    #                      index_of_iteration=index_of_iteration,
+    #                      addings={'kind': 3}
+    #                      )
 
-    return next_pos
+    # func-dir-robots to var-robots
+    # send_and_receive_TAC(sender_object=agent, receivers_named_tuples=agent.robot_nei_tuples,
+    #                      message_func=func_dir_clns_robot_to_var_robot_message_TAC,
+    #                      message_type_of_sender=message_types.from_func_dir_collisions_to_var,
+    #                      message_type_of_receiver=message_types.from_var_to_func_dir,
+    #                      index_of_iteration=index_of_iteration,
+    #                      addings={'kind': 3}
+    #                      )
+
+    # sum_of_all_TAC_messages = get_sum_of_all_func_messages_TAC(agent, mini_iterations-1)
+    # if max(sum_of_all_TAC_messages.values()) < 0:
+    #     return agent.get_pos()
+    #
+    # set_of_max_pos = get_set_of_max_pos(agent, sum_of_all_TAC_messages, for_alg['pos_policy'])
+    # next_pos = get_next_pos_out_of_sum_of_all_TAC_messages(agent, for_alg)
+
+    # return next_pos
 
 
 def Max_sum_TAC(kwargs):

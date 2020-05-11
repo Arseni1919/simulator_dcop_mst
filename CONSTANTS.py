@@ -25,15 +25,22 @@ CellTuple = namedtuple('CellTuple', ['pos',])
 TargetTuple = namedtuple('TargetTuple', ['pos', 'req', 'name', 'num'])
 AgentTuple = namedtuple('AgentTuple', ['pos', 'num_of_robot_nei', 'num_of_target_nei', 'name', 'num', 'cred', 'SR', 'MR'])
 MessageType = namedtuple('MessageType', ['from_var_to_func',
+                                         'from_var_to_func_only_pos',
+                                         'from_var_to_func_dir',
                                          'from_func_pos_collisions_to_var',
                                          'from_func_dir_collisions_to_var',
                                          'from_func_target_to_var'])
 message_types = MessageType(from_var_to_func='from_var_to_func',
+                            from_var_to_func_only_pos='from_var_to_func_only_pos',
+                            from_var_to_func_dir='from_var_to_func_dir',
                             from_func_pos_collisions_to_var='from_func_pos_collisions_to_var',
                             from_func_dir_collisions_to_var='from_func_dir_collisions_to_var',
                             from_func_target_to_var='from_func_target_to_var')
 from_func_to_var_types = (message_types.from_func_pos_collisions_to_var, message_types.from_func_target_to_var,
                           message_types.from_func_dir_collisions_to_var)
+dictionary_message_types = (message_types.from_func_pos_collisions_to_var, message_types.from_func_target_to_var,
+                            message_types.from_func_dir_collisions_to_var, message_types.from_var_to_func,
+                            message_types.from_var_to_func_dir)
 TypesOfRequirement = namedtuple('TypesOfRequirement', ['copy', 'copy_var_dicts', 'copy_func_dicts'])
 copy_types = TypesOfRequirement('copy', 'copy_var_dicts', 'copy_func_dicts')
 

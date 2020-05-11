@@ -32,11 +32,16 @@ def create_tuple_of_agent(agent):
                       num_of_target_nei=len(agent.get_curr_nei()), num_of_robot_nei=len(agent.get_curr_robot_nei()),
                       SR=agent.get_SR(), MR=agent.get_MR())
 
-# bla
-
 
 def create_tuple_of_target(target):
     return TargetTuple(pos=target.get_pos(),
                        req=target.get_req(),
                        name=target.get_name(),
                        num=target.get_num_of_agent())
+
+
+def getAngle(a, b, c):
+    ang = math.degrees(math.atan2(c[1]-b[1], c[0]-b[0]) - math.atan2(a[1]-b[1], a[0]-b[0]))
+    curr_ang = ang + 360 if ang < 0 else ang
+    small_ang = 360 - curr_ang if curr_ang > 180 else curr_ang
+    return small_ang
