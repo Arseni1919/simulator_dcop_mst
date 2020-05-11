@@ -9,6 +9,6 @@ The initial settings are in Main.py file.
 
 The screen sample:
 
-![sample](sample1.png)
+![sample](pics/sample1.png)
 
 
