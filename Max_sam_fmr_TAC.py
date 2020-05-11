@@ -356,6 +356,7 @@ def max_sum_TAC_variable_node(agent, for_alg):
     # return next_pos
 
 
+
 def Max_sum_TAC(kwargs):
     """
     :param kwargs:
