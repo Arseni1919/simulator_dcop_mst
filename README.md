@@ -9,6 +9,6 @@ The initial settings are in Main.py file.
 
 The screen sample:
 
-![sample](Screen Shot 2020-01-11 at 12.30.55 PM.png)
+![sample](sample1.png)
 
 
